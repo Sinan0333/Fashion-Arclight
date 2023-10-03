@@ -1,0 +1,96 @@
+<%- include('../layout/admin/header.ejs') -%>
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <br>
+        <br>
+        <br>
+        <h1 class="card-title">Edit Product</h1>
+        <p class="card-description"> Edit product form</p>
+        <% products.forEach(function(product) { %>
+          <form action="/admin/editProduct?_id=<%= product._id %>" class="forms-sample" method="post" enctype="multipart/form-data">  
+            <div class="form-group">
+                <label for="exampleInputName1">Product Name</label>
+                <input type="text" class="form-control" id="exampleInputName1" name="name" placeholder="Name" value="<%= product.name %>" style="color: white;">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail3">Quantity</label>
+                <input type="number" class="form-control" id="exampleInputEmail3" name="quantity" value="<%= product.quantity %>" style="color: white;">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword4">Price</label>
+                <input type="number" class="form-control" id="exampleInputPassword4" name="price" value="<%= product.price %>" style="color: white;">
+            </div>
+            <div class="form-group">
+                <label for="exampleSelectGender">Category</label>
+                <select class="form-control" id="exampleSelectGender" name="category" style="color: white;">
+                    <option><%= product.category %></option>
+                    <option>Category 2</option>
+                </select>
+            </div>
+            <div class="row d-flex justify-content-center ">
+
+                <div class="row d-flex justify-content-between ">
+
+                  <div class="col-lg-3 col-md-6 rounded-image-preview">
+                    <label for="imageInput1" class="image-label"><%= product.image[0] %>
+                      <div class="rounded-image-preview">
+                        <img id="imagePreview1"
+                          src="/images/product/orginal/<%= product.image[0] %>"
+                          alt="Preview" />
+                      </div>
+                      <input name="image1" type="file" accept="image/*" id="imageInput1" class="imageInput"  required >
+                    </label>
+                  </div>
+
+                  <div class="col-lg-3 col-md-6 rounded-image-preview">
+                    <label for="imageInput2" class="image-label"><%= product.image[1] %>
+                      <div class="rounded-image-preview">
+                        <img id="imagePreview2"
+                          src="/images/product/orginal/<%= product.image[1] %>"
+                          alt="Preview" />
+                      </div>
+                      <input name="image2" type="file" accept="image/*" id="imageInput2" class="imageInput" required >
+                    </label>
+                  </div>
+
+                  <div class="col-lg-3 col-md-6 rounded-image-preview">
+                    <label for="imageInput3" class="image-label"><%= product.image[2] %>
+                      <div class="rounded-image-preview">
+                        <img id="imagePreview3"
+                          src="/images/product/orginal/<%= product.image[2] %>"
+                          alt="Preview" />
+                      </div>
+                      <input name="image3" type="file" accept="image/*" id="imageInput3" class="imageInput" required>
+                    </label>
+                  </div>
+
+                  <div class="col-lg-3 col-md-6 rounded-image-preview">
+                    <label for="imageInput4" class="image-label"><%= product.image[3] %>
+                      <div class="rounded-image-preview">
+                        <img id="imagePreview4"
+                          src="/images/product/orginal/<%= product.image[3] %>"
+                          alt="Preview" />
+                      </div>
+                      <input name="image4" type="file" accept="image/*" id="imageInput4" class="imageInput" required>
+                    </label>
+                  </div>
+
+                </div>
+              </div>
+          <div class="form-group">
+            <label for="exampleTextarea1">Description</label>
+            <textarea class="form-control" id="exampleTextarea1" rows="4" name="description" ><%= product.description %></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary mr-2">Submit</button>
+          <button class="btn btn-dark">Cancel</button>
+           <% }); %>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+
+<%- include('../layout/admin/footer.ejs') -%>

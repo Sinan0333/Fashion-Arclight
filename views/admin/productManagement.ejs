@@ -1,0 +1,72 @@
+<%- include('../layout/admin/header.ejs') -%>
+<div class="main-panel">
+  <div class="content-wrapper">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Product Management</h4>
+              <a href="/admin/addProduct" class="btn btn-primary">Add Product</a>
+              
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>No:</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Stock</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                    <th>Update</th>
+                    <th>Action</th>
+                    <th>Delete</th>
+
+                  </tr>
+                </thead>
+                <tbody>
+                     <% let counter = 1; %>
+                  <% products.forEach(function(product) { %>
+                    <tr>
+                        <td><%= counter %></td>
+                        <td>
+                          <img src="/images/product/sharped/<%= product.image[3] %>" alt="<%= product.name %>" >  
+                              <span class="pl-2"><%= product.name %></span>
+                        </td>
+                      <td><%= product.category %></td>
+                      <td><%= product.quantity %></td>
+                      <td><%= product.price %></td>
+                      <td>
+                        <span class="<%= product.is_blocked ? 'text-danger' : 'text-success' %>">
+                          <%= product.is_blocked ? "Blocked" : "Active" %>
+                        </span>
+                      </td> 
+                      <td>
+                        <a href="/admin/editProduct?_id=<%= product._id %>" data-category-id="<%= product._id %>" class="btn btn-warning edit-button">
+                            Edit
+                          </a>                    
+                      </td>
+                      <td>
+                        <a href="/admin/blockProduct?_id=<%= product._id %>" class="btn btn-danger block-button" data-initial-status="<%= product.is_blocked %>">
+                          <%= product.is_blocked ? "Unblock" : "Block" %>
+                        </a>                        
+                        <td>
+                          <a href="/admin/deleteProduct?_id=<%= product._id %>" data-category-id="<%= product._id %>" class="btn btn-primary delete-button">
+                              Delete
+                          </a>
+                      </td>                      
+                    </tr>
+                      <% counter++; %>
+                  <% }); %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+    <!-- content-wrapper ends -->
+    <!-- partial:../../partials/_footer.html -->
+  <%- include('../layout/admin/footer.ejs') -%>

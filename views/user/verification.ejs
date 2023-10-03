@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="user/css/verification.css">
+</head>
+<body>
+<!-- Add a timer display element -->
+<div class="bg-img">
+    <div class="position-relative">
+        <form action="/validate" method="post">
+            <div class="card p-2 text-center">
+                <h6>Please enter the one-time password <br> to verify your account</h6>
+                <!-- <div> <span>A code has been sent to</span> <small>*******9897</small> </div> -->
+                <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2">
+                    <input class="m-2 text-center form-control rounded" type="text" id="first" name="first" maxlength="1" />
+                    <input class="m-2 text-center form-control rounded" type="text" id="second" name="second" maxlength="1" />
+                    <input class="m-2 text-center form-control rounded" type="text" id="third" name="third" maxlength="1" />
+                    <input class="m-2 text-center form-control rounded" type="text" id="fourth" name="fourth" maxlength="1" />
+                </div>
+                <div class="mt-4">
+                    <button class="btn btn-danger px-4 validate">Validate</button>
+                    <!-- Resend Button -->
+                    <a href="/resend">
+                        <button class="btn btn-primary px-4 ml-2" id="resend">Resend</button>
+                    </a>
+                </div>
+                <!-- Timer Display -->
+                <div id="timer" class="mt-2">
+                    Resend in: <span id="countdown">60</span> seconds <!-- Initial countdown value -->
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+    
+    <script src="user/js/verification.js"></script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>SignUp</title>
+    <link rel="stylesheet" href="user/css/signUp.css">
+   <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+  </head>
+  <body>
+    <div class="bg-img">
+      <div class="content">
+        <header>SignUp </header>
+        <form action="signUp" method="post" id="form">
+
+          <div class="field">
+            <span class="fa fa-user"></span>
+            <input type="text"  placeholder="Enter your name" name="username" required>
+          </div>
+
+          <div class="field space">
+            <span class="fa fa-user"></span>
+            <input type="email"  placeholder="Email " id="email" name="email"  >
+          </div>
+          <div class="error-msg"><p id="emailError"></p></div>
+
+          <div class="field space">
+            <span class="fa fa-user"></span>
+            <input type="number"  placeholder="Phone " name="mobile" required>
+          </div>
+          
+          <div class="field space">
+            <span class="fa fa-lock"></span>
+            <input type="password" class="pass-key"  placeholder="Password" name="password" id="password" required>
+            <span class="show">SHOW</span>
+          </div>
+          <div class="error-msg"><p id="passwordLengthError"></p></div>
+          
+
+          <div class="field space">
+            <span class="fa fa-lock"></span>
+            <input type="password" class="pass-key"  placeholder="Confirm Password" name="confirmpassword" id="confirmpassword" required>
+            <span class="show">SHOW</span>
+          </div>
+          <div class="error-msg"><p id="confirmpasswordError"></p></div>
+        
+          <div class="field space">
+            <input type="submit" value="SIGNUP">
+          </div>
+         
+        </form>
+
+        <div class="signup">Already have an account?
+          <a href="login">Login Now</a>
+        </div>
+        <div >
+            <% if (typeof error !== 'undefined') { %>
+              <p style="color: red;"><%= error %></p>
+            <% } %>
+              
+          </div>
+      </div>
+    </div>
+
+    <script>
+      const pass_field = document.querySelector('.pass-key');
+      const showBtn = document.querySelector('.show');
+      showBtn.addEventListener('click', function(){
+       if(pass_field.type === "password"){
+         pass_field.type = "text";
+         showBtn.textContent = "HIDE";
+         showBtn.style.color = "#3498db";
+       }else{
+         pass_field.type = "password";
+         showBtn.textContent = "SHOW";
+         showBtn.style.color = "#222";
+       }
+      });
+    </script>
+    <script src="user/js/signUp.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,47 @@
+<%- include('../layout/admin/header.ejs') -%>
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <br>
+        <br>
+        <br>
+        <h1 class="card-title">Add Product</h1>
+        <p class="card-description"> Add product form</p>
+        <form action="/admin/addproduct" class="forms-sample" method="post" enctype="multipart/form-data" >           
+          <div class="form-group">
+            <label for="exampleInputName1">Product Name</label>
+            <input type="text" class="form-control" id="exampleInputName1" name="name" placeholder="name" style="color: white;" >
+          </div>
+          <div class="form-group">
+            <label for="exampleInputEmail3">Quantity</label>
+            <input type="number" class="form-control" id="exampleInputEmail3" name="quantity" placeholder="Quantity" style="color: white;">
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword4">Price</label>
+            <input type="number" class="form-control" id="exampleInputPassword4" name="price" placeholder="Price" style="color: white;">
+          </div>
+          <div class="form-group">
+            <label for="exampleSelectGender">Category</label>
+            <select class="form-control" id="exampleSelectGender" name="category" style="color: white;">
+                <% categorys.forEach(function(category) { %>
+              <option><%= category.name %></option>
+              <% }); %>
+            </select>
+          </div>
+            <div class="form-group">
+                <label for="imageInput">Product Images</label>
+                <input type="file" name="images" class="form-control-file" id="imageInput" accept="image/*" multiple>
+              </div>
+          <div class="form-group">
+            <label for="exampleTextarea1">Description</label>
+            <textarea class="form-control" id="exampleTextarea1" rows="4" name="description" style="color: white;"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary mr-2">Submit</button>
+          <button class="btn btn-dark">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+<%- include('../layout/admin/footer.ejs') -%>

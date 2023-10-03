@@ -1,0 +1,83 @@
+<%- include('../layout/admin/header.ejs') -%>
+<div class="main-panel">
+  <div class="content-wrapper">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Category Management</h4>
+              <button id="addCategoryBtn" class="btn btn-primary">Add Category</button>
+              <div id="categoryModal" class="modal">
+                <div class="modal-content">
+                  <span class="close">&times;</span>
+                  <h2>Add Category</h2>
+                  <form id="categoryForm" action="/admin/addCategory" method="post">
+                    <label for="categoryName">Category Name:</label>
+                    <input type="text" id="categoryName" name="categoryName" required>
+                    <br><br>
+                      </a> 
+                    <button type="submit" id="saveCategoryBtn" class="btn btn-success">Add</button>
+                  </form>
+                </div>
+              </div>
+              
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>No:</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                    <th>Update</th>
+                  </tr>
+                </thead>
+                <tbody>
+                     <% let counter = 1; %>
+                  <% categorys.forEach(function(category) { %>
+                    <tr>
+                        <td><%= counter %></td>
+                      <td><%= category.name %></td>
+                      <td>
+                        <span class="<%= category.is_blocked ? 'text-danger' : 'text-success' %>">
+                          <%= category.is_blocked ? "Blocked" : "Active" %>
+                        </span>
+                      </td> 
+                      <td>
+                        <a href="/admin/blockCategory?_id=<%= category._id %>" class="btn btn-danger block-button" data-initial-status="<%= category.is_blocked %>">
+                          <%= category.is_blocked ? "Unblock" : "Block" %>
+                        </a>                        
+                      </td>
+                      <td>
+                        <a href="#" data-category-id="<%= category._id %>" class="btn btn-warning edit-button">
+                            Edit
+                          </a>                    
+                      </td>
+                    </tr>
+
+                    <div id="categoryEditModal_<%= category._id %>" class="modal">
+                        <div class="modal-content">
+                          <span class="close" data-modal-id="categoryEditModal_<%= category._id %>">&times;</span>
+                          <h2>Edit Category</h2>
+                          <form id="categoryForm" action="/admin/updateCategory?_id=<%= category._id %>" method="post" >
+                            <label for="categoryName">Category Name:</label>
+                            <input type="text" id="categoryName" name="categoryName" value="<%= category.name %>" required>
+                            <br><br>
+                            <button type="submit" class="btn btn-success">Update</button>
+                          </form>
+                        </div>
+                      </div>
+                      <% counter++; %>
+                  <% }); %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+    <!-- content-wrapper ends -->
+    <!-- partial:../../partials/_footer.html -->
+  <%- include('../layout/admin/footer.ejs') -%>
