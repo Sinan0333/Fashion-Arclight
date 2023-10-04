@@ -254,24 +254,9 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     <!-- <script src="user/js/bootstrap-input-spinner.js"></script> -->
     <script src="user/js/main2.js"></script>
 <!-- add address button action -->
-<script>
-    // When the "Add Address" button is clicked, show the "tab-addAddress" tab and hide other tabs.
-    document.getElementById('tab-addAddress-link').addEventListener('click', function() {
-        // Hide other tabs
-        document.getElementById('tab-address').classList.remove('show', 'active');
-        // Show the "tab-addAddress" tab
-        document.getElementById('tab-addAddress').classList.add('show', 'active');
+<!--=========================================product details page js=================================================-->
+    <script src="user/js/myJs.js"></script>
 
-        const closeAddAddressFormButton = document.getElementById('closeAddAddressForm');
-        const tabAddAddress = document.getElementById('tab-addAddress');
-
-        closeAddAddressFormButton.addEventListener('click', function () {
-    // Hide the form
-        tabAddAddress.style.display = 'none';
-        document.getElementById('tab-address').classList.add('show', 'active');
-});
-    });
-</script>
 
 </body>
 </html>

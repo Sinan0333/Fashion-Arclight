@@ -22,6 +22,7 @@
             <div class="dashboard">
                 <div class="container">
                     <div class="row">
+                        <!-- side buttons  start -->
                         <aside class="col-md-4 col-lg-3">
                             <ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
                                 <li class="nav-item">
@@ -43,11 +44,11 @@
                                     <a class="nav-link" href="#">Sign Out</a>
                                 </li>
                             </ul>
-                        </aside><!-- End .col-lg-3 -->
+                        </aside><!-- End .col-lg-3 --><!-- Show Addresses end -->
 
                         <div class="col-md-8 col-lg-9">
                             <div class="tab-content">
-                                <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel" aria-labelledby="tab-dashboard-link">
+                                <div class="tab-pane fade " id="tab-dashboard" role="tabpanel" aria-labelledby="tab-dashboard-link">
                                     <p>Hello <span class="font-weight-normal text-dark">User</span> (not <span class="font-weight-normal text-dark">User</span>? <a href="#">Log out</a>) 
                                     <br>
                                     From your account dashboard you can view your <a href="#tab-orders" class="tab-trigger-link link-underline">recent orders</a>, manage your <a href="#tab-address" class="tab-trigger-link">shipping and billing addresses</a>, and <a href="#tab-account" class="tab-trigger-link">edit your password and account details</a>.</p>
@@ -63,7 +64,7 @@
                                     <a href="category.html" class="btn btn-outline-primary-2"><span>GO SHOP</span><i class="icon-long-arrow-right"></i></a>
                                 </div><!-- .End .tab-pane -->
 
-
+                                <!-- Show Addresses start -->
                                 <div class="tab-pane fade" id="tab-address" role="tabpanel" aria-labelledby="tab-address-link">
                                     <p>The following addresses will be used on the checkout page by default.</p>
                                     <div class="row">
@@ -79,15 +80,16 @@
                                                 City: <%= address.city %><br>
                                                 House Name: <%= address.houseName %><br>
                                                 Pincode: <%= address.pin %><br>
-                                                <a href="/editAddress" >Edit <i class="icon-edit"></i></a></p>
-                                              </div>
+                                                <a href="/editAddress?ind=<%= index %>" >Edit <i class="icon-edit"></i></a>
+                                            </div>
                                             </div>
                                           </div>
                                         <% }); %>
                                       </div>
                                     <a  class="btn btn-primary" id="tab-addAddress-link" data-toggle="tab" href="#tab-addAddress" role="tab" aria-controls="tab-addAddress" aria-selected="false">Add Address</a>
-                                </div>
+                                </div><!-- Show Addresses end -->
 
+                                <!-- Add address form start -->
                                 <div class="tab-pane fade" id="tab-addAddress" role="tabpanel" aria-labelledby="tab-addAddress-link">
                                     <button class="btn btn-close" id="closeAddAddressForm" style="font-size: 20px;font-weight: 100;color:#ebebeb;"><i class="fa-solid fa-xmark " ></i></button>
                                     <form action="/addAddress" method="post">
@@ -131,33 +133,48 @@
                                           <i class="icon-long-arrow-right"></i>
                                         </button>
                                       </form>
-                                </div>
+                                </div><!-- Add address form end -->
 
-                                <div class="tab-pane fade" id="tab-account" role="tabpanel" aria-labelledby="tab-account-link">
-                                    <form action="#">
+                                <!-- user profiel start -->
+                                <div class="tab-pane fade show active" id="tab-account"  role="tabpanel" aria-labelledby="tab-account-link">
+                                    <div class="circle-image">
+                                        <img src="user/images/product-09.jpg" alt="Image" />
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <div class="user-details">
+                                        <h2><%= user.name %></h2>
+                                        <p>Email: <%= user.email %></p>
+                                        <p>Mobile: <%= user.mobile %></p>
+                                        <p>Location: New York, USA</p>
+                                        <button id="editProfileButton" class="btn btn-outline-primary-2">
+                                            <span>Edit Profile</span>
+                                            <i class="icon-long-arrow-right"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div id="editProfileForm" style="display: none;">
+                                    <form action="/editProfile" method="post" enctype="multipart/form-data">
                                         <div class="text-center mb-4">
                                             <div class="custom-file-upload">
-                                              <div class="circular-image-input">
-                                                <img src="user/images/product-02.jpg" id="profile-picture" alt="Profile Picture">
-                                                <input type="file" id="profile-picture-upload" accept="image/*" onclick="event.stopPropagation()">
-                                              </div>
+                                                <div class="circular-image-input">
+                                                    <img src="user/images/product-02.jpg" id="profile-picture" alt="Profile Picture">
+                                                    <input type="file" id="profile-picture-upload" accept="image/*" onchange="previewProfilePicture(event)">
+                                                </div>
                                             </div>
-                                          </div>  
-
-                                          <div class="user-details">
-                                            <h2> <%= user.name %></h2>
-                                            <p>Email: <%= user.email %></p>
-                                            <p>Mobile: <%= user.mobile %></p>
-                                            <p>Location: New York, USA</p>
-                                            <button>Edit Profile</button>
-                                          </div>
-                                   
-                                      <button type="submit" class="btn btn-outline-primary-2">
-                                        <span>Edit Profile</span>
-                                        <i class="icon-long-arrow-right"></i>
-                                      </button>
+                                        </div>
+                                        <input type="text" name="name"  value="<%= user.name %>">
+                                        <input type="text" name="email" value="<%= user.email %>" >
+                                        <input type="text" name="mobile" value="<%= user.mobile  %>">
+                                        <button type="submit" class="btn btn-outline-primary-2">
+                                            <span>Save change</span>
+                                            <i class="icon-long-arrow-right"></i>
+                                        </button>
                                     </form>
-                                </div><!-- End .tab-pane -->
+                                </div>
+                                
+
                             </div>
                         </div><!-- End .col-lg-9 -->
                     </div><!-- End .row -->

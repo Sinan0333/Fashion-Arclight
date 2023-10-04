@@ -52,7 +52,7 @@ const loadEditProduct = async(req,res)=>{
 
 
 // to add product 
-const addProduct = async(req,res)=>{
+ const addProduct = async(req,res)=>{
     try {
         const img=[];
 

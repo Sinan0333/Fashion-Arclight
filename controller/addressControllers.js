@@ -1,3 +1,4 @@
+const session = require("express-session");
 const Address = require("../model/addressModel");
 const User = require("../model/userModel");
 
@@ -38,11 +39,52 @@ const addAddress = async (req, res) => {
 };
 
 
+// Load Edit Address
+const loadEditAddress = async(req,res)=>{
+  try {
+    const user_id = req.session.user_id
+    const ind = req.query.ind
 
-//Edit Address
+    const userData = await Address.findOne({user:user_id})
+    const address = userData.address[ind]
+
+    res.render("editAddress",{edit:address});
+
+  } catch (error) {
+      console.log(error.message);
+  }
+}
+
+
+//  to update address
+const editAddress = async(req,res)=>{
+  try {
+     const user_id=req.session.user_id
+
+    await Address.updateOne({user:user_id,'address._id':req.body._id},
+    {
+      $set:{
+        'address.$.fullName':req.body.name,
+        'address.$.mobile':req.body.mobile,
+        'address.$.houseName':req.body.house,
+        'address.$.state':req.body.state,
+        'address.$.city':req.body.city,
+        'address.$.pin':req.body.pincode,
+
+      }
+    })
+
+    res.redirect("/profile");
+
+  } catch (error) {
+      console.log(error.message);
+  }
+}
 
 
 
 module.exports ={
  addAddress,
+ loadEditAddress,
+ editAddress,
 }

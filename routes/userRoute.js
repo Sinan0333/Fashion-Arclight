@@ -40,6 +40,10 @@ user_route.get('/resend',auth.isLogout,userControllers.resendOtp)
 user_route.get('/',userControllers.loadHome)
 user_route.get('/profile',auth.isLogin,userControllers.loadprofile)
 user_route.post('/addAddress',addressControllers.addAddress)
+user_route.get('/editAddress',addressControllers.loadEditAddress)
+user_route.post('/editAddress',addressControllers.editAddress)
+user_route.post('/editProfile',userControllers.editProfile)
+user_route.get('/sample',userControllers.sample)
 
 
 

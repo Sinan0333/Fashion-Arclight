@@ -42,3 +42,26 @@
     opacity: 0;
     cursor: pointer;
 }
+
+.text-center.mb-4 {
+    display: flex;
+    align-items: center;
+    /* Center vertically */
+    justify-content: flex-start;
+    /* Align on the left */
+}
+
+/* profile circle image*/
+.circle-image {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.circle-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+
+}

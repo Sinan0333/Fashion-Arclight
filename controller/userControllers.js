@@ -237,7 +237,7 @@ const loadProduct = async (req, res) => {
 };
 
 
-
+//load profile
 const loadprofile = async (req, res) => {
   try {
 
@@ -250,6 +250,35 @@ const loadprofile = async (req, res) => {
     console.log(error.message);
   }
 };
+
+
+//load profile
+const editProfile = async (req, res) => {
+  try {
+    console.log(req.body.name,req.body.email,req.body.mobile);
+    const data= await User.findOneAndUpdate({email:req.body.email},{$set:{
+      name:req.body.name,
+      email:req.body.email,
+      mobile:req.body.mobile,
+    }}) 
+    console.log(data);
+    res.redirect("/profile")
+  } catch (error){
+    console.log(error.message);
+  }
+};
+
+
+//load profile
+const sample = async (req, res) => {
+  try {
+    
+    res.render("addAddress")
+  } catch (error){
+    console.log(error.message);
+  }
+};
+
 
 
 
@@ -267,6 +296,9 @@ module.exports = {
   loadProduct,
   userLogout,
   resendOtp,
-  loadprofile
+  loadprofile,
+  editProfile,
+  sample
+
 
 };
