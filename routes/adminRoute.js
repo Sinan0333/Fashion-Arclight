@@ -52,10 +52,10 @@ admin_route.post('/updateCategory',categoryControllers.updateCategory)
 // =========================================< Product Management  >=================================================
 admin_route.get('/product',auth.isLogin,productControllers.loadProductManagement)
 admin_route.get('/addproduct',auth.isLogin,productControllers.loadAddProduct)
-admin_route.post('/addProduct',multer.upload.array('images',4),productControllers.addProduct)
+admin_route.post('/addProduct',multer.prducts.array('images',4),productControllers.addProduct)
 admin_route.get('/blockProduct',auth.isLogin,productControllers.blockProduct)
 admin_route.get('/editProduct',auth.isLogin,productControllers.loadEditProduct)
-admin_route.post('/editProduct',multer.upload.any(),productControllers.editProduct)
+admin_route.post('/editProduct',multer.prducts.any(),productControllers.editProduct)
 admin_route.get('/deleteProduct',productControllers.deleteProduct)
 
 

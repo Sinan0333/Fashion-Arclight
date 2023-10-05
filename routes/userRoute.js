@@ -7,6 +7,7 @@ const userControllers=require('../controller/userControllers')
 const addressControllers=require('../controller/addressControllers')
 const config = require('../config/config')
 const auth = require('../middleware/auth')
+const multer = require('../middleware/multer')
 
 
 user_route.set('view engine','ejs')
@@ -31,7 +32,7 @@ user_route.get('/logout',auth.isLogin,userControllers.userLogout)
 
 // =========================================< Signup verification >=================================================
 user_route.get('/signUp',auth.isLogout,userControllers.loadRegister)
-user_route.post('/signUp',userControllers.insertUser)
+user_route.post('/signUp',multer.user.single('img'),userControllers.insertUser)
 user_route.post('/validate',userControllers.otpVarification)
 user_route.get('/resend',auth.isLogout,userControllers.resendOtp)
 
@@ -39,10 +40,12 @@ user_route.get('/resend',auth.isLogout,userControllers.resendOtp)
 // =========================================< Home Page >=================================================
 user_route.get('/',userControllers.loadHome)
 user_route.get('/profile',auth.isLogin,userControllers.loadprofile)
+user_route.get('/addAddress',addressControllers.loadAddAddress)
 user_route.post('/addAddress',addressControllers.addAddress)
 user_route.get('/editAddress',addressControllers.loadEditAddress)
 user_route.post('/editAddress',addressControllers.editAddress)
-user_route.post('/editProfile',userControllers.editProfile)
+user_route.get('/editProfile',userControllers.loadEditProfile)
+user_route.post('/editProfile',multer.user.single('img'),userControllers.editProfile)
 user_route.get('/sample',userControllers.sample)
 
 

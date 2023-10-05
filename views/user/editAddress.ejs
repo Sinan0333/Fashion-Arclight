@@ -4,53 +4,52 @@
 <main class="main">
     <div class="container">
         <div style="width: 100%; height: 110px; background-color: white;"></div>
-
         <!-- Add address form start -->
         <div class="tab-pane "  >
             <h3>Add Address</h1>
             <form action="/editAddress" method="post">
+                <input type="hidden" class="form-control" name="_id" value="<%= edit._id %>" required>
                 <label>Full name *</label>
-                <input type="text" class="form-control" name="name" required>
+                <input type="text" class="form-control" name="name" value="<%= edit.fullName %>" required>
                 <div class="row">                                       
                     <div class="col-sm-6">
                         <label>Email *</label>
-                        <input type="email" class="form-control" name="email" required>
+                        <input type="email" class="form-control" name="email" value="<%= edit.email %>" required>
                     </div><!-- End .col-sm-6 -->
 
                     <div class="col-sm-6">
                         <label>Mobile *</label>
-                        <input type="number" class="form-control" name="mobile" required>
+                        <input type="number" class="form-control" name="mobile" value="<%= edit.mobile %>" required>
                     </div><!-- End .col-sm-6 -->
 
                     <div class="col-sm-6">
                         <label>State *</label>
-                        <input type="text" class="form-control" name="state" required>
+                        <input type="text" class="form-control" name="state" value="<%= edit.state %>" required>
                     </div><!-- End .col-sm-6 -->
 
                     <div class="col-sm-6">
                         <label>City *</label>
-                        <input type="text" class="form-control" name="city" required>
+                        <input type="text" class="form-control" name="city" value="<%= edit.city %>" required>
                     </div><!-- End .col-sm-6 -->
 
                     <div class="col-sm-6">
                         <label>Pincode *</label>
-                        <input type="number" class="form-control" name="pincode" required>
+                        <input type="number" class="form-control" name="pincode" value="<%= edit.pin %>"  required>
                     </div><!-- End .col-sm-6 -->
                                           
                     <div class="col-sm-6">
                         <label>House name *</label>
-                        <input type="text" class="form-control" name="house" required>
+                        <input type="text" class="form-control" name="house" value="<%= edit.houseName %>"  required>
                     </div><!-- End .col-sm-6 -->                                         
                 </div><!-- End .row -->                                   
 
                 <button type="submit" class="btn btn-outline-primary-2">
-                    <span>Add Address</span>
+                    <span>Save change</span>
                     <i class="icon-long-arrow-right"></i>
                 </button>
             </form>
         </div><!-- Add address form end -->
         <div style="width: 100%; height: 110px; background-color: white;"></div>
-
     </div><!-- End .container -->
 </main><!-- End .main -->
 

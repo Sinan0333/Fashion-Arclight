@@ -3,10 +3,23 @@ const Address = require("../model/addressModel");
 const User = require("../model/userModel");
 
 
+
+// Load ADD Address
+const loadAddAddress = async(req,res)=>{
+  try {
+
+    res.render("addAddress");
+
+  } catch (error) {
+      console.log(error.message);
+  }
+}
+
+
 //Add address
 const addAddress = async (req, res) => {
     try {
-  
+
         const user_id=req.session.user_id
         const data = {
             fullName:req.body.name,
@@ -84,6 +97,7 @@ const editAddress = async(req,res)=>{
 
 
 module.exports ={
+  loadAddAddress,
  addAddress,
  loadEditAddress,
  editAddress,

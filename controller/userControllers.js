@@ -101,18 +101,18 @@ const insertUser = async (req, res) => {
       res.render("signUp", { error: "Email already exist" });
     } else {
       const sPassword = await securePassword(req.body.password)
-      // const data = new User({
-      //   name: req.body.username,
-      //   email: req.body.email,
-      //   mobile: req.body.mobile,
-      //   password: sPassword,
-      //   is_admin:0,
-      //   is_blocked:false
-      // });
+ 
+      if(req.file.originalname){
+        var img = req.file.originalname
+      }else{
+        var img = 'default profile'
+      }
+      
       userData.name=req.body.username
       userData.email=req.body.email
       userData.mobile=req.body.mobile
       userData.password=sPassword
+      userData.image=img
       userData.is_admin=0
       userData.is_blocked=false
 
@@ -252,17 +252,52 @@ const loadprofile = async (req, res) => {
 };
 
 
-//load profile
+//load Editprofile Form
+const loadEditProfile = async (req, res) => {
+  try {
+    const user_id= req.session.user_id;
+    const userData = await User.findById(user_id)
+
+    res.render("editProfile",{user:userData})
+  } catch (error){
+    console.log(error.message);
+  }
+};
+
+
+//update profile
 const editProfile = async (req, res) => {
   try {
-    console.log(req.body.name,req.body.email,req.body.mobile);
-    const data= await User.findOneAndUpdate({email:req.body.email},{$set:{
+
+    const userData = await User.findById(req.session.user_id)
+
+    if(req.body.currentpswd&&req.body.newpswd){
+
+      const matchPassword = await bcrypt.compare(req.body.currentpswd,userData.password)
+
+      if(matchPassword){
+
+        var sPassword = await securePassword(req.body.newpswd)
+
+      }else{
+        res.render('editProfile',{error:'Current password is incorrect.please try again.',user:userData})
+      }
+      
+    }else{
+      var sPassword = userData.password
+    }
+
+    const data= await User.findOneAndUpdate({email:userData.email},{$set:{
       name:req.body.name,
       email:req.body.email,
       mobile:req.body.mobile,
+      password:sPassword,
+      image:req.file.originalname
     }}) 
+
     console.log(data);
     res.redirect("/profile")
+
   } catch (error){
     console.log(error.message);
   }
@@ -297,6 +332,7 @@ module.exports = {
   userLogout,
   resendOtp,
   loadprofile,
+  loadEditProfile,
   editProfile,
   sample
 

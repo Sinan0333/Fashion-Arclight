@@ -1,0 +1,60 @@
+
+<%- include('../layout/user/header.ejs') -%>
+
+<main class="main">
+    <div class="container">
+        <div style="width: 100%; height: 110px; background-color: white;"></div>
+        <!-- Add address form start -->
+        <div class="tab-pane "  >
+            <h3>Edit Profile</h1>
+            <form action="/editProfile" method="post" enctype="multipart/form-data" >
+                <div class="text-center mb-4">
+                    <div class="custom-file-upload">
+                        <div class="circular-image-input">
+                            <img src="images/user/orginal/<%= user.image %>" id="profile-picture" alt="Profile Picture">
+                            <input type="file" id="profile-picture-upload" name="img" accept="image/*" onchange="previewImage(event)">
+                        </div>
+                    </div>
+                </div>
+                <label>Full name *</label>
+                <input type="text" class="form-control" name="name" value="<%= user.name %>" required>
+                <div class="row">  
+                    <div class="col-sm-6">
+                        <label>Email *</label>
+                        <input type="email" class="form-control" name="email" value="<%= user.email %>" required>
+                    </div><!-- End .col-sm-6 -->
+
+                    <div class="col-sm-6">
+                        <label>Mobile *</label>
+                        <input type="NUM" class="form-control" name="mobile" value="<%= user.mobile %>" required>
+                    </div><!-- End .col-sm-6 -->
+                    <div class="col-sm-6">
+                        <label>Current password (leave blank to leave unchanged)</label>
+                        <input type="password" class="form-control" name="currentpswd"  >
+                    </div><!-- End .col-sm-6 -->
+
+                    <div class="col-sm-6">
+                        <label>New password (leave blank to leave unchanged)</label>
+                        <input type="password" class="form-control" name="newpswd"  >
+                    </div><!-- End .col-sm-6 -->
+                </div><!-- End .row -->                                   
+                <div >
+                    <% if (typeof error !== 'undefined') { %>
+                      <p style="color: red;"><%= error %></p>
+                    <% } %>
+                      
+                  </div>
+                <button type="submit" class="btn btn-outline-primary-2">
+                    <span>Save change</span>
+                    <i class="icon-long-arrow-right"></i>
+                </button>
+                <div class="pass">
+                    <br>
+                    <a href="#">Forgot Password?</a>
+                </div>
+            </form>
+        </div><!-- Add address form end -->
+        <div style="width: 100%; height: 110px; background-color: white;"></div>
+    </div><!-- End .container -->
+</main><!-- End .main -->
+<%- include('../layout/user/footer.ejs') -%>

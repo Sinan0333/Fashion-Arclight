@@ -10,8 +10,17 @@
     <div class="bg-img">
       <div class="content">
         <header>SignUp </header>
-        <form action="signUp" method="post" id="form">
-
+        <form action="signUp" method="post" id="form" enctype="multipart/form-data">
+          <div class="text-center mb-4">
+            <div class="custom-file-upload">
+                <div class="circular-image-input">
+                    <img src="user/images/default profile.jpg" id="profile-picture" alt="Profile Picture">
+                    <input type="file" id="profile-picture-upload" name="img" accept="image/*" onchange="previewImage(event)">
+                </div>
+            </div>
+        </div>
+        <br>
+        <br>
           <div class="field">
             <span class="fa fa-user"></span>
             <input type="text"  placeholder="Enter your name" name="username" required>
@@ -77,6 +86,7 @@
       });
     </script>
     <script src="user/js/signUp.js"></script>
+    <script src="user/js/myJs.js"></script>
 
   </body>
 </html>

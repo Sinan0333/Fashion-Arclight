@@ -86,59 +86,17 @@
                                           </div>
                                         <% }); %>
                                       </div>
-                                    <a  class="btn btn-primary" id="tab-addAddress-link" data-toggle="tab" href="#tab-addAddress" role="tab" aria-controls="tab-addAddress" aria-selected="false">Add Address</a>
+                                    <a  class="btn btn-primary"  href="/addAddress" >Add Address</a>
                                 </div><!-- Show Addresses end -->
 
                                 <!-- Add address form start -->
-                                <div class="tab-pane fade" id="tab-addAddress" role="tabpanel" aria-labelledby="tab-addAddress-link">
-                                    <button class="btn btn-close" id="closeAddAddressForm" style="font-size: 20px;font-weight: 100;color:#ebebeb;"><i class="fa-solid fa-xmark " ></i></button>
-                                    <form action="/addAddress" method="post">
-                                        <br>
-                                        <label>Full name *</label>
-                                        <input type="text" class="form-control" name="name" required>
-                                    <div class="row">                                       
-                                        <div class="col-sm-6">
-                                              <label>Email *</label>
-                                              <input type="email" class="form-control" name="email" required>
-                                          </div><!-- End .col-sm-6 -->
-
-                                          <div class="col-sm-6">
-                                            <label>Mobile *</label>
-                                            <input type="number" class="form-control" name="mobile" required>
-                                          </div><!-- End .col-sm-6 -->
-
-                                          <div class="col-sm-6">
-                                              <label>State *</label>
-                                              <input type="text" class="form-control" name="state" required>
-                                          </div><!-- End .col-sm-6 -->
-
-                                          <div class="col-sm-6">
-                                              <label>City *</label>
-                                              <input type="text" class="form-control" name="city" required>
-                                          </div><!-- End .col-sm-6 -->
-
-                                          <div class="col-sm-6">
-                                              <label>Pincode *</label>
-                                              <input type="number" class="form-control" name="pincode" required>
-                                          </div><!-- End .col-sm-6 -->
-                                          
-                                          <div class="col-sm-6">
-                                            <label>House name *</label>
-                                            <input type="text" class="form-control" name="house" required>
-                                        </div><!-- End .col-sm-6 -->                                         
-                                    </div><!-- End .row -->                                   
-
-                                        <button type="submit" class="btn btn-outline-primary-2">
-                                          <span>Add Address</span>
-                                          <i class="icon-long-arrow-right"></i>
-                                        </button>
-                                      </form>
-                                </div><!-- Add address form end -->
+                                
 
                                 <!-- user profiel start -->
                                 <div class="tab-pane fade show active" id="tab-account"  role="tabpanel" aria-labelledby="tab-account-link">
+                                <form action="/editProfile">
                                     <div class="circle-image">
-                                        <img src="user/images/product-09.jpg" alt="Image" />
+                                        <img src="images/user/orginal/<%= user.image %>" alt="<%= user.image %>" />
                                     </div>
                                     <br>
                                     <br>
@@ -152,9 +110,10 @@
                                             <i class="icon-long-arrow-right"></i>
                                         </button>
                                     </div>
+                                </form>
                                 </div>
                                 
-                                <div id="editProfileForm" style="display: none;">
+                                <!-- <div id="editProfileForm" style="display: none;">
                                     <form action="/editProfile" method="post" enctype="multipart/form-data">
                                         <div class="text-center mb-4">
                                             <div class="custom-file-upload">
@@ -172,7 +131,7 @@
                                             <i class="icon-long-arrow-right"></i>
                                         </button>
                                     </form>
-                                </div>
+                                </div> -->
                                 
 
                             </div>
