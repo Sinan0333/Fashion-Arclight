@@ -3,11 +3,14 @@ const Product = require('../model/productModel')
 const Address = require("../model/addressModel");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
+const fs = require("fs")
 require("dotenv").config()
+
 
 
 let OTP;
 const userData ={};
+let email;
 
 
 //bcrypt password
@@ -37,7 +40,7 @@ const loadlogin = async (req, res) => {
 //user logout 
 const userLogout = async (req, res) => {
   try {
-    req.session.destroy()
+    req.session.user_id.destroy()
     res.redirect('/login')
   } catch {
     console.log(error.message);
@@ -79,6 +82,63 @@ const verifyLogin = async (req,res)=>{
     console.log(error.message);
   }
 }
+
+
+//forgot password
+const forgotPassword = async (req, res) => {
+  try {
+   
+    if(req.session.user_id){
+     const userData =await User.findOne({_id:req.session.user_id})
+      sendVerifyMail(userData.name,userData.email)
+      res.render('verification')
+    }else{
+      res.render('getEmail')
+    }
+  } catch {
+    console.log(error.message);
+  }
+};
+
+
+// to get email of the user to send otp to the user
+const getEmail= async (req, res) => {
+  try {
+   
+   email = req.body.email
+   const userData = await User.findOne({email:email})
+   if(userData){
+    sendVerifyMail('user',email)
+    res.render('verification')
+   }else{
+    res.render(getEmail,{error:'Email not found'})
+   }
+   
+  } catch {
+    console.log(error.message);
+  }
+};
+
+
+// to change the password in db
+const changePassword= async (req, res) => {
+  try {
+   
+  if (req.session.user_id) {
+    const user_id = req.session.user_id
+    const sPassword = await securePassword(req.body.newpswd)
+    await User.findOneAndUpdate({_id:user_id},{$set:{password:sPassword}})
+    res.redirect("/profile")
+  }else{
+    const sPassword = await securePassword(req.body.newpswd)
+    await User.findOneAndUpdate({email:email},{$set:{password:sPassword}})
+    res.redirect("/login")
+  }
+   
+  } catch {
+    console.log(error.message);
+  }
+};
 
 
 // =========================================< Signup >=================================================
@@ -178,16 +238,23 @@ const otpVarification = async (req, res) => {
     const otp = first + second + third + fourth;
 
   if(otp!==OTP){
-    res.render('signUp')
-    // res.render("index");
+    res.render('verification',{error:'Otp verification failed'})
   }
   else{
 
-    const data =new User(userData)
-    const result = await data.save()
-    req.session.user_id=result._id
-    res.redirect("/"); 
-
+    if(req.session.user_id){
+      res.render('changePassword')
+    }else{
+      const Data = await User.findOne({email:email})
+      if(Data){
+        res.render('changePassword')
+      }else{
+        const data =new User(userData)
+        const result = await data.save()
+        req.session.user_id=result._id
+        res.redirect("/"); 
+      }
+    }
   }
     
   } catch (error) {
@@ -270,7 +337,7 @@ const editProfile = async (req, res) => {
   try {
 
     const userData = await User.findById(req.session.user_id)
-
+// checking user changed theire password
     if(req.body.currentpswd&&req.body.newpswd){
 
       const matchPassword = await bcrypt.compare(req.body.currentpswd,userData.password)
@@ -287,12 +354,22 @@ const editProfile = async (req, res) => {
       var sPassword = userData.password
     }
 
+    //checking the user changed therir profile photo or not
+    let img;
+   if(req.file && req.file.originalname){
+      img=req.file.originalname
+      const imagePathOrginal = `public/images/product/orginal/${userData.image}`
+      fs.lutimesSync(imagePathOrginal)
+   }else{
+      img = userData.image
+   }
+
     const data= await User.findOneAndUpdate({email:userData.email},{$set:{
       name:req.body.name,
       email:req.body.email,
       mobile:req.body.mobile,
       password:sPassword,
-      image:req.file.originalname
+      image:img
     }}) 
 
     console.log(data);
@@ -308,7 +385,7 @@ const editProfile = async (req, res) => {
 const sample = async (req, res) => {
   try {
     
-    res.render("addAddress")
+    res.render("changePassword")
   } catch (error){
     console.log(error.message);
   }
@@ -328,6 +405,9 @@ module.exports = {
   otpVarification,
   loadlogin,
   verifyLogin,
+  forgotPassword,
+  getEmail,
+  changePassword,
   loadProduct,
   userLogout,
   resendOtp,

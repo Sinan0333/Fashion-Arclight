@@ -35,6 +35,9 @@ user_route.get('/signUp',auth.isLogout,userControllers.loadRegister)
 user_route.post('/signUp',multer.user.single('img'),userControllers.insertUser)
 user_route.post('/validate',userControllers.otpVarification)
 user_route.get('/resend',auth.isLogout,userControllers.resendOtp)
+user_route.get('/forgotPassword',userControllers.forgotPassword)
+user_route.post('/getEmail',userControllers.getEmail)
+user_route.post('/changePassword',userControllers.changePassword)
 
 
 // =========================================< Home Page >=================================================

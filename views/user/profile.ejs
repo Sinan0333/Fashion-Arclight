@@ -41,7 +41,7 @@
                                     <a class="nav-link " id="tab-dashboard-link" data-toggle="tab" href="#tab-dashboard" role="tab" aria-controls="tab-dashboard" aria-selected="false">dashboard</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">Sign Out</a>
+                                    <a class="nav-link" href="logout">Sign Out</a>
                                 </li>
                             </ul>
                         </aside><!-- End .col-lg-3 --><!-- Show Addresses end -->
@@ -66,31 +66,33 @@
 
                                 <!-- Show Addresses start -->
                                 <div class="tab-pane fade" id="tab-address" role="tabpanel" aria-labelledby="tab-address-link">
-                                    <p>The following addresses will be used on the checkout page by default.</p>
-                                    <div class="row">
-                                        <% addresses.address.forEach(function(address, index) { %>
-                                          <div class="col-lg-6">
-                                            <div class="card card-dashboard">
-                                              <div class="card-body">
-                                                <h3 class="card-title">Address <%= index + 1 %></h3>
-                                                <p>Name: <%= address.fullName %><br>
-                                                Email: <%= address.email %><br>
-                                                Mobile: <%= address.mobile %><br>
-                                                State: <%= address.state %><br>
-                                                City: <%= address.city %><br>
-                                                House Name: <%= address.houseName %><br>
-                                                Pincode: <%= address.pin %><br>
-                                                <a href="/editAddress?ind=<%= index %>" >Edit <i class="icon-edit"></i></a>
-                                            </div>
-                                            </div>
-                                          </div>
-                                        <% }); %>
-                                      </div>
-                                    <a  class="btn btn-primary"  href="/addAddress" >Add Address</a>
+                                    <% if (addresses=== null    ) { %>
+                                        <p>No addresses have been added yet.</p>
+                                        <a class="btn btn-primary" href="/addAddress">Add Address</a>
+                                    <% } else { %>
+                                        <p>The following addresses will be used on the checkout page by default.</p>
+                                        <div class="row">
+                                            <% addresses.address.forEach(function(address, index) { %>
+                                                <div class="col-lg-6">
+                                                    <div class="card card-dashboard">
+                                                        <div class="card-body">
+                                                            <h3 class="card-title">Address <%= index + 1 %></h3>
+                                                            <p>Name: <%= address.fullName %><br>
+                                                            Email: <%= address.email %><br>
+                                                            Mobile: <%= address.mobile %><br>
+                                                            State: <%= address.state %><br>
+                                                            City: <%= address.city %><br>
+                                                            House Name: <%= address.houseName %><br>
+                                                            Pincode: <%= address.pin %><br>
+                                                            <a href="/editAddress?ind=<%= index %>" >Edit <i class="icon-edit"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <% }); %>
+                                        </div>
+                                        <a class="btn btn-primary" href="/addAddress">Add Address</a>
+                                    <% } %>
                                 </div><!-- Show Addresses end -->
-
-                                <!-- Add address form start -->
-                                
 
                                 <!-- user profiel start -->
                                 <div class="tab-pane fade show active" id="tab-account"  role="tabpanel" aria-labelledby="tab-account-link">
@@ -112,28 +114,6 @@
                                     </div>
                                 </form>
                                 </div>
-                                
-                                <!-- <div id="editProfileForm" style="display: none;">
-                                    <form action="/editProfile" method="post" enctype="multipart/form-data">
-                                        <div class="text-center mb-4">
-                                            <div class="custom-file-upload">
-                                                <div class="circular-image-input">
-                                                    <img src="user/images/product-02.jpg" id="profile-picture" alt="Profile Picture">
-                                                    <input type="file" id="profile-picture-upload" accept="image/*" onchange="previewProfilePicture(event)">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <input type="text" name="name"  value="<%= user.name %>">
-                                        <input type="text" name="email" value="<%= user.email %>" >
-                                        <input type="text" name="mobile" value="<%= user.mobile  %>">
-                                        <button type="submit" class="btn btn-outline-primary-2">
-                                            <span>Save change</span>
-                                            <i class="icon-long-arrow-right"></i>
-                                        </button>
-                                    </form>
-                                </div> -->
-                                
-
                             </div>
                         </div><!-- End .col-lg-9 -->
                     </div><!-- End .row -->

@@ -21,7 +21,6 @@
     position: relative;
     width: 200px;
     height: 200px;
-
     border-radius: 50%;
     overflow: hidden;
     cursor: pointer;
@@ -46,9 +45,7 @@
 .text-center.mb-4 {
     display: flex;
     align-items: center;
-    /* Center vertically */
     justify-content: flex-start;
-    /* Align on the left */
 }
 
 /* profile circle image*/
