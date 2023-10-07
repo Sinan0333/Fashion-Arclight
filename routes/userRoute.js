@@ -5,6 +5,7 @@ const session = require('express-session')
 
 const userControllers=require('../controller/userControllers')
 const addressControllers=require('../controller/addressControllers')
+const cartControllers=require('../controller/cartControllers')
 const config = require('../config/config')
 const auth = require('../middleware/auth')
 const multer = require('../middleware/multer')
@@ -50,6 +51,9 @@ user_route.post('/editAddress',addressControllers.editAddress)
 user_route.get('/editProfile',userControllers.loadEditProfile)
 user_route.post('/editProfile',multer.user.single('img'),userControllers.editProfile)
 user_route.get('/sample',userControllers.sample)
+user_route.post('/addToCart',cartControllers.addToCart)
+user_route.get('/cart',cartControllers.loadCart)
+user_route.post('/updateCart',cartControllers.updateCart)
 
 
 

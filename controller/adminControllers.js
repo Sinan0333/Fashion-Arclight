@@ -32,7 +32,7 @@ const loadlogin = async(req,res)=>{
 //admin logout
 const adminLogout = async(req,res)=>{
   try {
-    req.session.admin_id.destroy()
+    req.session.destroy()
     res.redirect('/admin/login')
   } catch (error) {
       console.log(error.message);

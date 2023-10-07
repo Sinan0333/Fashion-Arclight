@@ -40,7 +40,7 @@ const loadlogin = async (req, res) => {
 //user logout 
 const userLogout = async (req, res) => {
   try {
-    req.session.user_id.destroy()
+    req.session.destroy()
     res.redirect('/login')
   } catch {
     console.log(error.message);
@@ -385,7 +385,7 @@ const editProfile = async (req, res) => {
 const sample = async (req, res) => {
   try {
     
-    res.render("changePassword")
+    res.render("cart")
   } catch (error){
     console.log(error.message);
   }

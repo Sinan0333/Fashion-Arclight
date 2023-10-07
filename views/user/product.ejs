@@ -79,7 +79,7 @@
                                 </div><!-- End .rating-container -->
 
                                 <div class="product-price">
-                                   $ <%= product.price %>
+                                    ₹ <%= product.price %>
                                 </div><!-- End .product-price -->
 
                                 <div class="product-content">
@@ -114,15 +114,8 @@
                                     <a href="#" class="size-guide"><i class="icon-th-list"></i>size guide</a>
                                 </div><!-- End .details-filter-row -->
 
-                                <div class="details-filter-row details-row-size">
-                                    <label for="qty">Qty:</label>
-                                    <div class="product-details-quantity">
-                                        <input type="number" id="qty" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required>
-                                    </div><!-- End .product-details-quantity -->
-                                </div><!-- End .details-filter-row -->
-
                                 <div class="product-details-action">
-                                    <a href="#" class="btn-product btn-cart"><span> add to cart</span></a>
+                                    <a href="#" class="btn-product btn-cart " onclick="addToCart('<%= product._id %>');"><span> add to cart</span></a>
 
                                     <div class="details-action-wrapper">
                                         <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to Wishlist</span></a>
@@ -393,6 +386,30 @@
     </div> 
 </section>              
 
+<script>
+    function addToCart(productId) {
+        const data = {productId:productId}
+
+        $.ajax({
+            method: 'POST',
+            url: '/addToCart', 
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: function (response) {
+                if(response.stock===true){
+                    swal("Success", "Item added to cart!", "success")
+                }else{
+                    swal("Sorry", "No stock!", "error");
+                }
+
+            },
+            error: function (error) {
+                // Handle any errors from the server
+                console.error(error);
+            }
+        });
+    }
+</script>
 
 
 
