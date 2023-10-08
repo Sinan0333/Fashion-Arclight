@@ -19,22 +19,22 @@
 <form class="bg0 p-t-20 p-b-85">
     <div class="container">
         <div class="row">
-            <div class="col-lg-10 col-xl-7 m-lr-auto m-b-50" >
+            <div class="col-lg-10 col-xl-8 m-lr-auto m-b-50" >
                 <div class="m-l-25 m-r--38 m-lr-0-xl">
-                    <div class="wrap-table-shopping-cart">
-                        <% if (cart=== null    ) { %>
-                        <p>Cart is Empty.</p>
-                        <% } else { %>
-                            <% cart.products.forEach(function(product, index) { %>
+                    <div class="wrap-table-shopping-cart" id="reloadArea">
                         <table class="table-shopping-cart">
                             <tr class="table_head">
                                 <th class="column-1">Product</th>
                                 <th class="column-2"></th>
                                 <th class="column-3">Price</th>
+                                <th class="column-3">Stock</th>
                                 <th class="column-4">Quantity</th>
                                 <th class="column-5">Total</th>
                             </tr>
-
+                            <% if (cart=== null    ) { %>
+                                <p>Cart is Empty.</p>
+                                <% } else { %>
+                                    <% cart.products.forEach(function(product, index) { %>
                             <tr class="table_row">
                                 <td class="column-1">
                                     <div class="how-itemcart1">
@@ -43,21 +43,37 @@
                                 </td>
                                 <td class="column-2"><%= product.productId.name %></td>
                                 <td class="column-3"><%= product.price %></td>
+                                <% if (product.productId.quantity === 0) { %>
+                                    <td class="column-3 " style="color: blue;">Out of stock</td>
+                                <% } else if (product.productId.quantity < 6) { %>
+                                    <td class="column-3" style="color: red;">Only <%= product.productId.quantity %> left</td>
+                                <% } else { %>
+                                    <td class="column-3" style="color: lime;">Available</td>
+                                <% } %>
                                 <td class="column-4">
                                     <div class="wrap-num-product flex-w m-l-auto m-r-0">
-                                        <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m"  onclick="minus('<%= product %>');">
+                                        <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m"  onclick="updateCart('<%= product.productId._id %>',-1);">
                                             <i class="fs-16 zmdi zmdi-minus"></i>
                                         </div>
 
-                                        <input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product1" value="1">
+                                        <input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product1" max="3" value="<%= product.count %>" >
 
-                                        <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m" onclick="plus('<%= product.productId._id %>',1);">
+                                        <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m" onclick="updateCart('<%= product.productId._id %>',1);">
                                             <i class="fs-16 zmdi zmdi-plus"></i>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="column-5"><%= product.price %></td>
-                            </tr>
+                                <td class="column-5"><%= product.totalPrice %></td>
+                            <!-- </tr>
+                            <tr style="text-align: center;">
+                                <% if (product.productId.quantity === 0) { %>
+                                    <td  style="text-align: center;">Out of stock</td>
+                                <% } else if (product.productId.quantity < 6) { %>
+                                    <td class="column-3">Only <%= product.productId.quantity %> left</td>
+                                <% } else { %>
+                                    <td class="column-3">Available</td>
+                                <% } %>
+                            </tr> -->
                             <% }); %>
                             <% } %>
 
@@ -264,9 +280,8 @@
 </div>
 
 <script>
-    function plus(productId,count) {
+    function updateCart(productId,count) {
         const data = {productId:productId,count:count}
-        console.log(data);
         $.ajax({
             method: 'POST',
             url: '/updateCart', 
@@ -274,14 +289,14 @@
             contentType: 'application/json',
             success: function (response) {
                 if(response.stock===true){
-                    swal("Success", "Item added to cart!", "success")
+                    $('#reloadArea').load('/cart #reloadArea'); 
                 }else{
-                    swal("Sorry", "No stock!", "error");
+                    swal("Stock Limit Reached", "", "error");
                 }
 
             },
             error: function (error) {
-                // Handle any errors from the server
+
                 console.error(error);
             }
         });
