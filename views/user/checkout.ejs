@@ -1,0 +1,189 @@
+<%- include('../layout/user/header.ejs') -%>
+
+<div style="width: 100%;height: 77px;"></div>
+<section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url('user/images/bg-01.jpg');">
+    <h2 class="ltext-105 cl0 txt-center">
+        Checkout
+    </h2>
+</section>	
+<br>
+
+<nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
+    <div class="container">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Shop</a></li>
+            <li class="breadcrumb-item active" aria-current="page">My Account</li>
+        </ol>
+    </div><!-- End .container -->
+</nav><!-- End .breadcrumb-nav -->
+
+<div class="page-content">
+    <div class="checkout">
+        <div class="container">
+            <div class="checkout-discount">
+                <form action="#">
+                    <input type="text" class="form-control" required id="checkout-discount-input">
+                    <label for="checkout-discount-input" class="text-truncate">Have a coupon? <span>Click here to enter your code</span></label>
+                </form>
+            </div><!-- End .checkout-discount -->
+            <form action="/placeOrder" method="post">
+                <div class="row">
+                    <div class="col-lg-9">
+                    <% if (addresses.address.length>0) { %>
+                        <div class="row">
+                            <% addresses.address.forEach(function(address, index) { %>
+                                <div class="col-lg-6">
+                                    <div class="card card-dashboard">
+                                        <div class="card-body">
+                                            <input type="radio" name="address" value="<%= index %>">
+                                            <h3 class="card-title">Address <%= index + 1 %></h3>
+                                            <p>Name: <%= address.fullName %><br>
+                                            Email: <%= address.email %><br>
+                                            Mobile: <%= address.mobile %><br>
+                                            State: <%= address.state %><br>
+                                            City: <%= address.city %><br>
+                                            House Name: <%= address.houseName %><br>
+                                            Pincode: <%= address.pin %><br>
+                                            <a href="/editAddress?ind=<%= index %>" >Edit <i class="icon-edit"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% }); %>
+                        </div>
+                        <% } else { %>
+                            <div class="tab-pane "  >
+                                <h3>Add Address</h1>
+                                <!-- <form action="/addAddress" method="post"> -->
+                                    <label>Full name *</label>
+                                    <input type="text" class="form-control" name="name" required>
+                                    <div class="row">                                       
+                                        <div class="col-sm-6">
+                                            <label>Email *</label>
+                                            <input type="email" class="form-control" name="email" required>
+                                        </div><!-- End .col-sm-6 -->
+                    
+                                        <div class="col-sm-6">
+                                            <label>Mobile *</label>
+                                            <input type="number" class="form-control" name="mobile" required>
+                                        </div><!-- End .col-sm-6 -->
+                    
+                                        <div class="col-sm-6">
+                                            <label>State *</label>
+                                            <input type="text" class="form-control" name="state" required>
+                                        </div><!-- End .col-sm-6 -->
+                    
+                                        <div class="col-sm-6">
+                                            <label>City *</label>
+                                            <input type="text" class="form-control" name="city" required>
+                                        </div><!-- End .col-sm-6 -->
+                    
+                                        <div class="col-sm-6">
+                                            <label>Pincode *</label>
+                                            <input type="number" class="form-control" name="pincode" required>
+                                        </div><!-- End .col-sm-6 -->
+                                                              
+                                        <div class="col-sm-6">
+                                            <label>House name *</label>
+                                            <input type="text" class="form-control" name="house" required>
+                                        </div><!-- End .col-sm-6 -->                                         
+                                    </div><!-- End .row -->                                   
+                    
+                                    <!-- <button type="submit" class="btn btn-outline-primary-2">
+                                        <span>Add Address</span>
+                                        <i class="icon-long-arrow-right"></i>
+                                    </button> -->
+                                <!-- </form> -->
+                            </div><!-- Add address form end -->
+                    <% } %>
+                    </div>    
+                    <aside class="col-lg-3" >
+                        <div class="summary">
+                            <h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
+    
+                            <table class="table table-summary">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                               
+                                <tbody>
+                                    <% cart.products.forEach(function(product, index) { %>
+                                    <tr>
+                                        <td><a href="#"><%= product.productId.name %></a></td>
+                                        <td>$ <%= product.totalPrice %></td>
+                                    </tr>
+                                    <% }); %>
+                                    <tr class="summary-subtotal">
+                                        <td>Subtotal:</td>
+                                        <td>$ <%= total[0].total %></td>
+                                    </tr><!-- End .summary-subtotal -->
+                                    <tr>
+                                        <td>Shipping:</td>
+                                        <td>Free shipping</td>
+                                    </tr>
+                                    <tr class="summary-total">
+                                        <td>Total:</td>
+                                        <td>$ <%= total[0].total %></td>
+                                    </tr><!-- End .summary-total -->
+                                </tbody>
+                               
+                            </table><!-- End .table table-summary -->
+                            <div class="d-flex align-items-center">
+                                <div class="mr-2">
+                                  <input
+                                    required
+                                    type="radio"
+                                    id="COD"
+                                    name="payment"
+                                    value="COD"
+                                  />
+                                </div>
+                                <a href="" class="d-block text-dark" for="pay1"
+                                  >Cash On Delivery</a
+                                >
+                              </div>
+              
+                              <div class="d-flex align-items-center">
+                                <div class="mr-2">
+                                  <input
+                                    required
+                                    type="radio"
+                                    id="payment"
+                                    name="payment"
+                                    value="onlinePayment"
+                                    checked
+                                  />
+                                </div>
+                                <a href="" class="d-block text-dark" for="pay2"
+                                  >Online Payment</a
+                                >
+                              </div>
+              
+                              <div class="d-flex align-items-center">
+                                <div class="mr-2">
+                                  <input
+                                    required
+                                    type="radio"
+                                    id="wallet"
+                                    name="payment"
+                                    value="wallet"
+                                  />
+                                </div>
+                                <a href="" class="d-block text-dark" for="pay3">Wallet</a>
+                              </div>
+                            <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
+                                <span class="btn-text">Place Order</span>
+                                <span class="btn-hover-text">Proceed to Checkout</span>
+                            </button>
+                        </div><!-- End .summary -->
+                    </aside><!-- End .col-lg-3 -->
+                </div><!-- End .row -->
+            </form>
+        </div><!-- End .container -->
+    </div><!-- End .checkout -->
+</div><!-- End .page-content -->
+
+<%- include('../layout/user/footer.ejs') -%>

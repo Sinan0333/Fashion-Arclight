@@ -1,5 +1,6 @@
 const Cart = require('../model/cartModel')
 const Product = require('../model/productModel')
+const Address = require("../model/addressModel");
 
 
 // Show Cart
@@ -26,7 +27,6 @@ const addToCart = async(req,res)=>{
         const cartData = await Cart.findOne({'products.productId':product_id})
 
         if(productData.quantity>0){
-
             if(cartData){
                 await Cart.findOneAndUpdate(
                     { user: user_id ,'products.productId':product_id},
@@ -38,8 +38,7 @@ const addToCart = async(req,res)=>{
                     price:productData.price,
                     totalPrice:productData.price
                 }
-    
-                await Cart.findOneAndUpdate(
+               const s= await Cart.findOneAndUpdate(
     
                     { user: user_id },
                     {
@@ -48,8 +47,9 @@ const addToCart = async(req,res)=>{
                     },
                     { upsert: true, new: true }
         
-                );
+                )
             }
+            
             res.json({stock:true})
             
         }else{
@@ -108,8 +108,70 @@ const updateCart = async(req,res)=>{
     }
 }
 
+
+// remove products from the cart
+const removeProduct = async(req,res)=>{
+  try {
+      
+    const product_id = req.body.productId
+    const user_id = req.session.user_id
+    const cartData =  await Cart.findOneAndUpdate({user:user_id},{$pull:{products:{productId:product_id}}})
+    if(cartData){
+      res.json({remove:true})
+    }else{
+      res.json({remove:false})
+    }
+  } catch (error) {
+      console.log(error.message);
+  }
+}
+
+
+// Show Checkout page
+const loadCheckout = async(req,res)=>{
+  try {
+    
+    const user_id = req.session.user_id
+    const addressData = await Address.findOne({user:user_id})
+    const cartData = await Cart.findOne({user:user_id}).populate('products.productId')
+
+
+    const total = await Cart.aggregate([
+      {
+        $match: { _id: cartData._id } 
+      },
+      {
+        $unwind: '$products' 
+      },
+      {
+        $group: {
+          _id: null,
+          total: {
+            $sum: {
+              $multiply: ['$products.price', '$products.count'] 
+            }
+          }
+        }
+      }
+    ]);
+   
+    res.render("checkout",{addresses:addressData,cart:cartData,total:total})
+
+  } catch (error) {
+      console.log(error.message);
+  }
+}
+
+
+
+
+
 module.exports ={
   addToCart,
   loadCart,
   updateCart,
+  removeProduct,
+  loadCheckout,
+
+  
 }

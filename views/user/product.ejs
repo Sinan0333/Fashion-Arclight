@@ -2,8 +2,6 @@
 
 
 <div class="page-wrapper">
-        
-
     <main class="main">
         <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
             <br>
@@ -119,7 +117,7 @@
                                 </div>
 
                                 <div class="product-details-action">
-                                    <a href="#" class="btn-product btn-cart " onclick="addToCart('<%= product._id %>');"><span> add to cart</span></a>
+                                    <p class="btn-product btn-cart " onclick="addToCart('<%= product._id %>');"><span> add to cart</span></p>
 
                                     <div class="details-action-wrapper">
                                         <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to Wishlist</span></a>
@@ -394,6 +392,7 @@
     function addToCart(productId) {
         const data = {productId:productId}
 
+        console.log(data);
         $.ajax({
             method: 'POST',
             url: '/addToCart', 

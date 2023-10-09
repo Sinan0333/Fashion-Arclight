@@ -1,19 +1,22 @@
 <%- include('../layout/user/header.ejs') -%>
 
-<div class="container">
-    <div style="width: 100%; height: 60px; background-color: white;"></div>
-    <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
-        <a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
-            Home
-            <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
-        </a>
+<div style="width: 100%;height: 77px;"></div>
+<section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url('user/images/bg-01.jpg');">
+    <h2 class="ltext-105 cl0 txt-center">
+        Cart
+    </h2>
+</section>	
+<br>
 
-        <span class="stext-109 cl4">
-            Shoping Cart
-        </span>
-    </div>
-</div>
-    
+<nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
+    <div class="container">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Shop</a></li>
+            <li class="breadcrumb-item active" aria-current="page">My Account</li>
+        </ol>
+    </div><!-- End .container -->
+</nav><!-- End .breadcrumb-nav -->
 
 <!-- Shoping Cart -->
 <form class="bg0 p-t-20 p-b-85">
@@ -64,6 +67,7 @@
                                     </div>
                                 </td>
                                 <td class="column-5"><%= product.totalPrice %></td>
+                                <td><p class="btn-remove" title="Remove Product" onclick="removeProduct('<%= product.productId._id %>')"><i class="icon-close"></i></p></td>
                             <!-- </tr>
                             <tr style="text-align: center;">
                                 <% if (product.productId.quantity === 0) { %>
@@ -178,7 +182,7 @@
                                     </tbody>
                                 </table><!-- End .table table-summary -->
 
-                                <a href="checkout.html" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a>
+                                <a href="/checkout" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a>
                             </div><!-- End .summary -->
 
                             <a href="category.html" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a>
@@ -300,6 +304,27 @@
                 console.error(error);
             }
         });
+    }
+
+    function removeProduct(productId){
+        const data = {productId:productId}
+
+        $.ajax({
+            method:'POST',
+            url:'/removeProduct',
+            data:JSON.stringify(data),
+            contentType:'application/json',
+            success:function(response){
+                if(response.remove==true){
+                    swal("Success", "Item removed from the cart!", "success")
+                    $('#reloadArea').load('/cart #reloadArea'); 
+                }
+            },
+            error:function(error){
+                console.log(error);
+            }
+        });
+
     }
 </script>
 

@@ -1,0 +1,226 @@
+<%- include('../layout/user/header.ejs') -%>
+
+<main class="main">
+  <div
+    class="page-header text-center"
+    style="background-image: url('assets/images/page-header-bg.jpg')"
+  >
+    <div class="container">
+      <h1 class="page-title">Checkout<span>Shop</span></h1>
+    </div>
+    <!-- End .container -->
+  </div>
+  <!-- End .page-header -->
+  <nav aria-label="breadcrumb" class="breadcrumb-nav">
+    <div class="container">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item"><a href="/cart">Cart</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+      </ol>
+    </div>
+    <!-- End .container -->
+  </nav>
+  <!-- End .breadcrumb-nav -->
+
+  <div class="page-content">
+    <div class="checkout">
+      <div class="container">
+        <div class="">
+          <label for="checkout-discount-input" class="text-truncate"
+            >Have a coupon? <span>Enter your code below.</span></label
+          >
+        </div>
+        <div class="cart-discount">
+          
+            <div class="input-group mb-5">
+              <input
+                type="text"
+                class="form-control"
+                required
+                name="code"
+                id="code"
+                placeholder="coupon code"
+                style="
+                  height: 40px;
+                  border: 1px dotted #000;
+                  padding-left: 10px;
+                "
+              />
+
+              <button
+                class="btn btn-outline-dark"
+                style="margin: 0; width: 70px; height: 40px"
+                onclick="applycoupon($('#code').val())"
+              >
+                <i class="icon-long-arrow-right"></i>
+              </button>
+            </div>
+        </div>
+
+        <form id="checkout-form">
+          <div class="row">
+            <div class="col-md-8">
+              <h5>Choose Billing Address</h5>
+              <% if(address.length> 0){ address.forEach((address)=>{ %>
+
+              <div class="col-md-10">
+                <div class="tabs-horizontal">
+                  <div class="card card-dashboard">
+                    <div class="card-body">
+                      <input
+                        class="form-check-input"
+                        required
+                        type="radio"
+                        name="address"
+                        id="flexRadioDefault1"
+                        value="<%= address.fullname %>,<%= address.mobile %>,<%= address.email %>,<%= address.houseName %>,<%= address.city %>,<%= address.state %>,<%= address.pin %>  "
+                      />
+                      <ul>
+                        <li>Full Name : <%= address.fullname %></li>
+                        <li>Mobile : <%= address.mobile %></li>
+                        <li>Email Id : <%= address.email %></li>
+                        <li>House Name : <%= address.houseName %></li>
+                        <li>City : <%= address.city %></li>
+                        <li>State : <%= address.state %></li>
+                        <li>Pin Code : <%= address.pin %></li>
+                        <div class="card-body">
+                          <a
+                            href="/editAddress?id=<%= address._id %>"
+                            class="btn btn-outline-dark btn-rounded"
+                            ><i class="icon-long-arrow-right">Edit </i></a
+                          >
+                          <a
+                            onclick="removeAddress('<%= address._id %>')"
+                            class="btn btn-outline-dark btn-rounded"
+                            ><i class="icon-long-arrow-right">Remove</i></a
+                          >
+                        </div>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <!-- End .tabs-vertical -->
+              </div>
+              <!-- End .col-md-6 -->
+              <% } ) } %>
+            </div>
+            <!-- End .col-md-6 -->
+
+            <aside class="col-lg-3">
+              <div class="summary">
+                <h3 class="summary-title">Your Order</h3>
+                <!-- End .summary-title -->
+
+                <table class="table table-summary">
+                  <thead>
+                    <tr>
+                      <th>Product</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <% products.forEach((value,index)=> { %>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <a
+                          ><%= value.productId.name %>(Set: <%= value.count
+                          %>)</a
+                        >
+                      </td>
+                      <td>₹ <%= value.totalPrice %></td>
+                    </tr>
+                    <% }) %>
+
+                    <tr class="summary-subtotal">
+                      <td>Subtotal:</td>
+                      <td id="total1"> <%= Total %></td>
+                    </tr>
+
+                    <!-- End .summary-subtotal -->
+                    <tr>
+                      <td>Shipping:</td>
+                      <td>Free shipping</td>
+                    </tr>
+                    <tr class="summary-total">
+                      <td>Total:</td>
+
+                      <td id="total1"><%= Total %></td>
+                    </tr>
+                    <!-- End .summary-total -->
+                  </tbody>
+                </table>
+
+                <div class="d-flex align-items-center">
+                  <div class="mr-2">
+                    <input
+                      required
+                      type="radio"
+                      id="COD"
+                      name="payment"
+                      value="COD"
+                    />
+                  </div>
+                  <a href="" class="d-block text-dark" for="pay1"
+                    >Cash On Delivery</a
+                  >
+                </div>
+
+                <div class="d-flex align-items-center">
+                  <div class="mr-2">
+                    <input
+                      required
+                      type="radio"
+                      id="payment"
+                      name="payment"
+                      value="onlinePayment"
+                      checked
+                    />
+                  </div>
+                  <a href="" class="d-block text-dark" for="pay2"
+                    >Online Payment</a
+                  >
+                </div>
+
+                <div class="d-flex align-items-center">
+                  <div class="mr-2">
+                    <input
+                      required
+                      type="radio"
+                      id="wallet"
+                      name="payment"
+                      value="wallet"
+                    />
+                  </div>
+                  <a href="" class="d-block text-dark" for="pay3">Wallet</a>
+                </div>
+                <button
+                  type="submit"
+                  class="btn btn-outline-primary-2 btn-order btn-block"
+                >
+                  <span class="btn-text">Place Order</span>
+                  <span class="btn-hover-text">Proceed to Checkout</span>
+                </button>
+              </div>
+
+              <!-- End .summary -->
+            </aside>
+
+            <!-- End .col-lg-3 -->
+          </div>
+        </form>
+
+        <!-- End .row -->
+      </div>
+
+      <!-- End .container -->
+    </div>
+
+    <!-- End .checkout -->
+  </div>
+
+  <!-- End .page-content -->
+</main>
+<!-- End .main -->
+
+<%- include('../layout/user/footer.ejs') -%>

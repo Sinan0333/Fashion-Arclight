@@ -68,3 +68,11 @@
     float: left;
     margin-top: 2px;
 }
+
+.btn-cart:hover {
+    cursor: pointer;
+}
+
+.btn-remove:hover {
+    cursor: pointer;
+}

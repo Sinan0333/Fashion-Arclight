@@ -6,6 +6,7 @@ const session = require('express-session')
 const userControllers=require('../controller/userControllers')
 const addressControllers=require('../controller/addressControllers')
 const cartControllers=require('../controller/cartControllers')
+const orderControllers=require('../controller/orderControllers')
 const config = require('../config/config')
 const auth = require('../middleware/auth')
 const multer = require('../middleware/multer')
@@ -54,6 +55,9 @@ user_route.get('/sample',userControllers.sample)
 user_route.post('/addToCart',cartControllers.addToCart)
 user_route.get('/cart',cartControllers.loadCart)
 user_route.post('/updateCart',cartControllers.updateCart)
+user_route.post('/removeProduct',cartControllers.removeProduct)
+user_route.get('/checkout',cartControllers.loadCheckout)
+user_route.post('/placeOrder',orderControllers.placeOrder)
 
 
 

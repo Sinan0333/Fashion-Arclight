@@ -385,7 +385,7 @@ const editProfile = async (req, res) => {
 const sample = async (req, res) => {
   try {
     
-    res.render("cart")
+    res.render("checkout")
   } catch (error){
     console.log(error.message);
   }
