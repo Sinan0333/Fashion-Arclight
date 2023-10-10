@@ -56,8 +56,56 @@
                                 </div><!-- .End .tab-pane -->
 
                                 <div class="tab-pane fade" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
-                                    <p>No order has been made yet.</p>
-                                    <a href="category.html" class="btn btn-outline-primary-2"><span>GO SHOP</span><i class="icon-long-arrow-right"></i></a>
+                                    <% if (orders.length==0) { %>
+                                        <div  style=" max-width: 800px;
+                                            margin: 0 auto;
+                                            padding: 20px;
+                                            text-align: center;">
+                                        <h1 style=" font-size: 24px;
+                                            margin-bottom: 20px;">Your Orders</h1>
+                                        <div style=" border: 1px solid #ddd;
+                                            padding: 20px;
+                                            background-color: #fff;
+                                            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+                                        <div style=" font-size: 18px;
+                                            margin-bottom: 20px;">
+                                        <div style="font-size: 48px;
+                                            color: #ccc;">&#128722;</div>
+                                        <p style="font-size: 16px;">Your orders list is empty.</p>
+                                         <p><a style=" text-decoration: none;
+                                            color: #007bff;" href="/">Continue shopping</a></p>
+                                        </div>
+                                        </div>
+                                        <div style="width: 100%;height: 77px;"></div>
+                                        </div>
+                                    <% }else { %>           
+                                                <table style="width: 100%; border-collapse: separate; border-spacing: 0 20px;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>No.</th>
+                                                            <th>Date</th>
+                                                            <th>Amount</th>
+                                                            <th>Payment</th>
+                                                            <th>Status</th>
+                                                            <th>Details</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <% orders.forEach(function(order,index) { %>
+                                                        <tr>
+                                                            <td><%= index + 1 %></td>
+                                                            <td><%= order.date.toLocaleDateString('en-US', { year:
+                                                                'numeric', month: 'short', day: '2-digit'
+                                                                }).replace(/\//g, '-') %></td>
+                                                            <td><%= order.totalAmount %></td>
+                                                            <td><%= order.paymentMethod %></td>
+                                                            <td><%= order.status %></td>
+                                                            <td>Details</td>
+                                                        </tr>
+                                                        <% }); %>
+                                                    </tbody>
+                                                </table> 
+                                                <% } %>                            
                                 </div><!-- .End .tab-pane -->
 
                                 <div class="tab-pane fade" id="tab-downloads" role="tabpanel" aria-labelledby="tab-downloads-link">

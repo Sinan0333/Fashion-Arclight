@@ -36,7 +36,7 @@
                                 <div class="col-lg-6">
                                     <div class="card card-dashboard">
                                         <div class="card-body">
-                                            <input type="radio" name="address" value="<%= index %>">
+                                            <input type="radio" name="address" value="<%= index %>" <%= index === 0 ? 'checked' : '' %> >
                                             <h3 class="card-title">Address <%= index + 1 %></h3>
                                             <p>Name: <%= address.fullName %><br>
                                             Email: <%= address.email %><br>

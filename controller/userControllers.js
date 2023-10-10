@@ -1,6 +1,7 @@
 const User = require("../model/userModel");
 const Product = require('../model/productModel')
 const Address = require("../model/addressModel");
+const Order = require("../model/orderModel");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const fs = require("fs")
@@ -311,8 +312,10 @@ const loadprofile = async (req, res) => {
     const user_id=req.session.user_id
     const userData =await User.findById(user_id)
     const addressData = await Address.findOne({user:user_id})
+    const OrderData = await Order.find({user:user_id})
+    console.log(OrderData);
 
-    res.render("profile",{user:userData,addresses:addressData});
+    res.render("profile",{user:userData,addresses:addressData,orders:OrderData});
   } catch {
     console.log(error.message);
   }
@@ -385,7 +388,7 @@ const editProfile = async (req, res) => {
 const sample = async (req, res) => {
   try {
     
-    res.render("checkout")
+    res.render("emptyCart")
   } catch (error){
     console.log(error.message);
   }

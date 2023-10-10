@@ -9,9 +9,30 @@ const loadCart = async(req,res)=>{
         
         const user_id = req.session.user_id
         const cartData =  await Cart.findOne({user:user_id}).populate('products.productId')
-        
-        res.render('cart',{cart:cartData})
-  
+        if(cartData){
+          const total = await Cart.aggregate([
+            {
+              $match: { _id: cartData._id } 
+            },
+            {
+              $unwind: '$products' 
+            },
+            {
+              $group: {
+                _id: null,
+                total: {
+                  $sum: {
+                    $multiply: ['$products.price', '$products.count'] 
+                  }
+                }
+              }
+            }
+          ]);
+          res.render('cart',{cart:cartData,total:total})
+        }else{
+          res.render('cart',{cart:null})
+        }
+
     } catch (error) {
         console.log(error.message);
     }
@@ -24,21 +45,23 @@ const addToCart = async(req,res)=>{
         const user_id = req.session.user_id;
         const product_id = req.body.productId
         const productData = await Product.findById(product_id)
-        const cartData = await Cart.findOne({'products.productId':product_id})
-
+        const cartData = await Cart.findOne({ user: user_id ,'products.productId':product_id})
+      console.log("step 1");
         if(productData.quantity>0){
+          console.log("step 2");
             if(cartData){
                 await Cart.findOneAndUpdate(
                     { user: user_id ,'products.productId':product_id},
                     {$inc:{'products.$.count':1}}
                 )
+                console.log("step 2.1");
             }else{
                 const data={
                     productId:product_id,
                     price:productData.price,
                     totalPrice:productData.price
                 }
-               const s= await Cart.findOneAndUpdate(
+                await Cart.findOneAndUpdate(
     
                     { user: user_id },
                     {
@@ -49,7 +72,7 @@ const addToCart = async(req,res)=>{
         
                 )
             }
-            
+            console.log("step 2.2");
             res.json({stock:true})
             
         }else{
@@ -66,14 +89,18 @@ const addToCart = async(req,res)=>{
 const updateCart = async(req,res)=>{
     try {
 
-        const product_id = req.body.productId
-        const count = req.body.count
-        const cartData = await Cart.findOne({'products.productId':product_id})
-        const product = cartData.products.filter((obj)=>obj.productId==product_id)
-        const productData = await Product.findById(product_id)
+      const product_id = req.body.productId
+      const user_id = req.session.user_id
+      const count = req.body.count
+      const cartData = await Cart.findOne({ user: user_id })
+      const product = cartData.products.filter((obj)=>obj.productId==product_id)
+      const productData = await Product.findById(product_id)
 
         if((product[0].count>=1&&count>0&&product[0].count <productData.quantity)||(product[0].count>=2&&count<0 )){
-            const cartData = await Cart.findOneAndUpdate({'products.productId':product_id},{$inc:{'products.$.count':count}})
+          console.log("step 1");
+            const cartData = await Cart.findOneAndUpdate({user:user_id,'products.productId':product_id},{$inc:{'products.$.count':count}})
+            console.log("step 2");
+            console.log(cartData);
             const total = await Cart.aggregate([
                 {
                   $match: { _id: cartData._id } 
@@ -95,11 +122,15 @@ const updateCart = async(req,res)=>{
                   }
                 }
               ]);
+              
             await Cart.findOneAndUpdate({'products.productId':product_id},{$set:{'products.$.totalPrice':total[0].total}})
+            console.log("step 3");
             res.json({stock:true})
         }else{
             if(product[0].count>1){
                 res.json({stock:false})
+            }else{
+              res.json({stock:true})
             }
         }
         
@@ -134,8 +165,11 @@ const loadCheckout = async(req,res)=>{
     const user_id = req.session.user_id
     const addressData = await Address.findOne({user:user_id})
     const cartData = await Cart.findOne({user:user_id}).populate('products.productId')
-
-
+    const stock = cartData.products.filter((val,ind)=>val.productId.quantity>0)
+    if(stock.length!=cartData.products.length){
+      console.log("ibade");
+      res.json({stock:false})
+    }
     const total = await Cart.aggregate([
       {
         $match: { _id: cartData._id } 

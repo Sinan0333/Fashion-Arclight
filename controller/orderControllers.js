@@ -1,6 +1,8 @@
 const Order = require("../model/orderModel");
 const Address = require("../model/addressModel");
 const Cart = require('../model/cartModel')
+const Product = require('../model/productModel')
+
 
 // to place order
 const placeOrder = async(req,res)=>{
@@ -13,24 +15,27 @@ const placeOrder = async(req,res)=>{
         const address = addressData.address[addressIndex]
         const cartData = await Cart.findOne({user:user_id})
         const productData = cartData.products
-
-        const data = {
+        const total = productData.reduce((acc,val)=> acc+val.totalPrice,0)
+        const data = new Order({
+        user:user_id,
         deliveryDetails:address,
         products:productData,
         date:new Date(),
+        totalAmount:total,
         status:'pending',
         paymentMethod:paymentMethod,
-       }
+       })
 
-       await Order.findOneAndUpdate(
+       const result = await data.save()
+      
+      for( let i=0;i<cartData.products.length;i++){
+        let product = cartData.products[i].productId
+        let count = cartData.products[i].count
+        await Product.updateOne({_id:product},{$inc:{quantity:-count}})
+      }
 
-        { user: user_id },
-        {
-          $set: data,
-        },
-        { upsert: true, new: true }
-
-      );
+      await Cart.deleteOne({user:user_id})
+      res.render('orderSuccess')
   
     } catch (error) {
         console.log(error.message);

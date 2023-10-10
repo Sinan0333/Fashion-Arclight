@@ -18,13 +18,36 @@
     </div><!-- End .container -->
 </nav><!-- End .breadcrumb-nav -->
 
+<% if (cart===null) { %>
+    <div  style=" max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        text-align: center;">
+    <h1 style=" font-size: 24px;
+        margin-bottom: 20px;">Your Shopping Cart</h1>
+    <div style=" border: 1px solid #ddd;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+    <div style=" font-size: 18px;
+        margin-bottom: 20px;">
+    <div style="font-size: 48px;
+        color: #ccc;">&#128722;</div>
+    <p style="font-size: 16px;">Your shopping cart is empty.</p>
+     <p><a style=" text-decoration: none;
+        color: #007bff;" href="#">Continue shopping</a></p>
+    </div>
+    </div>
+    <div style="width: 100%;height: 77px;"></div>
+    </div>
+<% }else { %>
 <!-- Shoping Cart -->
 <form class="bg0 p-t-20 p-b-85">
     <div class="container">
-        <div class="row">
+        <div class="row" id="reloadArea">
             <div class="col-lg-10 col-xl-8 m-lr-auto m-b-50" >
                 <div class="m-l-25 m-r--38 m-lr-0-xl">
-                    <div class="wrap-table-shopping-cart" id="reloadArea">
+                    <div class="wrap-table-shopping-cart" >
                         <table class="table-shopping-cart">
                             <tr class="table_head">
                                 <th class="column-1">Product</th>
@@ -34,10 +57,7 @@
                                 <th class="column-4">Quantity</th>
                                 <th class="column-5">Total</th>
                             </tr>
-                            <% if (cart=== null    ) { %>
-                                <p>Cart is Empty.</p>
-                                <% } else { %>
-                                    <% cart.products.forEach(function(product, index) { %>
+                                <% cart.products.forEach(function(product, index) { %>
                             <tr class="table_row">
                                 <td class="column-1">
                                     <div class="how-itemcart1">
@@ -79,7 +99,7 @@
                                 <% } %>
                             </tr> -->
                             <% }); %>
-                            <% } %>
+                            
 
                             <!-- <tr class="table_row">
                                 <td class="column-1">
@@ -133,7 +153,7 @@
                                     <tbody>
                                         <tr class="summary-subtotal">
                                             <td>Subtotal:</td>
-                                            <td>$160.00</td>
+                                            <td>$ <%= total[0].total %></td>
                                         </tr><!-- End .summary-subtotal -->
                                         <tr class="summary-shipping">
                                             <td>Shipping:</td>
@@ -177,15 +197,15 @@
 
                                         <tr class="summary-total">
                                             <td>Total:</td>
-                                            <td>$160.00</td>
+                                            <td>$ <%= total[0].total %></td>
                                         </tr><!-- End .summary-total -->
                                     </tbody>
                                 </table><!-- End .table table-summary -->
 
-                                <a href="/checkout" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a>
+                                <p class="btn btn-outline-primary-2 btn-order btn-block" onclick="checkStock()">PROCEED TO CHECKOUT</p>
                             </div><!-- End .summary -->
 
-                            <a href="category.html" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a>
+                            <a href="/" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a>
                         </aside><!-- End .col-lg-3 -->
 
             <!-- <div class="col-sm-10 col-lg-7 col-xl-5 m-lr-auto m-b-50">
@@ -274,7 +294,7 @@
         </div>
     </div>
 </form>
-    
+<% } %> 
 
 <!-- Back to top -->
 <div class="btn-back-to-top" id="myBtn">
@@ -286,6 +306,7 @@
 <script>
     function updateCart(productId,count) {
         const data = {productId:productId,count:count}
+        console.log(data);
         $.ajax({
             method: 'POST',
             url: '/updateCart', 
@@ -295,7 +316,8 @@
                 if(response.stock===true){
                     $('#reloadArea').load('/cart #reloadArea'); 
                 }else{
-                    swal("Stock Limit Reached", "", "error");
+                    swal("Stock Limit Reached", "", "error")
+                    $('#reloadArea').load('/cart #reloadArea'); 
                 }
 
             },
@@ -325,6 +347,26 @@
             }
         });
 
+    }
+
+    function checkStock(productId,count) {
+        $.ajax({
+            method: 'get',
+            url: '/checkout', 
+            data: JSON.stringify(),
+            contentType: 'application/json',
+            success: function (response) {
+                if(response.stock===false){
+                    swal("Stock Limit Reached", "", "error");
+                }else{
+                    window.location.href = '/checkout'
+                }
+            },
+            error: function (error) {
+
+                console.error(error);
+            }
+        });
     }
 </script>
 
