@@ -100,7 +100,7 @@
                                                             <td><%= order.totalAmount %></td>
                                                             <td><%= order.paymentMethod %></td>
                                                             <td><%= order.status %></td>
-                                                            <td>Details</td>
+                                                            <td><a href="/invoice?_id=<%= order._id %>">Details</a></td>
                                                         </tr>
                                                         <% }); %>
                                                     </tbody>
@@ -134,6 +134,8 @@
                                                             House Name: <%= address.houseName %><br>
                                                             Pincode: <%= address.pin %><br>
                                                             <a href="/editAddress?ind=<%= index %>" >Edit <i class="icon-edit"></i></a>
+                                                            <a href="/deleteAddress?_id=<%= address._id %>" style="margin-left: 15px;" >Delete <i class="icon-delete"></i></a>
+
                                                         </div>
                                                     </div>
                                                 </div>

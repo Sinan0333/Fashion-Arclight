@@ -49,6 +49,7 @@ user_route.get('/addAddress',addressControllers.loadAddAddress)
 user_route.post('/addAddress',addressControllers.addAddress)
 user_route.get('/editAddress',addressControllers.loadEditAddress)
 user_route.post('/editAddress',addressControllers.editAddress)
+user_route.get('/deleteAddress',addressControllers.deleteAddress)
 user_route.get('/editProfile',userControllers.loadEditProfile)
 user_route.post('/editProfile',multer.user.single('img'),userControllers.editProfile)
 user_route.get('/sample',userControllers.sample)
@@ -58,6 +59,7 @@ user_route.post('/updateCart',cartControllers.updateCart)
 user_route.post('/removeProduct',cartControllers.removeProduct)
 user_route.get('/checkout',cartControllers.loadCheckout)
 user_route.post('/placeOrder',orderControllers.placeOrder)
+user_route.get('/invoice',orderControllers.loadOrderInvoice)
 
 
 

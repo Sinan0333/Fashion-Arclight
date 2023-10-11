@@ -7,6 +7,7 @@ const session = require('express-session')
 const adminControllers=require('../controller/adminControllers')
 const productControllers=require('../controller/productControllers')
 const categoryControllers = require('../controller/categoryControllers')
+const orderControllers=require('../controller/orderControllers')
 const config = require('../config/config')
 const auth = require('../middleware/adminAuth')
 const multer = require('../middleware/multer')
@@ -59,6 +60,7 @@ admin_route.post('/editProduct',multer.prducts.any(),productControllers.editProd
 admin_route.get('/deleteProduct',productControllers.deleteProduct)
 
 
+// admin_route.get('/order',orderControllers.loadOrderManagement)
 // admin_route.use((req, res) => {
 //     res.status(404).render('Error');
 //   });

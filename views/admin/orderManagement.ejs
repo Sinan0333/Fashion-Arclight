@@ -1,0 +1,47 @@
+<%- include('../layout/admin/header.ejs') -%>
+<div class="main-panel">
+  <div class="content-wrapper">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Order Management</h4>
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>No.</th>
+                    <th>OrderId</th>
+                    <th>Order Date</th>
+                    <th>Payment</th>
+                    <th>Status</th>
+                    <th>View</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% orders.forEach(function(order,index) { %>
+                    <tr>
+                      <td><%= index + 1 %></td> <!-- Replace with actual user properties -->
+                      <td><%= order._id %></td>
+                      <td><%= order.date.toLocaleDateString('en-US', { year:
+                        'numeric', month: 'short', day: '2-digit'
+                        }).replace(/\//g, '-') %></td>
+                      <td><%= order.totalAmount %></td>
+                      <td><%= order.status %></td>
+                      <td>
+                        <a href="/admin/details?_id=<%= order._id %>" class="btn btn-primary block-button" >Details</a>                        
+                      </td>
+                    </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+    <!-- content-wrapper ends -->
+    <!-- partial:../../partials/_footer.html -->
+  <%- include('../layout/admin/footer.ejs') -%>
