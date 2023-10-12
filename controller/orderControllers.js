@@ -1,7 +1,7 @@
 const Order = require("../model/orderModel")
 const Address = require("../model/addressModel");
 const Cart = require('../model/cartModel')
-const Product = require('../model/productModel')
+const Product = require('../model/productModel');
 
 
 // to place order
@@ -10,8 +10,8 @@ const placeOrder = async(req,res)=>{
         
         const user_id = req.session.user_id
         const paymentMethod = req.body.payment
-        const addressIndex = req.body.address
-        if(!addressIndex){
+        const addressIndex = !req.body.address? 0:req.body.address
+        if(!req.body.address){
           const data = {
             fullName:req.body.name,
             mobile:req.body.mobile,
@@ -79,16 +79,44 @@ const loadOrderManagement = async(req,res)=>{
   }
 }
 
-//Admin order management
-const loadOrderInvoice = async(req,res)=>{
+
+// Load Admin Order Details
+const loadOrderSummary = async(req,res)=>{
   try {
   
     const order_id = req.query._id
-    console.log(order_id);
     const OrderData = await Order.findOne({_id:order_id}).populate('products.productId')
-    // console.log(OrderData.products.productId.name);
-    console.log(OrderData);
-    res.render('invoice',{orders:OrderData})
+    res.render('orderDetails',{order:OrderData})
+
+  } catch (error) {
+
+      console.log(error.message);
+
+  }
+}
+
+//User cancel order
+const cancelOrder = async(req,res)=>{
+  try {
+  
+    const order_id = req.query._id
+    const OrderData = await Order.updateOne({_id:order_id},{$set:{status:'cancelled'}})
+    res.redirect('/profile')
+  } catch (error) {
+
+      console.log(error.message);
+
+  }
+}
+
+
+// Load User Order Details
+const loadOrderDetails = async(req,res)=>{
+  try {
+  
+    const order_id = req.query._id
+    const OrderData = await Order.findOne({_id:order_id}).populate('products.productId')
+    res.render('orderDetails',{order:OrderData})
 
   } catch (error) {
 
@@ -100,6 +128,8 @@ const loadOrderInvoice = async(req,res)=>{
 module.exports ={
   placeOrder,
   loadOrderManagement,
-  loadOrderInvoice
+  loadOrderDetails,
+  cancelOrder,
+  loadOrderSummary
     
   }

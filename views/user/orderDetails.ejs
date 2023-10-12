@@ -1,0 +1,121 @@
+
+<%- include('../layout/user/header.ejs') -%>
+
+<div style="width: 100%; height: 77px; background-color: white;"></div>
+<nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
+    <div class="container">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Shop</a></li>
+            <li class="breadcrumb-item active" aria-current="page">My Account</li>
+        </ol>
+    </div><!-- End .container -->
+</nav><!-- End .breadcrumb-nav -->
+
+<main class="main">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card card-dashboard">
+                    <div class="card-body">
+                        <h3 class="card-title">Delivery Address</h3>
+                        <p>Name: <%= order.deliveryDetails.fullName %><br>
+                        Email: <%= order.deliveryDetails.email %><br>
+                        Mobile: <%= order.deliveryDetails.mobile %><br>
+                        State: <%= order.deliveryDetails.state %><br>
+                        City: <%= order.deliveryDetails.city %><br>
+                        House Name: <%= order.deliveryDetails.houseName %><br>
+                        Pincode: <%= order.deliveryDetails.pin %><br>
+                        <a href="/editAddress" >Edit <i class="icon-edit"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card card-dashboard">
+                    <div class="card-body">
+                        <h3 class="card-title">Order Summary</h3>
+                        <p>OrdeId: <%= order._id %><br>
+                        Date: <%= order.date.toLocaleDateString('en-US', { year:'numeric', month: 'short', day: '2-digit'}).replace(/\//g, '-') %><br>
+                        Items: <%= order.products.length %><br>
+                        Total Amount: <%= order.totalAmount %><br>
+                        Payment Method: <%= order.paymentMethod %><br>
+                        Status: <%= order.status %><br>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="p-b-45">
+            <h4 class="ltext-106 cl5 txt-center">
+                 Products
+            </h4>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card card-dashboard">
+                    <div class="card-body">
+                        <table class="table table-hover">
+                            <tbody>
+                                <% order.products.forEach(function(product,index) { %>
+                                    <tr>
+                                        <td><%= index + 1 %></td>
+                                        <td>
+                                            <img src="/images/product/orginal/<%= product.productId.image[3] %>" alt="" class="img-thumbnail" style="max-width: 80px;">
+                                        </td>
+                                        <td><%= product.productId.name %></td>
+                                        <td><%= product.productId.category %></td>
+                                        <td>$<%= product.price %></td>
+                                        <td ><%= product.count %></td>
+                                        <td><%= product.totalPrice %></td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div> 
+        <% if (order.status != 'cancelled') { %>
+        <!-- <a href="/cancelOrder?_id=<%= order._id %>"> -->
+            <button type="button" class="btn btn-danger btn-block" onclick="cancelOrder('<%= order._id %>')">Cancel Order</button>
+        <!-- </a>    -->
+        <% } %>     
+        <div style="width: 100%; height: 77px; background-color: white;"></div>
+    </div><!-- End .container -->
+</main><!-- End .main -->
+
+<script>
+    function cancelOrder(orderId) {
+    Swal.fire({
+      title: 'Cancel Order',
+      input: 'text',
+      inputLabel: 'Reason for cancellation',
+      inputPlaceholder: 'Enter your reason here',
+      showCancelButton: true,
+      confirmButtonText: 'Submit',
+      showLoaderOnConfirm: true,
+    })
+        const data = {productId:productId}
+        console.log(data);
+        $.ajax({
+            method: 'POST',
+            url: '/updateCart', 
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: function (response) {
+                if(response.stock===true){
+                    $('#reloadArea').load('/cart #reloadArea'); 
+                }else{
+                    swal("Stock Limit Reached", "", "error")
+                    $('#reloadArea').load('/cart #reloadArea'); 
+                }
+
+            },
+            error: function (error) {
+
+                console.error(error);
+            }
+        });
+    }
+</script>
+
+<%- include('../layout/user/footer.ejs') -%>

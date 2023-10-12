@@ -58,6 +58,8 @@ admin_route.get('/blockProduct',auth.isLogin,productControllers.blockProduct)
 admin_route.get('/editProduct',auth.isLogin,productControllers.loadEditProduct)
 admin_route.post('/editProduct',multer.prducts.any(),productControllers.editProduct)
 admin_route.get('/deleteProduct',productControllers.deleteProduct)
+admin_route.get('/order',orderControllers.loadOrderManagement)
+admin_route.get('/orderSummary',orderControllers.loadOrderSummary)
 
 
 // admin_route.get('/order',orderControllers.loadOrderManagement)

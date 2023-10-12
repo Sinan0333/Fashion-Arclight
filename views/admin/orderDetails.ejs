@@ -1,0 +1,84 @@
+<%- include('../layout/admin/header.ejs') -%>
+
+<div class="main-panel">
+    <div class="content-wrapper">
+      <div class="row">
+        <div class="col-lg-6">
+            <div class="card card-dashboard">
+                <div class="card-body">
+                    <h3 class="card-title">Delivery Address</h3>
+                    <p>Name: <%= order.deliveryDetails.fullName %><br>
+                    Email: <%= order.deliveryDetails.email %><br>
+                    Mobile: <%= order.deliveryDetails.mobile %><br>
+                    State: <%= order.deliveryDetails.state %><br>
+                    City: <%= order.deliveryDetails.city %><br>
+                    House Name: <%= order.deliveryDetails.houseName %><br>
+                    Pincode: <%= order.deliveryDetails.pin %><br>
+                    <a href="/editAddress" >Edit <i class="icon-edit"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card card-dashboard">
+                <div class="card-body">
+                    <h3 class="card-title">Order Summary</h3>
+                    <p>OrdeId: <%= order._id %><br>
+                    Date: <%= order.date.toLocaleDateString('en-US', { year:'numeric', month: 'short', day: '2-digit'}).replace(/\//g, '-') %><br>
+                    Items: <%= order.products.length %><br>
+                    Total Amount: <%= order.totalAmount %><br>
+                    Payment Method: <%= order.paymentMethod %><br>
+                    Status: <%= order.status %><br>
+                </div>
+            </div>
+        </div>
+      </div>
+<br>
+      <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <h2 class="card-title">Products</h2 >
+              
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>No:</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Count</th>
+                    <th>Price</th>
+                    <th>Total Price</th>
+                    <!-- <th>Cancel</th> -->
+
+                  </tr>
+                </thead>
+                <tbody>
+                  <% order.products.forEach(function(product,index) { %>
+                    <tr>
+                        <td><%= index+1 %></td>
+                        <td>
+                          <img src="/images/product/orginal/<%= product.productId.image[3] %>" alt="<%= product.name %>" >  
+                              <span class="pl-2"><%= product.productId.name %></span>
+                        </td>
+                      <td><%= product.productId.category %></td>
+                      <td><%= product.count %></td>
+                      <td><%= product.price %></td>
+                      <td><%= product.totalPrice %></td>                        
+                        <!-- <td>
+                          <a href="/admin/deleteProduct?_id=<%= product._id %>" data-category-id="<%= product._id %>" class="btn btn-primary delete-button">
+                              Delete
+                          </a>
+                      </td>                       -->
+                    </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+     </div>
+    </div>
+
+<%- include('../layout/admin/footer.ejs') -%>

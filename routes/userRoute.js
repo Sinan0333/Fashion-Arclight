@@ -59,7 +59,8 @@ user_route.post('/updateCart',cartControllers.updateCart)
 user_route.post('/removeProduct',cartControllers.removeProduct)
 user_route.get('/checkout',cartControllers.loadCheckout)
 user_route.post('/placeOrder',orderControllers.placeOrder)
-user_route.get('/invoice',orderControllers.loadOrderInvoice)
+user_route.get('/orderDetails',orderControllers.loadOrderDetails)
+user_route.get('/cancelOrder',orderControllers.cancelOrder)
 
 
 
