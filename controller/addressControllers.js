@@ -2,7 +2,6 @@ const Address = require("../model/addressModel");
 const User = require("../model/userModel");
 
 
-
 // Load ADD Address
 const loadAddAddress = async(req,res)=>{
   try {

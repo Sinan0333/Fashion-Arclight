@@ -1,19 +1,20 @@
 const express = require('express')
 const admin_route = express()
-const bodyparser = require('body-parser')
 const session = require('express-session')
 
 
+// =========================================< Controllers >=================================================
 const adminControllers=require('../controller/adminControllers')
 const productControllers=require('../controller/productControllers')
 const categoryControllers = require('../controller/categoryControllers')
 const orderControllers=require('../controller/orderControllers')
+
+
 const config = require('../config/config')
 const auth = require('../middleware/adminAuth')
 const multer = require('../middleware/multer')
 
 
-admin_route.set('view engine','ejs')
 admin_route.set('views','./views/admin')
 
 
@@ -23,9 +24,6 @@ admin_route.use(session({
     resave: false,
     saveUninitialized:true
 }))
-admin_route.use(bodyparser.json())
-admin_route.use(bodyparser.urlencoded({extended:true}))
-
 
 
 // =========================================< Login logout  >=================================================
@@ -40,7 +38,7 @@ admin_route.get('/',auth.isLogin,adminControllers.loadDashboard)
 
 // =========================================< User Management  >=================================================
 admin_route.get('/user',auth.isLogin,adminControllers.loadUserManagement)
-admin_route.get('/blockUser',auth.isLogin,adminControllers.blockUser)
+admin_route.post('/blockUser',auth.isLogin,adminControllers.blockUser)
 
 
 // =========================================< Category Management  >=================================================
@@ -58,9 +56,11 @@ admin_route.get('/blockProduct',auth.isLogin,productControllers.blockProduct)
 admin_route.get('/editProduct',auth.isLogin,productControllers.loadEditProduct)
 admin_route.post('/editProduct',multer.prducts.any(),productControllers.editProduct)
 admin_route.get('/deleteProduct',productControllers.deleteProduct)
+
+
+// =========================================< Order Management  >=================================================
 admin_route.get('/order',orderControllers.loadOrderManagement)
 admin_route.get('/orderSummary',orderControllers.loadOrderSummary)
-
 
 // admin_route.get('/order',orderControllers.loadOrderManagement)
 // admin_route.use((req, res) => {

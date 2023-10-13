@@ -4,6 +4,9 @@ const Cart = require('../model/cartModel')
 const Product = require('../model/productModel');
 
 
+// =========================================< User side >=================================================
+
+
 // to place order
 const placeOrder = async(req,res)=>{
     try {
@@ -64,6 +67,41 @@ const placeOrder = async(req,res)=>{
 }
 
 
+// Load User Order Details
+const loadOrderDetails = async(req,res)=>{
+  try {
+  
+    const order_id = req.query._id
+    const OrderData = await Order.findOne({_id:order_id}).populate('products.productId')
+    res.render('orderDetails',{order:OrderData})
+
+  } catch (error) {
+
+      console.log(error.message);
+
+  }
+}
+
+
+//User cancel order
+const cancelOrder = async(req,res)=>{
+  try {
+  console.log("ivade ethi");
+    const order_id = req.body.orderId
+    const cancelReaon = req.body.cancelReason
+    const OrderData = await Order.updateOne({_id:order_id},{$set:{status:'cancelled',cancelReason:cancelReaon}})
+    res.json({cancel:true})  
+  } catch (error) {
+
+      console.log(error.message);
+
+  }
+}
+
+
+// =========================================< Admin side >=================================================
+
+
 //Admin order management
 const loadOrderManagement = async(req,res)=>{
   try {
@@ -80,7 +118,7 @@ const loadOrderManagement = async(req,res)=>{
 }
 
 
-// Load Admin Order Details
+// Load Admin Order Detail
 const loadOrderSummary = async(req,res)=>{
   try {
   
@@ -95,35 +133,10 @@ const loadOrderSummary = async(req,res)=>{
   }
 }
 
-//User cancel order
-const cancelOrder = async(req,res)=>{
-  try {
-  
-    const order_id = req.query._id
-    const OrderData = await Order.updateOne({_id:order_id},{$set:{status:'cancelled'}})
-    res.redirect('/profile')
-  } catch (error) {
-
-      console.log(error.message);
-
-  }
-}
 
 
-// Load User Order Details
-const loadOrderDetails = async(req,res)=>{
-  try {
-  
-    const order_id = req.query._id
-    const OrderData = await Order.findOne({_id:order_id}).populate('products.productId')
-    res.render('orderDetails',{order:OrderData})
 
-  } catch (error) {
 
-      console.log(error.message);
-
-  }
-}
 
 module.exports ={
   placeOrder,

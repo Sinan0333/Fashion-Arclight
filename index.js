@@ -10,8 +10,13 @@ const noCache = require('nocache')
 const userRoute= require('./routes/userRoute')
 const adminRoute= require('./routes/adminRoute')
 
+
+app.set('view engine','ejs')
+app.use(express.json())
+app.use(express.urlencoded({extended:true}))
 app.use(express.static('public'))
 app.use(noCache())
+
 
 app.use('/',userRoute)
 app.use('/admin',adminRoute)

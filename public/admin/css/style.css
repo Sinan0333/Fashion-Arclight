@@ -69,3 +69,7 @@ img {
 .text-center {
   text-align: center;
 }
+
+.custom-swal {
+  background-color: #191c24
+}

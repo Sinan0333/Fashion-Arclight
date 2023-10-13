@@ -88,42 +88,7 @@
                                 </td>
                                 <td class="column-5"><%= product.totalPrice %></td>
                                 <td><p class="btn-remove" title="Remove Product" onclick="removeProduct('<%= product.productId._id %>')"><i class="icon-close"></i></p></td>
-                            <!-- </tr>
-                            <tr style="text-align: center;">
-                                <% if (product.productId.quantity === 0) { %>
-                                    <td  style="text-align: center;">Out of stock</td>
-                                <% } else if (product.productId.quantity < 6) { %>
-                                    <td class="column-3">Only <%= product.productId.quantity %> left</td>
-                                <% } else { %>
-                                    <td class="column-3">Available</td>
-                                <% } %>
-                            </tr> -->
                             <% }); %>
-                            
-
-                            <!-- <tr class="table_row">
-                                <td class="column-1">
-                                    <div class="how-itemcart1">
-                                        <img src="user/images/item-cart-05.jpg" alt="IMG">
-                                    </div>
-                                </td>
-                                <td class="column-2">Lightweight Jacket</td>
-                                <td class="column-3">$ 16.00</td>
-                                <td class="column-4">
-                                    <div class="wrap-num-product flex-w m-l-auto m-r-0">
-                                        <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
-                                            <i class="fs-16 zmdi zmdi-minus"></i>
-                                        </div>
-
-                                        <input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product2" value="1">
-
-                                        <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
-                                            <i class="fs-16 zmdi zmdi-plus"></i>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="column-5">$ 16.00</td>
-                            </tr> -->
                         </table>
                     </div>
                    
@@ -146,29 +111,27 @@
 
 
             <aside class="col-lg-3">
-                            <div class="summary summary-cart">
-                                <h3 class="summary-title">Cart Total</h3><!-- End .summary-title -->
-
-                                <table class="table table-summary">
-                                    <tbody>
-                                        <tr class="summary-subtotal">
-                                            <td>Subtotal:</td>
-                                            <td>$ <%= total[0].total %></td>
-                                        </tr><!-- End .summary-subtotal -->
-                                        <tr class="summary-shipping">
-                                            <td>Shipping:</td>
-                                            <td>&nbsp;</td>
-                                        </tr>
-
-                                        <tr class="summary-shipping-row">
-                                            <td>
-                                                <div class="custom-control custom-radio">
-                                                    <input type="radio" id="free-shipping" name="shipping" class="custom-control-input">
-                                                    <label class="custom-control-label" for="free-shipping">Free Shipping</label>
-                                                </div><!-- End .custom-control -->
-                                            </td>
-                                            <td>$0.00</td>
-                                        </tr><!-- End .summary-shipping-row -->
+                <div class="summary summary-cart">
+                    <h3 class="summary-title">Cart Total</h3><!-- End .summary-title -->
+                        <table class="table table-summary">
+                            <tbody>
+                                    <tr class="summary-subtotal">
+                                        <td>Subtotal:</td>
+                                        <td>$ <%= total[0].total %></td>
+                                    </tr><!-- End .summary-subtotal -->
+                                    <tr class="summary-shipping">
+                                        <td>Shipping:</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+                                    <tr class="summary-shipping-row">
+                                        <td>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" id="free-shipping" name="shipping" class="custom-control-input">
+                                                <label class="custom-control-label" for="free-shipping">Free Shipping</label>
+                                            </div><!-- End .custom-control -->
+                                        </td>
+                                        <td>$0.00</td>
+                                    </tr><!-- End .summary-shipping-row -->
 
                                         <tr class="summary-shipping-row">
                                             <td>
@@ -199,102 +162,17 @@
                                             <td>Total:</td>
                                             <td>$ <%= total[0].total %></td>
                                         </tr><!-- End .summary-total -->
-                                    </tbody>
-                                </table><!-- End .table table-summary -->
-
-                                <p class="btn btn-outline-primary-2 btn-order btn-block" onclick="checkStock()">PROCEED TO CHECKOUT</p>
-                            </div><!-- End .summary -->
-
-                            <a href="/" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a>
-                        </aside><!-- End .col-lg-3 -->
-
-            <!-- <div class="col-sm-10 col-lg-7 col-xl-5 m-lr-auto m-b-50">
-                <div class="bor10 p-lr-40 p-t-30 p-b-40 m-l-63 m-r-40 m-lr-0-xl p-lr-15-sm">
-                    <h4 class="mtext-109 cl2 p-b-30">
-                        Cart Totals
-                    </h4>
-
-                    <div class="flex-w flex-t bor12 p-b-13">
-                        <div class="size-208">
-                            <span class="stext-110 cl2">
-                                Subtotal:
-                            </span>
-                        </div>
-
-                        <div class="size-209">
-                            <span class="mtext-110 cl2">
-                                $79.65
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="flex-w flex-t bor12 p-t-15 p-b-30">
-                        <div class="size-208 w-full-ssm">
-                            <span class="stext-110 cl2">
-                                Shipping:
-                            </span>
-                        </div>
-
-                        <div class="size-209 p-r-18 p-r-0-sm w-full-ssm">
-                            <p class="stext-111 cl6 p-t-2">
-                                There are no shipping methods available. Please double check your address, or contact us if you need any help.
-                            </p>
-                            
-                            <div class="p-t-15">
-                                <span class="stext-112 cl8">
-                                    Calculate Shipping
-                                </span>
-
-                                <div class="rs1-select2 rs2-select2 bor8 bg0 m-b-12 m-t-9">
-                                    <select class="js-select2" name="time">
-                                        <option>Select a country...</option>
-                                        <option>USA</option>
-                                        <option>UK</option>
-                                    </select>
-                                    <div class="dropDownSelect2"></div>
-                                </div>
-
-                                <div class="bor8 bg0 m-b-12">
-                                    <input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="state" placeholder="State /  country">
-                                </div>
-
-                                <div class="bor8 bg0 m-b-22">
-                                    <input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="postcode" placeholder="Postcode / Zip">
-                                </div>
-                                
-                                <div class="flex-w">
-                                    <div class="flex-c-m stext-101 cl2 size-115 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer">
-                                        Update Totals
-                                    </div>
-                                </div>
-                                    
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="flex-w flex-t p-t-27 p-b-33">
-                        <div class="size-208">
-                            <span class="mtext-101 cl2">
-                                Total:
-                            </span>
-                        </div>
-
-                        <div class="size-209 p-t-1">
-                            <span class="mtext-110 cl2">
-                                $79.65
-                            </span>
-                        </div>
-                    </div>
-
-                    <button class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
-                        Proceed to Checkout
-                    </button>
-                </div>
-            </div> -->
+                            </tbody>
+                        </table><!-- End .table table-summary -->
+                            <p class="btn btn-outline-primary-2 btn-order btn-block" onclick="checkStock()">PROCEED TO CHECKOUT</p>
+                </div><!-- End .summary -->
+                    <a href="/" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a>
+            </aside><!-- End .col-lg-3 -->
         </div>
     </div>
 </form>
 <% } %> 
+
 
 <!-- Back to top -->
 <div class="btn-back-to-top" id="myBtn">
@@ -302,6 +180,7 @@
         <i class="zmdi zmdi-chevron-up"></i>
     </span>
 </div>
+
 
 <script>
     function updateCart(productId,count) {

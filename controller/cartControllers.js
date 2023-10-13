@@ -50,10 +50,7 @@ const addToCart = async(req,res)=>{
 
         if(productData.quantity>0){
             if(cartData){
-                await Cart.findOneAndUpdate(
-                    { user: user_id ,'products.productId':product_id},
-                    {$inc:{'products.$.count':1}}
-                )
+              res.json({stock:true})  
             }else{
                 const data={
                     productId:product_id,

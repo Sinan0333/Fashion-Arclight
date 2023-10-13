@@ -93,7 +93,7 @@ const loadUserManagement = async(req,res)=>{
 const blockUser = async(req,res)=>{
   try {
 
-    const user_id =  req.query._id
+    const user_id =  req.body.userId
     const userData = await User.findOne({_id:user_id})
 
     if(userData.is_blocked){
@@ -102,7 +102,7 @@ const blockUser = async(req,res)=>{
       await User.findByIdAndUpdate({_id:user_id},{$set:{is_blocked:true}})
     }
 
-    res.redirect('/admin/user')
+    res.json({block:true}) 
 
   } catch (error) {
 
@@ -110,11 +110,6 @@ const blockUser = async(req,res)=>{
 
   }
 }
-
-
-// =========================================< Category Management >=================================================
-
-
 
 
 

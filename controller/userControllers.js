@@ -2,11 +2,12 @@ const User = require("../model/userModel");
 const Product = require('../model/productModel')
 const Address = require("../model/addressModel");
 const Order = require("../model/orderModel")
+
+
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const fs = require("fs")
 require("dotenv").config()
-
 
 
 let OTP;
@@ -384,7 +385,7 @@ const editProfile = async (req, res) => {
 };
 
 
-//load profile
+//load Smple
 const sample = async (req, res) => {
   try {
     

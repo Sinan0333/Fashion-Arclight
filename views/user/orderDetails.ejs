@@ -75,47 +75,49 @@
             </div>
         </div> 
         <% if (order.status != 'cancelled') { %>
-        <!-- <a href="/cancelOrder?_id=<%= order._id %>"> -->
             <button type="button" class="btn btn-danger btn-block" onclick="cancelOrder('<%= order._id %>')">Cancel Order</button>
-        <!-- </a>    -->
         <% } %>     
         <div style="width: 100%; height: 77px; background-color: white;"></div>
     </div><!-- End .container -->
 </main><!-- End .main -->
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     function cancelOrder(orderId) {
-    Swal.fire({
-      title: 'Cancel Order',
-      input: 'text',
-      inputLabel: 'Reason for cancellation',
-      inputPlaceholder: 'Enter your reason here',
-      showCancelButton: true,
-      confirmButtonText: 'Submit',
-      showLoaderOnConfirm: true,
-    })
-        const data = {productId:productId}
-        console.log(data);
-        $.ajax({
-            method: 'POST',
-            url: '/updateCart', 
-            data: JSON.stringify(data),
-            contentType: 'application/json',
-            success: function (response) {
-                if(response.stock===true){
-                    $('#reloadArea').load('/cart #reloadArea'); 
-                }else{
-                    swal("Stock Limit Reached", "", "error")
-                    $('#reloadArea').load('/cart #reloadArea'); 
-                }
+  Swal.fire({
+    title: 'Cancel Order',
+    input: 'text',
+    inputLabel: 'Reason for cancellation',
+    inputPlaceholder: 'Enter your reason here',
+    showCancelButton: true,
+    confirmButtonText: 'Submit',
+    showLoaderOnConfirm: true,
+    preConfirm: (cancelReason) => {
+      const data = { orderId: orderId, cancelReason: cancelReason };
+      $.ajax({
+        method: 'POST',
+        url: '/cancelOrder',
+        data: JSON.stringify(data),
+        contentType: 'application/json',
+        success: function (response) {
+          if (response.cancel) {
+            Swal.fire('Order Canceled', 'Your order has been canceled.', 'success').then(() => {
+              location.reload();
+            });
+          } else {
+            Swal.fire('Error', 'Failed to cancel the order.', 'error');
+          }
+        },
+        error: function (error) {
+          console.error(error);
+          Swal.fire('Error', 'An error occurred while canceling the order.', 'error');
+        },
+      });
+    },
+    allowOutsideClick: () => !Swal.isLoading(),
+  });
+}
 
-            },
-            error: function (error) {
-
-                console.error(error);
-            }
-        });
-    }
 </script>
 
 <%- include('../layout/user/footer.ejs') -%>

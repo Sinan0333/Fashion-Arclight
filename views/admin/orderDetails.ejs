@@ -78,7 +78,11 @@
           </div>
         </div>
       </div>
-     </div>
+     </div>  
+     <br>
+     <% if (order.status != 'cancelled') { %>
+      <button type="button" class="btn btn-danger btn-block" onclick="cancelOrder('<%= order._id %>')">Cancel Order</button>
+  <% } %>   
     </div>
 
 <%- include('../layout/admin/footer.ejs') -%>
