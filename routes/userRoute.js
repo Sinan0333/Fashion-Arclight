@@ -10,7 +10,7 @@ const cartControllers=require('../controller/cartControllers')
 const orderControllers=require('../controller/orderControllers')
 
 
-const config = require('../config/config')
+const config = require('../config/mongodb')
 const auth = require('../middleware/auth')
 const multer = require('../middleware/multer')
 require("dotenv").config()
@@ -70,18 +70,11 @@ user_route.post('/removeProduct',cartControllers.removeProduct)
 
 
 // =========================================< Checkout and order >=================================================
-user_route.get('/checkout',auth.isLogin,cartControllers.loadCheckout)
+user_route.get('/checkout',cartControllers.loadCheckout)
 user_route.post('/placeOrder',orderControllers.placeOrder)
 user_route.get('/orderDetails',auth.isLogin,orderControllers.loadOrderDetails)
 user_route.post('/cancelOrder',orderControllers.cancelOrder)
 user_route.get('/sample',userControllers.sample)
-
-
-
-
-// user_route.use((req, res) => {
-//     res.status(404).render('Error');
-//   });
 
 
 module.exports =user_route

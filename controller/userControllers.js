@@ -164,7 +164,7 @@ const insertUser = async (req, res) => {
     } else {
       const sPassword = await securePassword(req.body.password)
  
-      if(req.file.originalname){
+      if(req.file){
         var img = req.file.originalname
       }else{
         var img = 'default profile'
@@ -284,7 +284,7 @@ const resendOtp = async (req, res) => {
 const loadHome = async (req, res) => {
   try {
 
-    const productData = await Product.find()
+    const productData = await Product.find({is_blocked:false})
     res.render("index",{products:productData});
   } catch {
     console.log(error.message);
@@ -363,7 +363,7 @@ const editProfile = async (req, res) => {
    if(req.file && req.file.originalname){
       img=req.file.originalname
       const imagePathOrginal = `public/images/product/orginal/${userData.image}`
-      fs.lutimesSync(imagePathOrginal)
+      // fs.unlinkSync(imagePathOrginal)
    }else{
       img = userData.image
    }

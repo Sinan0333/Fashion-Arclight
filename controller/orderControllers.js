@@ -46,7 +46,7 @@ const placeOrder = async(req,res)=>{
         products:productData,
         date:new Date(),
         totalAmount:total,
-        status:'pending',
+        status:'placed',
         paymentMethod:paymentMethod,
        })
 
@@ -133,6 +133,34 @@ const loadOrderSummary = async(req,res)=>{
   }
 }
 
+// to update order status
+const updateOrder = async(req,res)=>{
+  try {
+
+    const order_id = req.body.orderId
+    const cancelOrder = req.body.cancel
+    const OrderData = await Order.findOne({_id:order_id})
+
+    if(cancelOrder){
+      await Order.findOneAndUpdate({_id:order_id},{$set:{status:'cancelled'}})
+    }else{
+      if(OrderData.status =='placed'){
+        await Order.findOneAndUpdate({_id:order_id},{$set:{status:'shipped'}})
+      }else if(OrderData.status =='shipped'){
+        await Order.findOneAndUpdate({_id:order_id},{$set:{status:'out for delivery'}})
+      }else if(OrderData.status =='out for delivery'){
+        await Order.findOneAndUpdate({_id:order_id},{$set:{status:'delivered'}})
+      }
+    }
+      res.json({update:true})  
+
+  } catch (error) {
+
+      console.log(error.message);
+
+  }
+}
+
 
 
 
@@ -143,6 +171,7 @@ module.exports ={
   loadOrderManagement,
   loadOrderDetails,
   cancelOrder,
-  loadOrderSummary
+  loadOrderSummary,
+  updateOrder,
     
   }

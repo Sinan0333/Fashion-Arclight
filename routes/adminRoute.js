@@ -10,7 +10,7 @@ const categoryControllers = require('../controller/categoryControllers')
 const orderControllers=require('../controller/orderControllers')
 
 
-const config = require('../config/config')
+const config = require('../config/mongodb')
 const auth = require('../middleware/adminAuth')
 const multer = require('../middleware/multer')
 
@@ -59,12 +59,9 @@ admin_route.get('/deleteProduct',productControllers.deleteProduct)
 
 
 // =========================================< Order Management  >=================================================
-admin_route.get('/order',orderControllers.loadOrderManagement)
-admin_route.get('/orderSummary',orderControllers.loadOrderSummary)
+admin_route.get('/order',auth.isLogin,orderControllers.loadOrderManagement)
+admin_route.get('/orderSummary',auth.isLogin,orderControllers.loadOrderSummary)
+admin_route.post('/updateOrder',orderControllers.updateOrder)
 
-// admin_route.get('/order',orderControllers.loadOrderManagement)
-// admin_route.use((req, res) => {
-//     res.status(404).render('Error');
-//   });
 
 module.exports = admin_route

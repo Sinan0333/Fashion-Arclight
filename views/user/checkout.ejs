@@ -30,7 +30,7 @@
             <form action="/placeOrder" method="post">
                 <div class="row">
                     <div class="col-lg-9">
-                    <% if (addresses.address.length>0) { %>
+                    <% if (addresses.address.length >0) { %>
                         <div class="row">
                             <% addresses.address.forEach(function(address, index) { %>
                                 <div class="col-lg-6">
@@ -106,7 +106,7 @@
                                 <tbody>
                                     <% cart.products.forEach(function(product, index) { %>
                                     <tr>
-                                        <td><a href="#"><%= product.productId.name %></a></td>
+                                        <td><a href="/product?_id=<%= product.productId._id %>"><%= product.productId.name %></a></td>
                                         <td>$ <%= product.totalPrice %></td>
                                     </tr>
                                     <% }); %>

@@ -61,7 +61,9 @@
                                         <td>
                                             <img src="/images/product/orginal/<%= product.productId.image[3] %>" alt="" class="img-thumbnail" style="max-width: 80px;">
                                         </td>
-                                        <td><%= product.productId.name %></td>
+                                        <td>
+                                            <a href="/product?_id=<%= product.productId._id %>"><%= product.productId.name %></a>
+                                        </td>                                          
                                         <td><%= product.productId.category %></td>
                                         <td>$<%= product.price %></td>
                                         <td ><%= product.count %></td>
@@ -74,7 +76,7 @@
                 </div>
             </div>
         </div> 
-        <% if (order.status != 'cancelled') { %>
+        <% if (order.status !=='cancelled' && order.status !=='delivered') { %>
             <button type="button" class="btn btn-danger btn-block" onclick="cancelOrder('<%= order._id %>')">Cancel Order</button>
         <% } %>     
         <div style="width: 100%; height: 77px; background-color: white;"></div>

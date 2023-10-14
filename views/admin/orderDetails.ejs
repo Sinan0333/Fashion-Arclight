@@ -14,7 +14,7 @@
                     City: <%= order.deliveryDetails.city %><br>
                     House Name: <%= order.deliveryDetails.houseName %><br>
                     Pincode: <%= order.deliveryDetails.pin %><br>
-                    <a href="/editAddress" >Edit <i class="icon-edit"></i></a>
+                    <!-- <a href="/editAddress" >Edit <i class="icon-edit"></i></a> -->
                 </div>
             </div>
         </div>
@@ -58,7 +58,7 @@
                     <tr>
                         <td><%= index+1 %></td>
                         <td>
-                          <img src="/images/product/orginal/<%= product.productId.image[3] %>" alt="<%= product.name %>" >  
+                          <img src="/images/product/orginal/<%= product.productId.image[0] %>" alt="<%= product.name %>" >  
                               <span class="pl-2"><%= product.productId.name %></span>
                         </td>
                       <td><%= product.productId.category %></td>

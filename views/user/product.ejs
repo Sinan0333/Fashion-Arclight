@@ -36,7 +36,7 @@
                             <div class="product-gallery product-gallery-vertical">
                                 <div class="row">
                                     <figure class="product-main-image">
-                                        <img id="product-zoom" src="images/product/sharped/<%= product.image[3] %>" data-zoom-image="images/product/orginal/<%= product.image[3] %>" alt="<%= product.name %>">
+                                        <img id="product-zoom" src="images/product/sharped/<%= product.image[0] %>" data-zoom-image="images/product/orginal/<%= product.image[0] %>" alt="<%= product.name %>">
 
                                         <a href="#" id="btn-product-gallery" class="btn-product-gallery">
                                             <i class="icon-arrows"></i>
@@ -44,21 +44,21 @@
                                     </figure><!-- End .product-main-image -->
 
                                     <div id="product-zoom-gallery" class="product-image-gallery">
-                                        <a class="product-gallery-item active" href="#" data-image="images/product/sharped/<%= product.image[3] %>" data-zoom-image="images/product/orginal/<%= product.image[3] %>">
+                                        <a class="product-gallery-item active" href="#" data-image="images/product/sharped/<%= product.image[0] %>" data-zoom-image="images/product/orginal/<%= product.image[0] %>">
                                              <!-- this image for the side small image -->
-                                            <img src="images/product/sharped/<%= product.image[3] %>" alt="<%= product.name %>">
-                                        </a>
-
-                                        <a class="product-gallery-item" href="#" data-image="images/product/sharped/<%= product.image[2] %>" data-zoom-image="images/product/orginal/<%= product.image[2] %>">
-                                            <img src="images/product/sharped/<%= product.image[2] %>" alt="<%= product.name %>">
+                                            <img src="images/product/sharped/<%= product.image[0] %>" alt="<%= product.name %>">
                                         </a>
 
                                         <a class="product-gallery-item" href="#" data-image="images/product/sharped/<%= product.image[1] %>" data-zoom-image="images/product/orginal/<%= product.image[1] %>">
                                             <img src="images/product/sharped/<%= product.image[1] %>" alt="<%= product.name %>">
                                         </a>
 
-                                        <a class="product-gallery-item" href="#" data-image="images/product/sharped/<%= product.image[0] %>" data-zoom-image="images/product/orginal/<%= product.image[0] %>">
-                                            <img src="images/product/sharped/<%= product.image[0] %>" alt="<%= product.name %>">
+                                        <a class="product-gallery-item" href="#" data-image="images/product/sharped/<%= product.image[2] %>" data-zoom-image="images/product/orginal/<%= product.image[2] %>">
+                                            <img src="images/product/sharped/<%= product.image[2] %>" alt="<%= product.name %>">
+                                        </a>
+
+                                        <a class="product-gallery-item" href="#" data-image="images/product/sharped/<%= product.image[3] %>" data-zoom-image="images/product/orginal/<%= product.image[3] %>">
+                                            <img src="images/product/sharped/<%= product.image[3] %>" alt="<%= product.name %>">
                                         </a>
                                     </div><!-- End .product-image-gallery -->
                                 </div><!-- End .row -->
@@ -108,10 +108,10 @@
                                             <option value="xl">Extra Large</option>
                                         </select>
                                     </div><!-- End .select-custom -->
-                                    <% if (product.quantity < 6) { %>
-                                        <p style="color: red;">(Only <%= product.quantity %> left)</p>
-                                    <% }  else if(product.quantity==0){ %>
-                                        <p style="color: blue;">(Out of stok)</p>
+                                    <% if (product.quantity==0) { %>
+                                        <p style="color:blue;">(Out Of Stock)</p>
+                                    <% }  else if(product.quantity <6 ){ %>
+                                        <p style="color:red;">(Only <%= product.quantity %> left)</p>
                                     <% } %>
                                     <!-- <a href="#" class="size-guide"><i class="icon-th-list"></i>size guide</a> -->
                                 </div>
@@ -356,7 +356,7 @@
                     <!-- Block2 -->
                     <div class="block2">
                         <div class="block2-pic hov-img0">
-                            <img src="images/product/orginal/<%= related.image[3] %>" alt="<%= product.name %>" >
+                            <img src="images/product/orginal/<%= related.image[0] %>" alt="<%= product.name %>" >
                         </div>
 
                         <div class="block2-txt flex-w flex-t p-t-14">

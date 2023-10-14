@@ -421,7 +421,7 @@
                         <!-- Block2 -->
                         <div class="block2">
                             <div class="block2-pic hov-img0">                             
-                                <img src="images/product/orginal/<%= product.image[3] %>" alt="<%= product.name %>" >                              
+                                <img src="images/product/orginal/<%= product.image[0] %>" alt="<%= product.name %>" >                              
                             </div>
                 
                             <div class="block2-txt flex-w flex-t p-t-14">
@@ -436,7 +436,11 @@
                                         <%= product.price %>
                                     </span>
                                 </div>
-                
+                                <% if (product.quantity==0) { %>
+                                    <p style="color:blue;">(Out Of Stock)</p>
+                                <% }  else if(product.quantity <6 ){ %>
+                                    <p style="color:red;">(Only <%= product.quantity %> left)</p>
+                                <% } %>
                                 <div class="block2-txt-child2 flex-r p-t-3">
                                     <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
                                         <img class="icon-heart1 dis-block trans-04" src="user/images/icons/icon-heart-01.png" alt="ICON">

@@ -18,7 +18,7 @@
     </div><!-- End .container -->
 </nav><!-- End .breadcrumb-nav -->
 
-<% if (cart===null) { %>
+<% if (cart===null||cart.products.length==0) { %>
     <div  style=" max-width: 800px;
         margin: 0 auto;
         padding: 20px;
@@ -35,7 +35,7 @@
         color: #ccc;">&#128722;</div>
     <p style="font-size: 16px;">Your shopping cart is empty.</p>
      <p><a style=" text-decoration: none;
-        color: #007bff;" href="#">Continue shopping</a></p>
+        color: #007bff;" href="/">Continue shopping</a></p>
     </div>
     </div>
     <div style="width: 100%;height: 77px;"></div>
@@ -61,10 +61,10 @@
                             <tr class="table_row">
                                 <td class="column-1">
                                     <div class="how-itemcart1">
-                                        <img src="images/product/orginal/<%= product.productId.image[3] %>" alt="IMG">
+                                        <img src="images/product/orginal/<%= product.productId.image[0] %>" alt="IMG">
                                     </div>
                                 </td>
-                                <td class="column-2"><%= product.productId.name %></td>
+                                <td class="column-2"><a href="/product?_id=<%= product.productId._id %>"><%= product.productId.name %></a></td>
                                 <td class="column-3"><%= product.price %></td>
                                 <% if (product.productId.quantity === 0) { %>
                                     <td class="column-3 " style="color: blue;">Out of stock</td>
@@ -117,7 +117,11 @@
                             <tbody>
                                     <tr class="summary-subtotal">
                                         <td>Subtotal:</td>
+                                        <% if (total.length>0) { %>
                                         <td>$ <%= total[0].total %></td>
+                                        <% } else { %>
+                                        <td>$ 0.00</td>
+                                         <% } %>
                                     </tr><!-- End .summary-subtotal -->
                                     <tr class="summary-shipping">
                                         <td>Shipping:</td>
@@ -160,7 +164,11 @@
 
                                         <tr class="summary-total">
                                             <td>Total:</td>
-                                            <td>$ <%= total[0].total %></td>
+                                            <% if (total.length>0) { %>
+                                                <td>$ <%= total[0].total %></td>
+                                                <% } else { %>
+                                                <td>$ 0.00</td>
+                                                 <% } %>
                                         </tr><!-- End .summary-total -->
                             </tbody>
                         </table><!-- End .table table-summary -->
@@ -228,7 +236,7 @@
 
     }
 
-    function checkStock(productId,count) {
+    function checkStock() {
         $.ajax({
             method: 'get',
             url: '/checkout', 

@@ -43,6 +43,7 @@ const loadCart = async(req,res)=>{
 //add to cart
 const addToCart = async(req,res)=>{
     try {
+
         const user_id = req.session.user_id;
         const product_id = req.body.productId
         const productData = await Product.findById(product_id)
@@ -115,6 +116,7 @@ const updateCart = async(req,res)=>{
                   }
                 }
               ]);
+              console.log(total);
               console.log('step 3');
             await Cart.findOneAndUpdate({'products.productId':product_id},{$set:{'products.$.totalPrice':total[0].total}})
             res.json({stock:true})
@@ -155,11 +157,15 @@ const removeProduct = async(req,res)=>{
 // Show Checkout page
 const loadCheckout = async(req,res)=>{
   try {
-    
+    console.log('checkout');
     const user_id = req.session.user_id
-    const addressData = await Address.findOne({user:user_id})
+    let addressData = await Address.findOne({user:user_id})
     const cartData = await Cart.findOne({user:user_id}).populate('products.productId')
     const stock = cartData.products.filter((val,ind)=>val.productId.quantity>0)
+
+    if(addressData == null){
+      addressData =[];
+    }
     if(stock.length!=cartData.products.length){
       res.json({stock:false})
     }
@@ -181,7 +187,7 @@ const loadCheckout = async(req,res)=>{
         }
       }
     ]);
-   
+  console.log(addressData);
     res.render("checkout",{addresses:addressData,cart:cartData,total:total})
 
   } catch (error) {

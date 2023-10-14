@@ -1,11 +1,11 @@
-const mongoose =  require('mongoose')
-mongoose.connect('mongodb://127.0.0.1:27017/FashionArclight')
-require("dotenv").config()
+const mongoDb = require('./config/mongodb')
+mongoDb.mongoDB()
 // ...........................................................
 
 const express = require('express')
 const app = express()
 const noCache = require('nocache')
+
 
 const userRoute= require('./routes/userRoute')
 const adminRoute= require('./routes/adminRoute')

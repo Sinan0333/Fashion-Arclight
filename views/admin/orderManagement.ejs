@@ -2,12 +2,12 @@
 <div class="main-panel">
   <div class="content-wrapper">
     <div class="row">
-      <div class="col-lg-12">
-        <div class="card">
-          <div class="card-body">
+      <div class="col-lg-12" >
+        <div class="card" >
+          <div class="card-body" >
             <h4 class="card-title">Order Management</h4>
-            <div class="table-responsive">
-              <table class="table table-hover">
+            <div class="table-responsive" >
+              <table class="table table-hover" id="reloadArea">
                 <thead>
                   <tr>
                     <th>No.</th>
@@ -15,10 +15,11 @@
                     <th>Order Date</th>
                     <th>Payment</th>
                     <th>Status</th>
+                    <th>Action</th>
                     <th>View</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody >
                   <% orders.forEach(function(order,index) { %>
                     <tr>
                       <td><%= index + 1 %></td> <!-- Replace with actual user properties -->
@@ -26,8 +27,27 @@
                       <td><%= order.date.toLocaleDateString('en-US', { year:
                         'numeric', month: 'short', day: '2-digit'
                         }).replace(/\//g, '-') %></td>
-                      <td><%= order.totalAmount %></td>
-                      <td><%= order.status %></td>
+                        <td><%= order.totalAmount %></td>
+
+                      <% if (order.status=="placed") { %>
+                        <td><button type="button" class="btn btn-success" onclick="updateOrder('<%= order._id %>')" >Placed</button></td>
+                      <% } else if ( order.status == 'shipped') { %>
+                        <td><button type="button" class="btn btn-light" onclick="updateOrder('<%= order._id %>')" >Shipped</button></td>
+                      <% } else if(order.status =='out for delivery') { %>
+                        <td><button type="button" class="btn btn-warning" onclick="updateOrder('<%= order._id %>')" >Out For Delivery</button></td>
+                      <% } else if(order.status =='delivered') { %>
+                        <td style="color: limegreen;">Deliverd</td>
+                      <% } else if(order.status =='cancelled') { %>
+                        <td style="color: red;">cancelled</td>
+                      <% } %>
+
+                      <td>
+                        <% if (order.status !=='cancelled' && order.status !=='delivered') { %>
+                          <button type="button" class="btn btn-danger" onclick="updateOrder('<%= order._id %>','cancel')" >Cancel</button>  
+                        <% } else{%>
+                          
+                          <% } %>                     
+                      </td>
                       <td>
                         <a href="/admin/orderSummary?_id=<%= order._id %>" class="btn btn-primary block-button" >Details</a>                        
                       </td>
@@ -41,7 +61,33 @@
       </div>
     </div>
   </div>
-  
     <!-- content-wrapper ends -->
     <!-- partial:../../partials/_footer.html -->
+
+    <script>
+         function updateOrder(orderId,cancel) {
+        const data = {orderId:orderId,cancel:cancel}
+        console.log(data);
+        $.ajax({
+            method: 'POST',
+            url: '/admin/updateOrder', 
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: function (response) {
+                if(response.update===true){
+                    $('#reloadArea').load('/admin/order #reloadArea'); 
+                }else{
+                    swal("Somthing error", "", "error")
+                    $('#reloadArea').load('/cart #reloadArea'); 
+                }
+
+            },
+            error: function (error) {
+
+                console.error(error);
+            }
+        });
+    }
+
+    </script>
   <%- include('../layout/admin/footer.ejs') -%>
