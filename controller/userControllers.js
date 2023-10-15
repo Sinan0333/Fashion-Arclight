@@ -277,34 +277,7 @@ const resendOtp = async (req, res) => {
 
 
 
-// =========================================< Load pages >=================================================
-
-
-// load home page (index.js)
-const loadHome = async (req, res) => {
-  try {
-
-    const productData = await Product.find({is_blocked:false})
-    res.render("index",{products:productData});
-  } catch {
-    console.log(error.message);
-  }
-};
-
-
-//load product page
-const loadProduct = async (req, res) => {
-  try {
-    const product_id=req.query._id
-    const productData = await Product.findOne({_id:product_id})
-
-    const relatedProducts =await Product.find({category:productData.category})
-    res.render("product",{product:productData,relatedProducts:relatedProducts});
-  } catch {
-    console.log(error.message);
-  }
-};
-
+// =========================================< Profile >=================================================
 
 //load profile
 const loadprofile = async (req, res) => {
@@ -389,7 +362,7 @@ const editProfile = async (req, res) => {
 const sample = async (req, res) => {
   try {
     
-    res.render("emptyCart")
+    res.render("S")
   } catch (error){
     console.log(error.message);
   }
@@ -402,23 +375,22 @@ const sample = async (req, res) => {
 
 
 
+
 module.exports = {
   insertUser,
   loadRegister,
-  loadHome,
   otpVarification,
   loadlogin,
   verifyLogin,
   forgotPassword,
   getEmail,
   changePassword,
-  loadProduct,
   userLogout,
   resendOtp,
   loadprofile,
   loadEditProfile,
   editProfile,
-  sample
+  sample,
 
 
 };

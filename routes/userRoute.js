@@ -5,6 +5,7 @@ const session = require('express-session')
 
 // =========================================< Controllers >=================================================
 const userControllers=require('../controller/userControllers')
+const productControllers=require('../controller/productControllers')
 const addressControllers=require('../controller/addressControllers')
 const cartControllers=require('../controller/cartControllers')
 const orderControllers=require('../controller/orderControllers')
@@ -44,9 +45,10 @@ user_route.post('/changePassword',userControllers.changePassword)
 
 
 // =========================================< Home Page >=================================================
-user_route.get('/',userControllers.loadHome)
-user_route.get('/product',auth.isLogin,userControllers.loadProduct)
-
+user_route.get('/',productControllers.loadHome)
+user_route.get('/product',auth.isLogin,productControllers.loadProduct)
+user_route.post('/searchProduct',productControllers.loadShop)
+user_route.get('/shop',productControllers.loadShop)
 
 // =========================================< Profile >=================================================
 user_route.get('/profile',auth.isLogin,userControllers.loadprofile)
