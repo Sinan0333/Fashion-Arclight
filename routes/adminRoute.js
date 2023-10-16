@@ -8,6 +8,7 @@ const adminControllers=require('../controller/adminControllers')
 const productControllers=require('../controller/productControllers')
 const categoryControllers = require('../controller/categoryControllers')
 const orderControllers=require('../controller/orderControllers')
+const bannerControllers=require('../controller/bannerControllers')
 
 
 const config = require('../config/mongodb')
@@ -62,6 +63,16 @@ admin_route.get('/deleteProduct',productControllers.deleteProduct)
 admin_route.get('/order',auth.isLogin,orderControllers.loadOrderManagement)
 admin_route.get('/orderSummary',auth.isLogin,orderControllers.loadOrderSummary)
 admin_route.post('/updateOrder',orderControllers.updateOrder)
+
+
+// =========================================< Banner Management  >=================================================
+admin_route.get('/banner',auth.isLogin,bannerControllers.loadBannerManagement)
+admin_route.get('/addBanner',auth.isLogin,bannerControllers.loadAddBanner)
+admin_route.post('/addBanner',multer.banner.single('image'),bannerControllers.addBanner)
+admin_route.post('/deleteBanner',bannerControllers.deleteBanner)
+admin_route.post('/blockBanner',bannerControllers.blockBanner)
+admin_route.get('/editBanner',bannerControllers.loadEditBanner)
+admin_route.post('/editBanner',multer.banner.single('image'),bannerControllers.editBanner)
 
 
 module.exports = admin_route

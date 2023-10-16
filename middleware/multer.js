@@ -13,7 +13,6 @@ const productStorage = multer.diskStorage({
 
 })
 
-const prducts = multer({ storage: productStorage})
 
 const userStorage = multer.diskStorage({
 
@@ -28,6 +27,24 @@ const userStorage = multer.diskStorage({
 
 })
 
-const user =multer({storage:userStorage})
 
-module.exports = {prducts,user}
+const bannerStorage = multer.diskStorage({
+
+  destination: "public/images/banner/orginal",
+
+  filename: (req, file, cb)=> {
+
+    const filename = file.originalname;
+    cb(null, filename)
+
+  }
+
+})
+
+
+const prducts = multer({ storage: productStorage})
+const user =multer({storage:userStorage})
+const banner =multer({storage:bannerStorage})
+
+
+module.exports = {prducts,user,banner}

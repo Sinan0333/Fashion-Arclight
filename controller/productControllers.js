@@ -1,5 +1,6 @@
 const Product = require('../model/productModel')
 const Category = require('../model/categoryModel')
+const Banner = require('../model/bannerModel')
 const Sharp = require('sharp')
 const fs = require('fs');
 
@@ -12,7 +13,8 @@ const loadHome = async (req, res) => {
   try {
 
     const productData = await Product.find({is_blocked:false})
-    res.render("index",{products:productData});
+    const bannerData =await Banner.find({is_blocked:false})
+    res.render("index",{products:productData,banners:bannerData});
   } catch {
     console.log(error.message);
   }

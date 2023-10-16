@@ -1,0 +1,44 @@
+<%- include('../layout/admin/header.ejs') -%>
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <br>
+        <br>
+        <br>
+        <h1 class="card-title">Add Banner</h1>
+        <p class="card-description"> Add Banner form</p>
+          <form action="/admin/addBanner" class="forms-sample" method="post" enctype="multipart/form-data">  
+            <div class="form-group">
+                <label for="exampleInputName1">Banner Title</label>
+                <input type="text" class="form-control" id="exampleInputName1" name="title" placeholder="title"  style="color: white;">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail3">Description</label>
+                <input type="text" class="form-control" id="exampleInputEmail3" name="description" placeholder="description"  style="color: white;">
+            </div>
+            <!-- <div class="row d-flex justify-content-center "> -->
+                <!-- <div class="row d-flex justify-content-between "> -->
+                  <div class="col-lg-3 col-md-6 rounded-image-preview">
+                    <label for="imageInput1" class="image-label">
+                      <div class="rounded-image-preview">
+                        <img id="imagePreview1"
+                          src="/images/product/orginal/Allen Solly 4.avif"
+                          alt="Preview" />
+                      </div>
+                      <input name="image" type="file" accept="image/*" id="imageInput1" class="imageInput"  required >
+                    </label>
+                  <!-- </div> -->
+                <!-- </div> -->
+            </div>
+            <br>
+          <button type="submit" class="btn btn-primary mr-2">Submit</button>
+          <button class="btn btn-dark">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+
+<%- include('../layout/admin/footer.ejs') -%>

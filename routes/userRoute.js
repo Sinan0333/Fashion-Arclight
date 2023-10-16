@@ -9,7 +9,7 @@ const productControllers=require('../controller/productControllers')
 const addressControllers=require('../controller/addressControllers')
 const cartControllers=require('../controller/cartControllers')
 const orderControllers=require('../controller/orderControllers')
-
+const wishlistControllers=require('../controller/wishlistControllers')
 
 const config = require('../config/mongodb')
 const auth = require('../middleware/auth')
@@ -78,5 +78,10 @@ user_route.get('/orderDetails',auth.isLogin,orderControllers.loadOrderDetails)
 user_route.post('/cancelOrder',orderControllers.cancelOrder)
 user_route.get('/sample',userControllers.sample)
 
+
+// =========================================< Wishlist >=================================================
+user_route.post('/addToWishList',wishlistControllers.addToWishList)
+user_route.get('/wishlist',wishlistControllers.loadWishlist)
+user_route.post('/removeWish',wishlistControllers.removeProduct)
 
 module.exports =user_route

@@ -1,0 +1,153 @@
+<%- include('../layout/user/header.ejs') -%>
+
+<div style="width: 100%;height: 77px;"></div>
+<section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url('user/images/bg-01.jpg');">
+    <h2 class="ltext-105 cl0 txt-center">
+        Wishlist
+    </h2>
+</section>	
+<br>
+
+<nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
+    <div class="container">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Shop</a></li>
+            <li class="breadcrumb-item active" aria-current="page">My Account</li>
+        </ol>
+    </div><!-- End .container -->
+</nav><!-- End .breadcrumb-nav -->
+
+<% if (wishlist===null||wishlist.products.length==0) { %>
+    <div  style=" max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        text-align: center;">
+    <h1 style=" font-size: 24px;
+        margin-bottom: 20px;">Your Wishlist</h1>
+    <div style=" border: 1px solid #ddd;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+    <div style=" font-size: 18px;
+        margin-bottom: 20px;">
+    <div style="font-size: 48px;
+        color: #ccc;">&#128722;</div>
+    <p style="font-size: 16px;">Your wishlist is empty.</p>
+     <p><a style=" text-decoration: none;
+        color: #007bff;" href="/">Continue shopping</a></p>
+    </div>
+    </div>
+    <div style="width: 100%;height: 77px;"></div>
+    </div>
+<% }else { %>
+<!-- Shoping Cart -->
+<form class="bg0 p-t-20 p-b-85">
+    <div class="container">
+        <div class="row" id="reloadArea">
+            <div class="col-lg-10 col-xl-10 m-lr-auto m-b-50" >
+                <div class="m-l-25 m-r--38 m-lr-0-xl">
+                    <div class="wrap-table-shopping-cart" >
+                        <table class="table-shopping-cart">
+                            <tr class="table_head">
+                                <th class="column-1">Product</th>
+                                <th class="column-2"></th>
+                                <th class="column-3">Price</th>
+                                <th class="column-3">Stock</th>
+                                <th class="column-2"></th>
+                                <th class="column-3"></th>
+                                
+                                
+                                
+                            </tr>
+                                <% wishlist.products.forEach(function(product, index) { %>
+                            <tr class="table_row">
+                                <td class="column-1">
+                                    <div class="how-itemcart1">
+                                        <img src="images/product/orginal/<%= product.productId.image[0] %>" alt="IMG">
+                                    </div>
+                                </td>
+                                <td class="column-2"><a href="/product?_id=<%= product.productId._id %>"><%= product.productId.name %></a></td>
+                                <td class="column-3"><%= product.productId.price %></td>
+                                <% if (product.productId.quantity === 0) { %>
+                                    <td class="column-3 " style="color: blue;">Out of stock</td>
+                                <% } else if (product.productId.quantity < 6) { %>
+                                    <td class="column-3" style="color: red;">Only <%= product.productId.quantity %> left</td>
+                                <% } else { %>
+                                    <td class="column-3" style="color: lime;">Available</td>
+                                <% } %>
+                                <td class="column-5"><div class="product-details-action">
+                                    <p class="btn-product btn-cart " onclick="addToCart('<%= product.productId._id %>');"><span> add to cart</span></p></div> </td>
+                                    <td></td>
+                                <td><p class="btn-remove" title="Remove Product" onclick="removeProduct('<%= product.productId._id %>')"><i class="icon-close"></i></p></td>
+                            <% }); %>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<% } %> 
+
+
+<!-- Back to top -->
+<div class="btn-back-to-top" id="myBtn">
+    <span class="symbol-btn-back-to-top">
+        <i class="zmdi zmdi-chevron-up"></i>
+    </span>
+</div>
+
+
+<script>
+
+    function addToCart(productId) {
+        const data = {productId:productId}
+
+        console.log(data);
+        $.ajax({
+            method: 'POST',
+            url: '/addToCart', 
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: function (response) {
+                if(response.stock===true){
+                    swal("Success", "Item added to cart!", "success")
+                }else{
+                    swal("Sorry", "No stock!", "error");
+                }
+
+            },
+            error: function (error) {
+                // Handle any errors from the server
+                console.error(error);
+            }
+        });
+    }
+
+
+    function removeProduct(productId){
+        const data = {productId:productId}
+
+        $.ajax({
+            method:'POST',
+            url:'/removeWish',
+            data:JSON.stringify(data),
+            contentType:'application/json',
+            success:function(response){
+                if(response.remove==true){
+                    swal("Success", "Item removed from the cart!", "success")
+                    $('#reloadArea').load('/wishlist #reloadArea'); 
+                }
+            },
+            error:function(error){
+                console.log(error);
+            }
+        });
+
+    }
+
+
+</script>
+
+<%- include('../layout/user/footer.ejs') -%>

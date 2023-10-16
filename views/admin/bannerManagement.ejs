@@ -1,0 +1,111 @@
+<%- include('../layout/admin/header.ejs') -%>
+<div class="main-panel">
+  <div class="content-wrapper">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Banner Management</h4>
+              <a href="/admin/addBanner" class="btn btn-primary">Add Banner</a>
+              
+            <div class="table-responsive" id="reloadArea">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>No:</th>
+                    <th>image</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Update</th>
+                    <th>Action</th>
+                    <th>Delete</th>
+
+                  </tr>
+                </thead>
+                <tbody >
+                     <% let counter = 1; %>
+                  <% banners.forEach(function(banner) { %>
+                    <tr>
+                        <td><%= counter %></td>
+                        <td>
+                          <img src="/images/banner/orginal/<%= banner.image %>" alt="<%= banner.title %>" >  
+                              <!-- <span class="pl-2"><%= banner.title %></span> -->
+                        </td>
+                      <td><%= banner.title %></td>
+                      <td><%= banner.description %></td>
+                      <td>
+                        <span class="<%= banner.is_blocked ? 'text-danger' : 'text-success' %>">
+                          <%= banner.is_blocked ? "Blocked" : "Active" %>
+                        </span>
+                      </td> 
+                      <td>
+                        <a href="/admin/editBanner?_id=<%= banner._id %>" data-category-id="<%= banner._id %>" class="btn btn-warning edit-button">
+                            Edit
+                          </a>                    
+                      </td>
+                      <td>
+                        <a  class="btn btn-danger block-button" data-initial-status="<%= banner.is_blocked %>" onclick="blockBanner('<%= banner._id %>')">
+                          <%= banner.is_blocked ? "Unblock" : "Block" %>
+                        </a>                        
+                        <td>
+                          <a data-category-id="<%= banner._id %>" class="btn btn-primary delete-button" onclick="deleteBanner('<%= banner._id %>')">
+                            Delete
+                          </a>                          
+                      </td>                      
+                    </tr>
+                      <% counter++; %>
+                  <% }); %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+     function deleteBanner(bannerId){
+      console.log(bannerId);
+        const data = {_id:bannerId}
+
+        $.ajax({
+            method:'POST',
+            url:'/admin/deleteBanner',
+            data:JSON.stringify(data),
+            contentType:'application/json',
+            success:function(response){
+                if(response.delete==true){
+                    $('#reloadArea').load('/admin/banner #reloadArea'); 
+                }
+            },
+            error:function(error){
+                console.log(error);
+            }
+        });
+    }
+
+    function blockBanner(bannerId){
+      console.log(bannerId);
+        const data = {_id:bannerId}
+
+        $.ajax({
+            method:'POST',
+            url:'/admin/blockBanner',
+            data:JSON.stringify(data),
+            contentType:'application/json',
+            success:function(response){
+                if(response.block==true){
+                    $('#reloadArea').load('/admin/banner #reloadArea'); 
+                }
+            },
+            error:function(error){
+                console.log(error);
+            }
+        });
+    }
+  </script>
+    <!-- content-wrapper ends -->
+    <!-- partial:../../partials/_footer.html -->
+  <%- include('../layout/admin/footer.ejs') -%>

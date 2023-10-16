@@ -70,6 +70,7 @@ img {
   text-align: center;
 }
 
-.custom-swal {
-  background-color: #191c24
+.swal2-popup {
+  background-color: #191c24;
+  /* Replace with your desired background color */
 }
