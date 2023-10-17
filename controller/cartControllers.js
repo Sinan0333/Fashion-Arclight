@@ -157,7 +157,7 @@ const removeProduct = async(req,res)=>{
 // Show Checkout page
 const loadCheckout = async(req,res)=>{
   try {
-    console.log('checkout');
+
     const user_id = req.session.user_id
     let addressData = await Address.findOne({user:user_id})
     const cartData = await Cart.findOne({user:user_id}).populate('products.productId')
@@ -187,7 +187,7 @@ const loadCheckout = async(req,res)=>{
         }
       }
     ]);
-  console.log(addressData);
+
     res.render("checkout",{addresses:addressData,cart:cartData,total:total})
 
   } catch (error) {

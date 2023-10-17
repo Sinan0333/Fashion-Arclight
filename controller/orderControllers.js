@@ -2,7 +2,13 @@ const Order = require("../model/orderModel")
 const Address = require("../model/addressModel");
 const Cart = require('../model/cartModel')
 const Product = require('../model/productModel');
+const Razorpay = require('razorpay');
+require("dotenv").config()
 
+var instance = new Razorpay({
+  key_id: process.env.key_id,
+  key_secret: process.env.key_secret,
+});
 
 // =========================================< User side >=================================================
 
@@ -10,10 +16,11 @@ const Product = require('../model/productModel');
 // to place order
 const placeOrder = async(req,res)=>{
     try {
-        
+        console.log(req.body);
         const user_id = req.session.user_id
         const paymentMethod = req.body.payment
         const addressIndex = !req.body.address? 0:req.body.address
+        const status = paymentMethod=="COD"?"placed":'pending'
         if(!req.body.address){
           const data = {
             fullName:req.body.name,
@@ -46,20 +53,38 @@ const placeOrder = async(req,res)=>{
         products:productData,
         date:new Date(),
         totalAmount:total,
-        status:'placed',
+        status:status,
         paymentMethod:paymentMethod,
        })
 
-       const result = await data.save()
+       if(status=='placed'){
+        const result = await data.save()
       
-      for( let i=0;i<cartData.products.length;i++){
-        let product = cartData.products[i].productId
-        let count = cartData.products[i].count
-        await Product.updateOne({_id:product},{$inc:{quantity:-count}})
-      }
+        for( let i=0;i<cartData.products.length;i++){
+          let product = cartData.products[i].productId
+          let count = cartData.products[i].count
+          await Product.updateOne({_id:product},{$inc:{quantity:-count}})
+        }
+  
+        await Cart.deleteOne({user:user_id})
+        res.json({placed:true})
+       }else{
+        const orderData = await data.save()
 
-      await Cart.deleteOne({user:user_id})
-      res.render('orderSuccess')
+        const options ={
+          amount: total*100,
+          currency: "INR",
+          receipt: ""+orderData._id,
+        }
+
+        instance.orders.create(options, function (err, order) {
+
+          res.json({ order });
+        });
+
+       }
+      
+       
   
     } catch (error) {
         console.log(error.message);
@@ -86,7 +111,7 @@ const loadOrderDetails = async(req,res)=>{
 //User cancel order
 const cancelOrder = async(req,res)=>{
   try {
-  console.log("ivade ethi");
+
     const order_id = req.body.orderId
     const cancelReaon = req.body.cancelReason
     const OrderData = await Order.updateOne({_id:order_id},{$set:{status:'cancelled',cancelReason:cancelReaon}})
@@ -162,6 +187,16 @@ const updateOrder = async(req,res)=>{
 }
 
 
+// Load order succes page
+const loadOrderSuccess = async(req,res)=>{
+  try {
+    res.render('orderSuccess')
+  } catch (error) {
+
+      console.log(error.message);
+
+  }
+}
 
 
 
@@ -173,5 +208,6 @@ module.exports ={
   cancelOrder,
   loadOrderSummary,
   updateOrder,
+  loadOrderSuccess
     
   }

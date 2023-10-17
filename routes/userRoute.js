@@ -76,6 +76,7 @@ user_route.get('/checkout',cartControllers.loadCheckout)
 user_route.post('/placeOrder',orderControllers.placeOrder)
 user_route.get('/orderDetails',auth.isLogin,orderControllers.loadOrderDetails)
 user_route.post('/cancelOrder',orderControllers.cancelOrder)
+user_route.get('/orderSuccess',auth.isLogin,orderControllers.loadOrderSuccess)
 user_route.get('/sample',userControllers.sample)
 
 

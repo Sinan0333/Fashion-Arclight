@@ -59,7 +59,7 @@ const removeProduct = async(req,res)=>{
         res.json({remove:true})
       }else{
         res.json({remove:false})
-      }
+      }n
     } catch (error) {
         console.log(error.message);
     }
