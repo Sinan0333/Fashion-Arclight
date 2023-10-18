@@ -42,9 +42,24 @@ const bannerStorage = multer.diskStorage({
 })
 
 
+const couponStorage = multer.diskStorage({
+
+  destination: "public/images/coupon/orginal",
+
+  filename: (req, file, cb)=> {
+
+    const filename = file.originalname;
+    cb(null, filename)
+
+  }
+
+})
+
+
 const prducts = multer({ storage: productStorage})
 const user =multer({storage:userStorage})
 const banner =multer({storage:bannerStorage})
+const coupon =multer({storage:couponStorage})
 
 
-module.exports = {prducts,user,banner}
+module.exports = {prducts,user,banner,coupon}

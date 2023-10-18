@@ -24,9 +24,7 @@
                     <tr>
                       <td><%= index + 1 %></td> <!-- Replace with actual user properties -->
                       <td><%= order._id %></td>
-                      <td><%= order.date.toLocaleDateString('en-US', { year:
-                        'numeric', month: 'short', day: '2-digit'
-                        }).replace(/\//g, '-') %></td>
+                      <td><%= order.date.toLocaleDateString('en-US', { year:'numeric', month: 'short', day: '2-digit'}).replace(/\//g, '-') %></td>
                         <td><%= order.totalAmount %></td>
 
                       <% if (order.status=="placed") { %>

@@ -22,8 +22,8 @@
     <div class="checkout">
         <div class="container">
             <div class="checkout-discount">
-                <form action="#">
-                    <input type="text" class="form-control" required id="checkout-discount-input">
+                <form action="/coupon">
+                    <input type="text" class="form-control" name="coupon" required id="checkout-discount-input">
                     <label for="checkout-discount-input" class="text-truncate">Have a coupon? <span>Click here to enter your code</span></label>
                 </form>
             </div><!-- End .checkout-discount -->
@@ -183,84 +183,87 @@
 <script>
 
     $(document).ready(function () {
-    $('#myForm').submit(function (event) {
-        event.preventDefault(); 
+        $('#myForm').submit(function (event) {
+            event.preventDefault(); 
 
-        var formData = $(this).serialize();
-        $.ajax({
-            type: 'POST',
-            url: '/placeOrder',
-            data: formData,
-            success: function (response) {
-                if(response.placed==true){
-                    window.location.href = '/orderSuccess'
-                }else{
-                    
-                    razorpayPayment(response.order)
+            var formData = $(this).serialize();
+            $.ajax({
+                type: 'POST',
+                url: '/placeOrder',
+                data: formData,
+                success: function (response) {
+                    if(response.placed==true){
+                        window.location.href = '/orderSuccess'
+                    }else{
+                        
+                        razorpayPayment(response.order)
+                    }
+                },
+                error: function (error) {
+    
+                    console.error('Error:', error);
                 }
-            },
-            error: function (error) {
- 
-                console.error('Error:', error);
-            }
+            });
         });
     });
-});
 
-function razorpayPayment(order){
-    console.log(order.amount);
-    var options = {
-    "key": "rzp_test_eTuP9JfD6ugQOM",
-    "amount": order.amount, 
-    "currency": "INR",
-    "name": "Acme Corp",
-    "description": "Test Transaction",
-    "image": "https://example.com/your_logo",
-    "order_id": order.id, 
-    handler: function (response) {
-        verifyPayment(response, order);
-      },
-    "prefill": { 
-        "name": "Gaurav Kumar", 
-        "email": "gaurav.kumar@example.com",
-        "contact": "9000090000"
-    },
-    "notes": {
-        "address": "Razorpay Corporate Office"
-    },
-    "theme": {
-        "color": "#3399cc"
-    }
-};
-var rzp1 = new Razorpay(options);
-rzp1.open();
-}
 
-function verifyPayment(payment, order) {
-    const amount2 = document.getElementById("total1").innerHTML;
-    $.ajax({
-      url: "/verify-payment",
-      method: "post",
-      data: {
-        payment: payment,
-        amount2: amount2,
-        order: order,
-      },
-      success: (response) => {
-        if (response.codsuccess == true) {
-          location.href = `/orderSuccess/${response.orderid}`;
-        } else {
-          swal.fire({
-            positon: "center",
-            icon: "error",
-            title: "Payment failed",
-            showConfirmButton: false,
-            timer: 1500,
-          });
+    function razorpayPayment(order){
+        var options = {
+        "key": "rzp_test_eTuP9JfD6ugQOM",
+        "amount": order.amount, 
+        "currency": "INR",
+        "name": "Acme Corp",
+        "description": "Test Transaction",
+        "image": "https://example.com/your_logo",
+        "order_id": order.id, 
+        handler: function (response) {
+            verifyPayment(response, order);
+        },
+        "prefill": { 
+            "name": "Gaurav Kumar", 
+            "email": "gaurav.kumar@example.com",
+            "contact": "9000090000"
+        },
+        "notes": {
+            "address": "Razorpay Corporate Office"
+        },
+        "theme": {
+            "color": "#3399cc"
         }
-      },
-    });
-  }
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.open();
+    }
+
+
+    function verifyPayment(payment, order) {
+        const amount2 = document.getElementById("total1").innerHTML;
+        console.log(amount2);
+        $.ajax({
+        url: "/verify-payment",
+        method: "post",
+        data: {
+            payment: payment,
+            amount2: amount2,
+            order: order,
+        },
+        success: (response) => {
+            if (response.placed == true) {
+                window.location.href = '/orderSuccess'
+            } else {
+            swal.fire({
+                positon: "center",
+                icon: "error",
+                title: "Payment failed",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            }
+        },
+        });
+    }
+
 
 </script>
 <%- include('../layout/user/footer.ejs') -%>

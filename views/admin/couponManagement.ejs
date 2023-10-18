@@ -1,0 +1,113 @@
+<%- include('../layout/admin/header.ejs') -%>
+<div class="main-panel">
+  <div class="content-wrapper">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Coupon Management</h4>
+              <a href="/admin/addCoupon" class="btn btn-primary">Add Coupon</a>
+              
+            <div class="table-responsive" id="reloadArea">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>No:</th>
+                    <th>Name</th>
+                    <th>Coupon Code</th>
+                    <th>Discount</th>
+                    <th>Criteria Amount</th>
+                    <th>Activation Date</th>
+                    <th>Expiry Date</th>
+                    <th>Used</th>
+                    <th>Update</th>
+                    <th>Action</th>
+                    <th>Delete</th>
+
+                  </tr>
+                </thead>
+                <tbody>
+                     <% let counter = 1; %>
+                  <% coupons.forEach(function(coupon) { %>
+                    <tr>
+                        <td><%= counter %></td>
+                        <td>
+
+                              <span class="pl-2"><%= coupon.name %></span>
+                        </td>
+                      <td><%= coupon.couponCode %></td>
+                      <td><%= coupon.discountAmount %></td> 
+                      <td><%= coupon.criteriaAmount %></td> 
+                      <td><%= coupon.activationDate.toLocaleDateString('en-US', { year:'numeric', month: 'short', day: '2-digit'}).replace(/\//g, '-') %></td> 
+                      <td><%= coupon.expiryDate.toLocaleDateString('en-US', { year:'numeric', month: 'short', day: '2-digit'}).replace(/\//g, '-') %></td> 
+                      <td><%= coupon.usedUsers.length %>/<%= coupon.usersLimit %></td>
+                      <td>
+                        <a href="/admin/editCoupon?_id=<%= coupon._id %>" data-category-id="<%= coupon._id %>" class="btn btn-warning edit-button">
+                            Edit
+                          </a>                    
+                      </td>
+                      <td>
+                        <a  class="btn btn-danger block-button" data-initial-status="<%= coupon.is_blocked %>" onclick="blockCoupon('<%= coupon._id %>')">
+                          <%= coupon.is_blocked ? "Unblock" : "Block" %>
+                        </a>                         
+                        <td>
+                          <a data-category-id="<%= coupon._id %>" class="btn btn-primary delete-button" onclick="deleteCoupon('<%= coupon._id %>')">
+                            Delete
+                          </a> 
+                      </td>                      
+                    </tr>
+                      <% counter++; %>
+                  <% }); %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+        function blockCoupon(couponId){
+      console.log(couponId);
+        const data = {_id:couponId}
+
+        $.ajax({
+            method:'POST',
+            url:'/admin/blockCoupon',
+            data:JSON.stringify(data),
+            contentType:'application/json',
+            success:function(response){
+                if(response.block==true){
+                    $('#reloadArea').load('/admin/coupon #reloadArea'); 
+                }
+            },
+            error:function(error){
+                console.log(error);
+            }
+        });
+    }
+
+    function deleteCoupon(couponId){
+      console.log(couponId);
+        const data = {_id:couponId}
+
+        $.ajax({
+            method:'POST',
+            url:'/admin/deleteCoupon',
+            data:JSON.stringify(data),
+            contentType:'application/json',
+            success:function(response){
+                if(response.delete==true){
+                    $('#reloadArea').load('/admin/coupon #reloadArea'); 
+                }
+            },
+            error:function(error){
+                console.log(error);
+            }
+        });
+    }
+  </script>
+    <!-- content-wrapper ends -->
+    <!-- partial:../../partials/_footer.html -->
+  <%- include('../layout/admin/footer.ejs') -%>

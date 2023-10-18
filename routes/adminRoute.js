@@ -9,6 +9,7 @@ const productControllers=require('../controller/productControllers')
 const categoryControllers = require('../controller/categoryControllers')
 const orderControllers=require('../controller/orderControllers')
 const bannerControllers=require('../controller/bannerControllers')
+const couponControllers=require('../controller/couponControllers')
 
 
 const config = require('../config/mongodb')
@@ -73,6 +74,16 @@ admin_route.post('/deleteBanner',bannerControllers.deleteBanner)
 admin_route.post('/blockBanner',bannerControllers.blockBanner)
 admin_route.get('/editBanner',bannerControllers.loadEditBanner)
 admin_route.post('/editBanner',multer.banner.single('image'),bannerControllers.editBanner)
+
+
+// =========================================< Coupon Management  >=================================================
+admin_route.get('/coupon',couponControllers.loadCouponManagement)
+admin_route.get('/addCoupon',couponControllers.loadAddCoupon)
+admin_route.post('/addCoupon',couponControllers.addCoupon)
+admin_route.get('/editCoupon',couponControllers.loadEditCoupon)
+admin_route.post('/editCoupon',couponControllers.editCoupon)
+admin_route.post('/blockCoupon',couponControllers.blockCoupon)
+admin_route.post('/deleteCoupon',couponControllers.deleteCoupon)
 
 
 module.exports = admin_route

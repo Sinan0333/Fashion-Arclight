@@ -10,6 +10,7 @@ const addressControllers=require('../controller/addressControllers')
 const cartControllers=require('../controller/cartControllers')
 const orderControllers=require('../controller/orderControllers')
 const wishlistControllers=require('../controller/wishlistControllers')
+const couponControllers=require('../controller/couponControllers')
 
 const config = require('../config/mongodb')
 const auth = require('../middleware/auth')
@@ -74,6 +75,7 @@ user_route.post('/removeProduct',cartControllers.removeProduct)
 // =========================================< Checkout and order >=================================================
 user_route.get('/checkout',cartControllers.loadCheckout)
 user_route.post('/placeOrder',orderControllers.placeOrder)
+user_route.post('/verify-payment',orderControllers.verifyPayment)
 user_route.get('/orderDetails',auth.isLogin,orderControllers.loadOrderDetails)
 user_route.post('/cancelOrder',orderControllers.cancelOrder)
 user_route.get('/orderSuccess',auth.isLogin,orderControllers.loadOrderSuccess)
@@ -84,5 +86,8 @@ user_route.get('/sample',userControllers.sample)
 user_route.post('/addToWishList',wishlistControllers.addToWishList)
 user_route.get('/wishlist',wishlistControllers.loadWishlist)
 user_route.post('/removeWish',wishlistControllers.removeProduct)
+
+
+// =========================================< Coupon >=================================================
 
 module.exports =user_route

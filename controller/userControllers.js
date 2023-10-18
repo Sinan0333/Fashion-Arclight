@@ -2,6 +2,7 @@ const User = require("../model/userModel");
 const Product = require('../model/productModel')
 const Address = require("../model/addressModel");
 const Order = require("../model/orderModel")
+const Coupon = require("../model/CouponModel")
 
 
 const bcrypt = require("bcrypt");
@@ -287,9 +288,9 @@ const loadprofile = async (req, res) => {
     const userData =await User.findById(user_id)
     const addressData = await Address.findOne({user:user_id})
     const OrderData = await Order.find({user:user_id})
-    console.log(OrderData);
+    const couponData = await Coupon.find()
 
-    res.render("profile",{user:userData,addresses:addressData,orders:OrderData});
+    res.render("profile",{user:userData,addresses:addressData,orders:OrderData,coupons:couponData});
   } catch {
     console.log(error.message);
   }

@@ -1,0 +1,56 @@
+<%- include('../layout/admin/header.ejs') -%>
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <br>
+        <br>
+        <br>
+        <h1 class="card-title">Add Coupon</h1>
+        <p class="card-description"> Add coupon form</p>
+          <form action="/admin/addCoupon" class="forms-sample" method="post" >  
+            <div class="form-group">
+                <label for="exampleInputName1">coupon Name</label>
+                <input type="text" class="form-control" id="exampleInputName1" name="name" placeholder="name"  style="color: white;">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputCouponCode">Coupon Code</label>
+                <input type="text" class="form-control" id="exampleInputEmail3" name="code" placeholder="code"  style="color: white;">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail3">Discount Amount</label>
+                <input type="number" class="form-control" id="exampleInputEmail3" name="discount" placeholder="discount amount"  style="color: white;">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail3">Expire Date</label>
+                <input type="text" class="form-control" id="exampleInputEmail3" name="expiryDate" placeholder="expire date"  style="color: white;">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail3">Criteria Amount</label>
+                <input type="number" class="form-control" id="exampleInputEmail3" name="criteriAamount" placeholder="criteria amount"  style="color: white;">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail3">User Limits</label>
+                <input type="number" class="form-control" id="exampleInputEmail3" name="userLimit" placeholder="user limits"  style="color: white;">
+            </div>
+                  <!-- <div class="col-lg-3 col-md-6 rounded-image-preview">
+                    <label for="imageInput1" class="image-label">
+                      <div class="rounded-image-preview">
+                        <img id="imagePreview1"
+                          src="/images/product/orginal/Allen Solly 4.avif"
+                          alt="Preview" />
+                      </div>
+                      <input name="image" type="file" accept="image/*" id="imageInput1" class="imageInput"  required >
+                    </label>
+                 </div> -->
+            <br>
+          <button type="submit" class="btn btn-primary mr-2">Submit</button>
+          <button class="btn btn-dark">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+
+<%- include('../layout/admin/footer.ejs') -%>

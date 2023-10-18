@@ -3,6 +3,7 @@ const Address = require("../model/addressModel");
 const Cart = require('../model/cartModel')
 const Product = require('../model/productModel');
 const Razorpay = require('razorpay');
+const crypto = require("crypto")
 require("dotenv").config()
 
 var instance = new Razorpay({
@@ -16,11 +17,12 @@ var instance = new Razorpay({
 // to place order
 const placeOrder = async(req,res)=>{
     try {
-        console.log(req.body);
+
         const user_id = req.session.user_id
         const paymentMethod = req.body.payment
         const addressIndex = !req.body.address? 0:req.body.address
         const status = paymentMethod=="COD"?"placed":'pending'
+        
         if(!req.body.address){
           const data = {
             fullName:req.body.name,
@@ -42,11 +44,13 @@ const placeOrder = async(req,res)=>{
 
           );
         }
+
         const addressData = await Address.findOne({user:user_id})
         const address = addressData.address[addressIndex]
         const cartData = await Cart.findOne({user:user_id})
         const productData = cartData.products
         const total = productData.reduce((acc,val)=> acc+val.totalPrice,0)
+        
         const data = new Order({
         user:user_id,
         deliveryDetails:address,
@@ -57,8 +61,9 @@ const placeOrder = async(req,res)=>{
         paymentMethod:paymentMethod,
        })
 
+       const orderData = await data.save()
+
        if(status=='placed'){
-        const result = await data.save()
       
         for( let i=0;i<cartData.products.length;i++){
           let product = cartData.products[i].productId
@@ -68,8 +73,8 @@ const placeOrder = async(req,res)=>{
   
         await Cart.deleteOne({user:user_id})
         res.json({placed:true})
+
        }else{
-        const orderData = await data.save()
 
         const options ={
           amount: total*100,
@@ -83,12 +88,46 @@ const placeOrder = async(req,res)=>{
         });
 
        }
-      
-       
   
     } catch (error) {
         console.log(error.message);
     }
+}
+
+
+// verifying the online paynent
+const verifyPayment = async(req,res)=>{
+  try {
+    
+    const user_id = req.session.user_id
+    const paymentData = req.body
+    const cartData = await Cart.findOne({user:user_id})
+
+    const hmac = crypto.createHmac("sha256", process.env.key_secret);
+    hmac.update( paymentData.payment.razorpay_order_id  +"|" +  paymentData.payment.razorpay_payment_id );
+    const hmacValue = hmac.digest("hex");
+
+    if(hmacValue == paymentData.payment.razorpay_signature){
+      for( let i=0;i<cartData.products.length;i++){
+        let product = cartData.products[i].productId
+        let count = cartData.products[i].count
+        await Product.updateOne({_id:product},{$inc:{quantity:-count}})
+      }
+
+      await Order.findByIdAndUpdate(
+        { _id: paymentData.order.receipt },
+        { $set: { status: "placed", paymentId: paymentData.payment.razorpay_payment_id } }
+      );
+  
+      await Cart.deleteOne({user:user_id})
+      res.json({placed:true})
+    }
+
+  } catch (error) {
+
+      console.log(error.message);
+
+  }
 }
 
 
@@ -208,6 +247,7 @@ module.exports ={
   cancelOrder,
   loadOrderSummary,
   updateOrder,
-  loadOrderSuccess
+  loadOrderSuccess,
+  verifyPayment,
     
   }
