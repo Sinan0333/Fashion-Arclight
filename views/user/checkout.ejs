@@ -22,7 +22,7 @@
     <div class="checkout">
         <div class="container">
             <div class="checkout-discount">
-                <form action="/coupon">
+                <form id="coupon-form">
                     <input type="text" class="form-control" name="coupon" required id="checkout-discount-input">
                     <label for="checkout-discount-input" class="text-truncate">Have a coupon? <span>Click here to enter your code</span></label>
                 </form>
@@ -92,7 +92,7 @@
                     <% } %>
                     </div>    
                     <aside class="col-lg-3" >
-                        <div class="summary">
+                        <div class="summary" id="reloadArea">
                             <h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
     
                             <table class="table table-summary">
@@ -112,7 +112,7 @@
                                     <% }); %>
                                     <tr class="summary-subtotal">
                                         <td>Subtotal:</td>
-                                        <td>$ <%= total[0].total %></td>
+                                        <td>$ <%= cart.cartTotal %></td>
                                     </tr><!-- End .summary-subtotal -->
                                     <tr>
                                         <td>Shipping:</td>
@@ -120,7 +120,7 @@
                                     </tr>
                                     <tr class="summary-total">
                                         <td>Total:</td>
-                                        <td id="total1">$ <%= total[0].total %></td>
+                                        <td id="total1">$ <%= cart.cartTotal %></td>
                                     </tr><!-- End .summary-total -->
                                 </tbody>
                                
@@ -263,6 +263,40 @@
         },
         });
     }
+
+
+$(document).ready(function() {
+    $("#coupon-form").submit(function(event) {
+        event.preventDefault(); 
+
+        var couponCode = $("#checkout-discount-input").val();
+
+        $.ajax({
+            type: "POST",
+            url: "/checkCoupon", 
+            data: { coupon: couponCode },
+            success: function(response) {
+                if(response.coupon==false){
+                    swal("No Coupon Available", "", "error")
+                }else if(response.coupon=='notAct'){
+                    swal("This Cooupon No Longer Available", "", "error")
+                }else if(response.coupon=='limit'){
+                    swal("This Cooupon Is Only For Limited Users", "", "error")
+                }else if(response.coupon=='used'){
+                    swal("This Coupon Is Already Used Try Another One", "", "error")
+                }else if(response.coupon=='amountIssue'){
+                    swal("Purchase More To Use This Coupon", "", "error")
+                }else if(response.coupon){
+                    swal("Success", "Coupon Added!", "success")
+                    $('#reloadArea').load('/checkout #reloadArea'); 
+                }else{
+                    swal("Somthing Worong", "", "error")
+                }
+            }
+        });
+    });
+});
+
 
 
 </script>

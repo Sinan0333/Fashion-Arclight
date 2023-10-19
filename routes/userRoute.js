@@ -89,5 +89,7 @@ user_route.post('/removeWish',wishlistControllers.removeProduct)
 
 
 // =========================================< Coupon >=================================================
+user_route.post('/checkCoupon',couponControllers.checkCoupon)
+
 
 module.exports =user_route

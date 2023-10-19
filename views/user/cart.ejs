@@ -117,11 +117,7 @@
                             <tbody>
                                     <tr class="summary-subtotal">
                                         <td>Subtotal:</td>
-                                        <% if (total.length>0) { %>
-                                        <td>$ <%= total[0].total %></td>
-                                        <% } else { %>
-                                        <td>$ 0.00</td>
-                                         <% } %>
+                                        <td>$ <%= cart.cartTotal %> %></td>
                                     </tr><!-- End .summary-subtotal -->
                                     <tr class="summary-shipping">
                                         <td>Shipping:</td>
@@ -164,11 +160,7 @@
 
                                         <tr class="summary-total">
                                             <td>Total:</td>
-                                            <% if (total.length>0) { %>
-                                                <td>$ <%= total[0].total %></td>
-                                                <% } else { %>
-                                                <td>$ 0.00</td>
-                                                 <% } %>
+                                            <td>$ <%= cart.cartTotal %></td>
                                         </tr><!-- End .summary-total -->
                             </tbody>
                         </table><!-- End .table table-summary -->

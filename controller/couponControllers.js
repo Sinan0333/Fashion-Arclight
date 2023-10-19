@@ -1,4 +1,5 @@
 const Coupon = require('../model/CouponModel');
+const Cart = require('../model/cartModel')
 
 
 // load Coupon Management
@@ -119,16 +120,35 @@ const checkCoupon = async (req,res)=>{
 
         const couponCode = req.body.coupon
         const user_id = req.session.user_id
-        const couponData = await Coupon.find()
-        const findCoupon = couponData.filter((obj)=>obj.couponCode==couponCode)
+        const currentDate = new Date()
+        const couponData = await Coupon.findOne({couponCode:couponCode})
+        const cartData = await Cart.findOne({user:user_id})
 
-        if(findCoupon){
-            const usedUSer = couponData.usedUsers.filter((user)=>user==user_id)
-            if(usedUSer){
-
+        if(couponData){
+            if(currentDate >= couponData.activationDate && currentDate <= couponData.expiryDate){
+                if (couponData.usedUsers.length < couponData.usersLimit) {
+                    const exists = couponData.usedUsers.includes(user_id)
+                    if(!exists){
+                        if(cartData.cartTotal>=couponData.criteriaAmount){
+                            await Coupon.findOneAndUpdate({couponCode:couponCode},{$push:{usedUsers:user_id}})
+                            const discount = cartData.cartTotal-couponData.discountAmount
+                            await Cart.findOneAndUpdate({user:user_id},{$set:{cartTotal:discount}})
+                            res.json({coupon:true})
+                        }else{
+                            res.json({coupon:'amountIssue'})
+                        }
+                        
+                    }else{
+                        res.json({coupon:'used'})
+                    }
+                  }else{
+                    res.json({coupon:'limit'})
+                  } 
             }else{
-                
+                res.json({coupon:'notAct'})
             }
+        }else{
+            res.json({coupon:false})
         }
 
 
@@ -144,5 +164,6 @@ module.exports ={
    loadEditCoupon,
    editCoupon,
    blockCoupon,
-   deleteCoupon
+   deleteCoupon,
+   checkCoupon
 }
