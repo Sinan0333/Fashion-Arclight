@@ -112,15 +112,19 @@
                                     <% }); %>
                                     <tr class="summary-subtotal">
                                         <td>Subtotal:</td>
-                                        <td>$ <%= cart.cartTotal %></td>
+                                        <td>$ <%= subTotal %></td>
                                     </tr><!-- End .summary-subtotal -->
                                     <tr>
                                         <td>Shipping:</td>
                                         <td>Free shipping</td>
                                     </tr>
+                                    <tr>
+                                        <td>Coupon Discount:</td>
+                                        <td><%= cart.couponDiscount %></td>
+                                    </tr>
                                     <tr class="summary-total">
                                         <td>Total:</td>
-                                        <td id="total1">$ <%= cart.cartTotal %></td>
+                                        <td id="total1">$ <%= total %></td>
                                     </tr><!-- End .summary-total -->
                                 </tbody>
                                

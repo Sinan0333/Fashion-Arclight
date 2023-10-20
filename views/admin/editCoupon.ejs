@@ -23,7 +23,7 @@
             </div>
             <div class="form-group">
                 <label for="exampleInputEmail3">Expire Date</label>
-                <input type="text" class="form-control" id="exampleInputEmail3" name="expiryDate" placeholder="expire date" value="<%= coupon.expiryDate %>" style="color: white;">
+                <input type="text" class="form-control" id="exampleInputEmail3" name="expiryDate" placeholder="expire date" value="<%= coupon.expiryDate.toLocaleDateString('en-US', { year:'numeric', month: 'short', day: '2-digit'}).replace(/\//g, '-') %>" style="color: white;">
             </div>
             <div class="form-group">
                 <label for="exampleInputEmail3">Criteria Amount</label>

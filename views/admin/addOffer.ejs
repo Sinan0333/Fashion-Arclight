@@ -1,0 +1,44 @@
+<%- include('../layout/admin/header.ejs') -%>
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <br>
+        <br>
+        <br>
+        <h1 class="card-title">Add Offer</h1>
+        <p class="card-description"> Add offer form</p>
+          <form action="/admin/addOffer" class="forms-sample" method="post" >  
+            <div class="form-group">
+                <label for="exampleInputName1">Offer Name</label>
+                <input type="text" class="form-control" id="exampleInputName1" name="name" placeholder="name"  style="color: white;">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail3">Discount Amount</label>
+                <input type="number" class="form-control"  name="discount" placeholder="discount amount"  style="color: white;">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail3">Expire Date</label>
+                <input type="text" class="form-control" id="exampleInputEmail3" name="expiryDate" placeholder="expire date"  style="color: white;">
+            </div>
+            <div class="form-group">
+              <label for="exampleSelectGender">Offer For</label>
+              <select class="form-control" id="exampleSelectGender" name="offerFor" style="color: white;">
+                <option>Selected Products</option>
+                  <% categorys.forEach(function(category) { %>
+                <option><%= category.name %></option>
+                <% }); %>
+              </select>
+            </div>
+
+            <br>
+          <button type="submit" class="btn btn-primary mr-2">Submit</button>
+          <button class="btn btn-dark">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+
+<%- include('../layout/admin/footer.ejs') -%>

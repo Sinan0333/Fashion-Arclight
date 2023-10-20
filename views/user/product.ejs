@@ -77,7 +77,13 @@
                                 </div><!-- End .rating-container -->
 
                                 <div class="product-price">
-                                    ₹ <%= product.price %>
+                                    <% if (product.category.offer === 0) { %>
+                                        ₹ <%= product.price %>
+                                        <% } else { %>
+                                            <span style="color: limegreen;margin-right: 20px;">₹ <%= product.category.offer %> off</span>
+                                            <span style="color: grey;text-decoration: line-through;margin-right: 20px;">₹ <%= product.price %></span>
+                                            <span style="margin-right: 20px;">₹ <%= offerPrice %></span>
+                                        <% } %>
                                 </div><!-- End .product-price -->
 
                                 <div class="product-content">
@@ -128,7 +134,7 @@
                                 <div class="product-details-footer">
                                     <div class="product-cat">
                                         <span>Category:</span>
-                                        <a href="#"><%= product.category %></a>,
+                                        <a href="#"><%= product.category.name %></a>,
                                        
                                     </div><!-- End .product-cat -->
 

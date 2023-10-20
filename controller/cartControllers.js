@@ -9,9 +9,9 @@ const loadCart = async(req,res)=>{
         
         const user_id = req.session.user_id
         const cartData =  await Cart.findOne({user:user_id}).populate('products.productId')
-
+        const cartTotal = cartData ? cartData.products.reduce((acc,val)=>acc+val.totalPrice,0) : 0
         if(cartData){
-          res.render('cart',{cart:cartData})
+          res.render('cart',{cart:cartData,total:cartTotal})
         }else{
           res.render('cart',{cart:null})
         }
@@ -30,8 +30,6 @@ const addToCart = async(req,res)=>{
         const product_id = req.body.productId
         const productData = await Product.findById(product_id)
         const cartProduct = await Cart.findOne({ user: user_id ,'products.productId':product_id})
-        const cartData = await Cart.findOne({user:user_id})
-        const cartTotal =cartData? cartData.cartTotal+productData.price:0
 
         if(productData.quantity>0){
             if(cartProduct){
@@ -46,7 +44,7 @@ const addToCart = async(req,res)=>{
     
                     { user: user_id },
                     {
-                      $set: { user: user_id,cartTotal:cartTotal },
+                      $set: { user: user_id },
                       $push: { products: data }
                     },
                     { upsert: true, new: true }
@@ -103,9 +101,6 @@ const updateCart = async(req,res)=>{
               console.log(total);
               console.log('step 3');
             await Cart.findOneAndUpdate({'products.productId':product_id},{$set:{'products.$.totalPrice':total[0].total}})
-            const updatedCart = await Cart.findOne({user:user_id})
-            const cartTotal = updatedCart.products.reduce((acc,val)=>acc+val.totalPrice,0)
-            await Cart.findOneAndUpdate({user:user_id},{$set:{cartTotal:cartTotal}})
             res.json({stock:true})
         }else{
             if(product[0].count>1){
@@ -129,8 +124,21 @@ const removeProduct = async(req,res)=>{
       
     const product_id = req.body.productId
     const user_id = req.session.user_id
-    const cartData =  await Cart.findOneAndUpdate({user:user_id},{$pull:{products:{productId:product_id}}})
-    if(cartData){
+    const productData = await Cart.aggregate([
+      {
+        $match: { user:user_id } 
+      },
+      {
+        $unwind: '$products' 
+      },
+      {
+          $match: { 'products.productId': product_id } 
+        },
+    ]);
+
+
+    if(productData){
+      await Cart.findOneAndUpdate({user:user_id},{$pull:{products:{productId:product_id}}})
       res.json({remove:true})
     }else{
       res.json({remove:false})
@@ -148,8 +156,9 @@ const loadCheckout = async(req,res)=>{
     const user_id = req.session.user_id
     let addressData = await Address.findOne({user:user_id})
     const cartData = await Cart.findOne({user:user_id}).populate('products.productId')
+    const cartTotal = cartData.products.reduce((acc,val)=>acc+val.totalPrice,0)
     const stock = cartData.products.filter((val,ind)=>val.productId.quantity>0)
-
+    const total= cartTotal-cartData.couponDiscount
     if(addressData == null){
       addressData =[];
     }
@@ -157,7 +166,7 @@ const loadCheckout = async(req,res)=>{
       res.json({stock:false})
     }
 
-    res.render("checkout",{addresses:addressData,cart:cartData})
+    res.render("checkout",{addresses:addressData,cart:cartData,subTotal:cartTotal,total:total})
 
   } catch (error) {
       console.log(error.message);

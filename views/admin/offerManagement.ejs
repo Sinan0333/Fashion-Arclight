@@ -1,0 +1,109 @@
+<%- include('../layout/admin/header.ejs') -%>
+<div class="main-panel">
+  <div class="content-wrapper">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Offer Management</h4>
+              <a href="/admin/addOffer" class="btn btn-primary">Add Offer</a>
+              
+            <div class="table-responsive" id="reloadArea">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>No:</th>
+                    <th>Name</th>
+                    <th>Discount</th>
+                    <th>Activation Date</th>
+                    <th>Expiry Date</th>
+                    <th>Offer For</th>
+                    <th>Update</th>
+                    <th>Action</th>
+                    <th>Delete</th>
+
+                  </tr>
+                </thead>
+                <tbody>
+                     <% let counter = 1; %>
+                  <% offers.forEach(function(offer) { %>
+                    <tr>
+                        <td><%= counter %></td>
+                        <td>
+
+                              <span class="pl-2"><%= offer.name %></span>
+                        </td>
+                      <td><%= offer.discountAmount %></td> 
+                      <td><%= offer.activationDate.toLocaleDateString('en-US', { year:'numeric', month: 'short', day: '2-digit'}).replace(/\//g, '-') %></td> 
+                      <td><%= offer.expiryDate.toLocaleDateString('en-US', { year:'numeric', month: 'short', day: '2-digit'}).replace(/\//g, '-') %></td> 
+                      <td><%= offer.offerFor %></td>
+                      <td>
+                        <a href="/admin/editOffer?_id=<%= offer._id %>" data-category-id="<%= offer._id %>" class="btn btn-warning edit-button">
+                            Edit
+                          </a>                    
+                      </td>
+                      <td>
+                        <a  class="btn btn-danger block-button" data-initial-status="<%= offer.is_blocked %>" onclick="blockOffer('<%= offer._id %>')">
+                          <%= offer.is_blocked ? "Unblock" : "Block" %>
+                        </a>                         
+                        <td>
+                          <a data-category-id="<%= offer._id %>" class="btn btn-primary delete-button" onclick="deleteOffer('<%= offer._id %>')">
+                            Delete
+                          </a> 
+                      </td>                      
+                    </tr>
+                      <% counter++; %>
+                  <% }); %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+        function blockOffer(offerId){
+      console.log(offerId);
+        const data = {_id:offerId}
+
+        $.ajax({
+            method:'POST',
+            url:'/admin/blockOffer',
+            data:JSON.stringify(data),
+            contentType:'application/json',
+            success:function(response){
+                if(response.block==true){
+                    $('#reloadArea').load('/admin/offer #reloadArea'); 
+                }
+            },
+            error:function(error){
+                console.log(error);
+            }
+        });
+    }
+
+    function deleteOffer(offerId){
+      console.log(offerId);
+        const data = {_id:offerId}
+
+        $.ajax({
+            method:'POST',
+            url:'/admin/deleteOffer',
+            data:JSON.stringify(data),
+            contentType:'application/json',
+            success:function(response){
+                if(response.delete==true){
+                    $('#reloadArea').load('/admin/offer #reloadArea'); 
+                }
+            },
+            error:function(error){
+                console.log(error);
+            }
+        });
+    }
+  </script>
+    <!-- content-wrapper ends -->
+    <!-- partial:../../partials/_footer.html -->
+  <%- include('../layout/admin/footer.ejs') -%>

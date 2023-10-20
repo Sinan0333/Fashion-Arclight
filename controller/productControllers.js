@@ -44,10 +44,12 @@ const loadShop = async(req,res)=>{
 const loadProduct = async (req, res) => {
   try {
     const product_id=req.query._id
-    const productData = await Product.findOne({_id:product_id})
+    const productData = await Product.findOne({_id:product_id}).populate('category')
+    const offerPrice = productData.price-productData.category.offer
 
-    const relatedProducts =await Product.find({category:productData.category})
-    res.render("product",{product:productData,relatedProducts:relatedProducts});
+    const relatedProducts =await Product.find({category:productData.category._id})
+    console.log(relatedProducts);
+    res.render("product",{product:productData,relatedProducts:relatedProducts,offerPrice:offerPrice});
   } catch {
     console.log(error.message);
   }
@@ -60,7 +62,7 @@ const loadProduct = async (req, res) => {
 // load productManagement page dynamically
 const loadProductManagement = async(req,res)=>{
     try {
-      const productData = await Product.find()
+      const productData = await Product.find().populate("category")
       res.render('productManagement',{products:productData})
     } catch (error) {
         console.log(error.message);
@@ -85,7 +87,7 @@ const loadAddProduct = async(req,res)=>{
 const addProduct = async(req,res)=>{
   try {
       const img=[];
-
+      const category  = await Category.findOne({name:req.body.category})
       for (let i = 0; i < req.files.length; i++) {
           img.push(req.files[i].filename);
           await Sharp("public/images/product/orginal/" + req.files[i].filename).resize(500, 500).toFile("public/images/product/sharped/" + req.files[i].filename);
@@ -93,7 +95,7 @@ const addProduct = async(req,res)=>{
       }
     const data = new Product({
       name:req.body.name,
-      category:req.body.category,
+      category:category._id,
       quantity:req.body.quantity,
       price:req.body.price,
       image:img,
@@ -133,6 +135,7 @@ const editProduct = async (req, res) => {
   try {
     const product_id = req.query._id;
     const productData = await Product.findOne({ _id: product_id });
+    const category  = await Category.findOne({name:req.body.category})
     const imagefileName = productData.image;
 
 
@@ -167,7 +170,7 @@ const editProduct = async (req, res) => {
       {
         $set: {
           name: req.body.name,
-          category: req.body.category,
+          category: category._id,
           quantity: req.body.quantity,
           price: req.body.price,
           image: img,

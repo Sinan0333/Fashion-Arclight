@@ -1,0 +1,44 @@
+<%- include('../layout/admin/header.ejs') -%>
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <br>
+        <br>
+        <br>
+        <h1 class="card-title">Edit Offer</h1>
+        <p class="card-description"> Edit offer form</p>
+          <form action="/admin/editOffer?_id=<%= offer._id %>" class="forms-sample" method="post" >  
+            <div class="form-group">
+                <label for="exampleInputName1">Offer Name</label>
+                <input type="text" class="form-control" id="exampleInputName1" name="name" placeholder="name"  value="<%= offer.name %>"  style="color: white;">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail3">Discount Amount</label>
+                <input type="number" class="form-control" id="exampleInputEmail3" name="discount" placeholder="discount amount" value="<%= offer.discountAmount %>" style="color: white;">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail3">Expire Date</label>
+                <input type="text" class="form-control" id="exampleInputEmail3" name="expiryDate" placeholder="expire date" value="<%= offer.expiryDate.toLocaleDateString('en-US', { year:'numeric', month: 'short', day: '2-digit'}).replace(/\//g, '-') %>" style="color: white;">
+            </div>
+            <div class="form-group">
+                <label for="exampleSelectGender">Offer For</label>
+                <select class="form-control" id="exampleSelectGender" name="category" style="color: white;">
+                  <option><%= offer.offerFor %></option>\
+                  <option >Only For Selected Products</option>
+                    <% categorys.forEach(function(category) { %>
+                  <option><%= category.name %></option>
+                  <% }); %>
+                </select>
+              </div>
+            <br>
+          <button type="submit" class="btn btn-primary mr-2">Submit</button>
+          <button class="btn btn-dark">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+
+<%- include('../layout/admin/footer.ejs') -%>

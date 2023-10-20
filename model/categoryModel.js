@@ -6,6 +6,10 @@ const categorySchema=mongoose.Schema({
         type:String,
         required:true
     },
+    offer:{
+        type:Number,
+        default:0
+    },
     is_blocked:{
         type:Boolean,
         required:true

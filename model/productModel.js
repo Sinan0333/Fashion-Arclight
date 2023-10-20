@@ -7,8 +7,9 @@ const productSchema=mongoose.Schema({
         required:true
     },
     category:{
-        type:String,
-        required:true
+        type: String,
+        required: true,
+        ref: "Category",
     },
     quantity:{
         type:Number,

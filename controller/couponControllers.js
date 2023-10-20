@@ -123,16 +123,15 @@ const checkCoupon = async (req,res)=>{
         const currentDate = new Date()
         const couponData = await Coupon.findOne({couponCode:couponCode})
         const cartData = await Cart.findOne({user:user_id})
-
+        const cartTotal = cartData.products.reduce((acc,val)=>acc+val.totalPrice,0)
         if(couponData){
             if(currentDate >= couponData.activationDate && currentDate <= couponData.expiryDate){
                 if (couponData.usedUsers.length < couponData.usersLimit) {
                     const exists = couponData.usedUsers.includes(user_id)
                     if(!exists){
-                        if(cartData.cartTotal>=couponData.criteriaAmount){
+                        if(cartTotal>=couponData.criteriaAmount){
                             await Coupon.findOneAndUpdate({couponCode:couponCode},{$push:{usedUsers:user_id}})
-                            const discount = cartData.cartTotal-couponData.discountAmount
-                            await Cart.findOneAndUpdate({user:user_id},{$set:{cartTotal:discount}})
+                            await Cart.findOneAndUpdate({user:user_id},{$inc:{couponDiscount:couponData.discountAmount}})
                             res.json({coupon:true})
                         }else{
                             res.json({coupon:'amountIssue'})
