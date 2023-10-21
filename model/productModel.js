@@ -19,6 +19,9 @@ const productSchema=mongoose.Schema({
         type:Number,
         required:true
     },
+    offer:{
+        type:Number,
+    },
     image:{
         type:Array,
         required:true

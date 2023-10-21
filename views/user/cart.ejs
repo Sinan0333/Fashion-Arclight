@@ -117,7 +117,7 @@
                             <tbody>
                                     <tr class="summary-subtotal">
                                         <td>Subtotal:</td>
-                                        <td>$ <%= total %> %></td>
+                                        <td>$ <%= subTotal %> %></td>
                                     </tr><!-- End .summary-subtotal -->
                                     <tr class="summary-shipping">
                                         <td>Shipping:</td>
@@ -152,12 +152,10 @@
                                             </td>
                                             <td>$20.00</td>
                                         </tr><!-- End .summary-shipping-row -->
-
-                                        <tr class="summary-shipping-estimate">
-                                            <td>Estimate for Your Country<br> <a href="dashboard.html">Change address</a></td>
-                                            <td>&nbsp;</td>
-                                        </tr><!-- End .summary-shipping-estimate -->
-
+                                        <tr>
+                                            <td>Discount:</td>
+                                            <td>$ <%= discount %></td>
+                                        </tr>
                                         <tr class="summary-total">
                                             <td>Total:</td>
                                             <td>$ <%= total %></td>

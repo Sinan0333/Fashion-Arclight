@@ -122,9 +122,13 @@
                                         <td>Coupon Discount:</td>
                                         <td><%= cart.couponDiscount %></td>
                                     </tr>
+                                    <tr>
+                                        <td>Offer Discount:</td>
+                                        <td><%= discount %></td>
+                                    </tr>
                                     <tr class="summary-total">
                                         <td>Total:</td>
-                                        <td id="total1">$ <%= total %></td>
+                                        <td id="total1"> <%= total %></td>
                                     </tr><!-- End .summary-total -->
                                 </tbody>
                                
@@ -188,9 +192,14 @@
 
     $(document).ready(function () {
         $('#myForm').submit(function (event) {
-            event.preventDefault(); 
+            event.preventDefault();
 
-            var formData = $(this).serialize();
+            const total = document.getElementById("total1").innerHTML;
+            var formDataArray = $(this).serializeArray();
+            formDataArray.push({ name: 'total', value: total })
+            var formData = $.param(formDataArray)
+
+            console.log(formData,);
             $.ajax({
                 type: 'POST',
                 url: '/placeOrder',
@@ -213,6 +222,7 @@
 
 
     function razorpayPayment(order){
+        console.log(order);
         var options = {
         "key": "rzp_test_eTuP9JfD6ugQOM",
         "amount": order.amount, 

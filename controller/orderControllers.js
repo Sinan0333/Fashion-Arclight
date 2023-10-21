@@ -22,7 +22,7 @@ const placeOrder = async(req,res)=>{
         const paymentMethod = req.body.payment
         const addressIndex = !req.body.address? 0:req.body.address
         const status = paymentMethod=="COD"?"placed":'pending'
-        
+        const total = req.body.total
         if(!req.body.address){
           const data = {
             fullName:req.body.name,
@@ -49,7 +49,7 @@ const placeOrder = async(req,res)=>{
         const address = addressData.address[addressIndex]
         const cartData = await Cart.findOne({user:user_id})
         const productData = cartData.products
-        const total = productData.reduce((acc,val)=> acc+val.totalPrice,0)
+        // const total = productData.reduce((acc,val)=> acc+val.totalPrice,0)
         
         const data = new Order({
         user:user_id,

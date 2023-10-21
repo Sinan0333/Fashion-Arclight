@@ -17,7 +17,7 @@
                     <th>Category</th>
                     <th>Stock</th>
                     <th>Price</th>
-                    <th>Status</th>
+                    <th>Offer</th>
                     <th>Update</th>
                     <th>Action</th>
                     <th>Delete</th>
@@ -36,11 +36,7 @@
                       <td><%= product.category.name %></td>
                       <td><%= product.quantity %></td>
                       <td><%= product.price %></td>
-                      <td>
-                        <span class="<%= product.is_blocked ? 'text-danger' : 'text-success' %>">
-                          <%= product.is_blocked ? "Blocked" : "Active" %>
-                        </span>
-                      </td> 
+                      <td><%= product.offer %></td>
                       <td>
                         <a href="/admin/editProduct?_id=<%= product._id %>" data-category-id="<%= product._id %>" class="btn btn-warning edit-button">
                             Edit

@@ -29,6 +29,15 @@
               <% }); %>
             </select>
           </div>
+          <div class="form-group">
+            <label for="exampleSelectGender">Offers</label>
+            <select class="form-control" id="exampleSelectGender" name="offer" style="color: white;">
+             <option>0</option>
+                <% offers.forEach(function(offer) { %>
+              <option><%= offer.name %></option>
+              <% }); %>
+            </select> 
+          </div>
             <div class="form-group">
                 <label for="imageInput">Product Images</label>
                 <input type="file" name="images" class="form-control-file" id="imageInput" accept="image/*" multiple>

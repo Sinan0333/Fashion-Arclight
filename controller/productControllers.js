@@ -1,6 +1,7 @@
 const Product = require('../model/productModel')
 const Category = require('../model/categoryModel')
 const Banner = require('../model/bannerModel')
+const Offer = require("../model/offerModel")
 const Sharp = require('sharp')
 const fs = require('fs');
 
@@ -45,11 +46,12 @@ const loadProduct = async (req, res) => {
   try {
     const product_id=req.query._id
     const productData = await Product.findOne({_id:product_id}).populate('category')
-    const offerPrice = productData.price-productData.category.offer
+    const largeOffer = productData.offer<productData.category.offer ? productData.category.offer : productData.offer
+    const offerPrice = productData.price-largeOffer
 
     const relatedProducts =await Product.find({category:productData.category._id})
     console.log(relatedProducts);
-    res.render("product",{product:productData,relatedProducts:relatedProducts,offerPrice:offerPrice});
+    res.render("product",{product:productData,relatedProducts:relatedProducts,offerPrice:offerPrice,offer:largeOffer});
   } catch {
     console.log(error.message);
   }
@@ -75,7 +77,8 @@ const loadAddProduct = async(req,res)=>{
     try {
      
       const categoryData = await Category.find()
-      res.render('addProduct',{categorys:categoryData})
+      const offerData = await Offer.find({offerFor:"Selected Products"})
+      res.render('addProduct',{categorys:categoryData,offers:offerData})
   
     } catch (error) {
         console.log(error.message);
@@ -87,11 +90,16 @@ const loadAddProduct = async(req,res)=>{
 const addProduct = async(req,res)=>{
   try {
       const img=[];
+      let offer = req.body.offer
       const category  = await Category.findOne({name:req.body.category})
       for (let i = 0; i < req.files.length; i++) {
           img.push(req.files[i].filename);
           await Sharp("public/images/product/orginal/" + req.files[i].filename).resize(500, 500).toFile("public/images/product/sharped/" + req.files[i].filename);
 
+      }
+      if(offer!=0){
+        const offerData = await Offer.findOne({name:req.body.offer})
+        offer = offerData.discountAmount
       }
     const data = new Product({
       name:req.body.name,
@@ -99,6 +107,7 @@ const addProduct = async(req,res)=>{
       quantity:req.body.quantity,
       price:req.body.price,
       image:img,
+      offer:offer,
       description:req.body.description,
       is_blocked:false
     })
@@ -119,8 +128,10 @@ const loadEditProduct = async(req,res)=>{
     try {
   
       const  product_id =  req.query._id;
-      const productData = await Product.findOne({_id:product_id})
-      res.render('editProduct',{products:[productData]})
+      const productData = await Product.findOne({_id:product_id}).populate('category')
+      const offerData = await Offer.find({offerFor:"Selected Products"})
+      const categoryData = await Category.find()
+      res.render('editProduct',{product:productData,categorys:categoryData,offers:offerData})
   
     } catch (error) {
   
@@ -137,7 +148,7 @@ const editProduct = async (req, res) => {
     const productData = await Product.findOne({ _id: product_id });
     const category  = await Category.findOne({name:req.body.category})
     const imagefileName = productData.image;
-
+    let offer = req.body.offer
 
     const deleteImagePromises = imagefileName.map((image) => {
       const imagePathOrginal = `public/images/product/orginal/${image}`;
@@ -164,6 +175,11 @@ const editProduct = async (req, res) => {
         .resize(500, 500)
         .toFile("public/images/product/sharped/" + req.files[i].filename);
     }
+    
+    if(offer!=0){
+      const offerData = await Offer.findOne({name:req.body.offer})
+      offer = offerData.discountAmount
+    }
 
     await Product.findByIdAndUpdate(
       { _id: product_id },
@@ -173,6 +189,7 @@ const editProduct = async (req, res) => {
           category: category._id,
           quantity: req.body.quantity,
           price: req.body.price,
+          offer:offer,
           image: img,
           description: req.body.description,
         },

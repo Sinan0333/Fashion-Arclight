@@ -9,9 +9,25 @@ const loadCart = async(req,res)=>{
         
         const user_id = req.session.user_id
         const cartData =  await Cart.findOne({user:user_id}).populate('products.productId')
-        const cartTotal = cartData ? cartData.products.reduce((acc,val)=>acc+val.totalPrice,0) : 0
+        const categoryData = await cartData.populate("products.productId.category")
+        let subTotal = cartData ? cartData.products.reduce((acc,val)=>acc+val.totalPrice,0) : 0
+        let eachProductDiscount=[];
+
+        for(let i=0;i<cartData.products.length;i++){
+          if(cartData.products[i].productId.offer<categoryData.products[i].productId.category.offer){
+           let amount = categoryData.products[i].productId.category.offer*cartData.products[i].count
+           eachProductDiscount.push(amount)
+          }else{
+            let amount = cartData.products[i].productId.offer*cartData.products[i].count
+            eachProductDiscount.push(amount)
+          }
+        }
+
+        const discount = eachProductDiscount.reduce((acc,val)=>acc+val,0)
+        const total = subTotal-discount
+
         if(cartData){
-          res.render('cart',{cart:cartData,total:cartTotal})
+          res.render('cart',{cart:cartData,subTotal:subTotal,subTotal,total:total,discount:discount})
         }else{
           res.render('cart',{cart:null})
         }
@@ -156,9 +172,25 @@ const loadCheckout = async(req,res)=>{
     const user_id = req.session.user_id
     let addressData = await Address.findOne({user:user_id})
     const cartData = await Cart.findOne({user:user_id}).populate('products.productId')
-    const cartTotal = cartData.products.reduce((acc,val)=>acc+val.totalPrice,0)
+    const categoryData = await cartData.populate("products.productId.category")
+    const subTotal = cartData.products.reduce((acc,val)=>acc+val.totalPrice,0)
     const stock = cartData.products.filter((val,ind)=>val.productId.quantity>0)
-    const total= cartTotal-cartData.couponDiscount
+    let eachProductDiscount=[];
+
+    for(let i=0;i<cartData.products.length;i++){
+      if(cartData.products[i].productId.offer<categoryData.products[i].productId.category.offer){
+       let amount = categoryData.products[i].productId.category.offer*cartData.products[i].count
+       eachProductDiscount.push(amount)
+      }else{
+        let amount = cartData.products[i].productId.offer*cartData.products[i].count
+        eachProductDiscount.push(amount)
+      }
+    }
+
+    const discount = eachProductDiscount.reduce((acc,val)=>acc+val,0)
+    const total = subTotal-discount-cartData.couponDiscount
+
+
     if(addressData == null){
       addressData =[];
     }
@@ -166,7 +198,7 @@ const loadCheckout = async(req,res)=>{
       res.json({stock:false})
     }
 
-    res.render("checkout",{addresses:addressData,cart:cartData,subTotal:cartTotal,total:total})
+    res.render("checkout",{addresses:addressData,cart:cartData,subTotal:subTotal,total:total,discount:discount})
 
   } catch (error) {
       console.log(error.message);
