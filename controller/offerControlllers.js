@@ -33,7 +33,7 @@ const addOffer = async (req,res)=>{
         const data = new Offer({
             name:req.body.name,
             discountAmount:req.body.discount,
-            activationDate:new Date(),
+            activationDate:req.body.activationDate,
             expiryDate:req.body.expiryDate,
             offerFor:req.body.offerFor
         })
@@ -73,6 +73,7 @@ const editOffer = async (req,res)=>{
             {
                 name:req.body.name,
                 discountAmount:req.body.discount,
+                activationDate:req.body.activationDate,
                 expiryDate:req.body.expiryDate,
                 offerFor:req.body.offerFor
             })

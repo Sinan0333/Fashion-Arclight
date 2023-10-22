@@ -77,7 +77,7 @@
                                 </div><!-- End .rating-container -->
 
                                 <div class="product-price">
-                                    <% if (product.category.offer === 0 || product.offer == 0) { %>
+                                    <% if (product.category.offer === 0 && product.offer == 0) { %>
                                         ₹ <%= product.price %>
                                         <% } else { %>
                                             <span style="color: limegreen;margin-right: 20px;">₹ <%= offer %> off</span>

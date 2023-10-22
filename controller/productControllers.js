@@ -48,9 +48,8 @@ const loadProduct = async (req, res) => {
     const productData = await Product.findOne({_id:product_id}).populate('category')
     const largeOffer = productData.offer<productData.category.offer ? productData.category.offer : productData.offer
     const offerPrice = productData.price-largeOffer
-
+console.log(productData.price,largeOffer,offerPrice);
     const relatedProducts =await Product.find({category:productData.category._id})
-    console.log(relatedProducts);
     res.render("product",{product:productData,relatedProducts:relatedProducts,offerPrice:offerPrice,offer:largeOffer});
   } catch {
     console.log(error.message);

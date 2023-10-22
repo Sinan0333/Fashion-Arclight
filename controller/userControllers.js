@@ -288,7 +288,32 @@ const loadprofile = async (req, res) => {
     const userData =await User.findById(user_id)
     const addressData = await Address.findOne({user:user_id})
     const OrderData = await Order.find({user:user_id})
-    const couponData = await Coupon.find()
+    // const couponData = await Coupon.find({is_blocked:false,usedUsers:{$nin:[user_id]},expiryDate:{$gte:new Date()}})
+
+    const couponData = await Coupon.aggregate([
+      {
+        $match: {
+          is_blocked: false,
+          usedUsers:{$nin:[user_id]},
+          expiryDate: { $gte: new Date() }
+        }
+      },
+      {
+        $addFields: {
+          usedUsersCount: { $size: "$usedUsers" }
+        }
+      },
+      {
+        $match: {
+          $expr: { $gt: ["$usedUsersCount", "$userLimit"] }
+        }
+      },
+      {
+        $project: {
+          usedUsersCount: 0
+        }
+      }
+    ]);
 
     res.render("profile",{user:userData,addresses:addressData,orders:OrderData,coupons:couponData});
   } catch {

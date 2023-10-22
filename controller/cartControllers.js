@@ -9,10 +9,12 @@ const loadCart = async(req,res)=>{
         
         const user_id = req.session.user_id
         const cartData =  await Cart.findOne({user:user_id}).populate('products.productId')
-        const categoryData = await cartData.populate("products.productId.category")
+        const categoryData = cartData? await cartData.populate("products.productId.category"):0
         let subTotal = cartData ? cartData.products.reduce((acc,val)=>acc+val.totalPrice,0) : 0
         let eachProductDiscount=[];
 
+        if(cartData){
+          
         for(let i=0;i<cartData.products.length;i++){
           if(cartData.products[i].productId.offer<categoryData.products[i].productId.category.offer){
            let amount = categoryData.products[i].productId.category.offer*cartData.products[i].count
@@ -25,8 +27,7 @@ const loadCart = async(req,res)=>{
 
         const discount = eachProductDiscount.reduce((acc,val)=>acc+val,0)
         const total = subTotal-discount
-
-        if(cartData){
+        
           res.render('cart',{cart:cartData,subTotal:subTotal,subTotal,total:total,discount:discount})
         }else{
           res.render('cart',{cart:null})
