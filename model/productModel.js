@@ -20,7 +20,8 @@ const productSchema=mongoose.Schema({
         required:true
     },
     offer:{
-        type:Number,
+        type:String,
+        ref: "Offer",
     },
     image:{
         type:Array,

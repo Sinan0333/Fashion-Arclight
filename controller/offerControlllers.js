@@ -19,29 +19,28 @@ const loadOfferrManagement = async(req,res)=>{
 const loadAddOffer = async(req,res)=>{
     try {
 
-        const categoryData = await Category.find()
-        res.render("addOffer",{categorys:categoryData})
+        res.render("addOffer")
         
     } catch (error) {
         console.log(error.message);
     }
 }
 
+
 // Add Offer
 const addOffer = async (req,res)=>{
     try {
+
         const data = new Offer({
             name:req.body.name,
             discountAmount:req.body.discount,
             activationDate:req.body.activationDate,
             expiryDate:req.body.expiryDate,
-            offerFor:req.body.offerFor
         })
-        await data.save()
-        if((req.body.offerFor !="Selected Products")){
-            const categoryData = await Category.findOneAndUpdate({name:req.body.offerFor},{$set:{offer:req.body.discount}})
-        }
+
+       const offerData =  await data.save()
         res.redirect('/admin/offer')
+
     } catch (error) {
         console.log(error.message);
     }
@@ -54,13 +53,13 @@ const loadEditOffer = async (req,res)=>{
        
         const offerId = req.query._id;
         const offerData = await Offer.findById(offerId)
-        const categoryData = await Category.find()
-        res.render("editOffer",{offer:offerData,categorys:categoryData})
+        res.render("editOffer",{offer:offerData})
 
     } catch (error) {
         console.log(error.message);
     }
 }
+
 
 // Edit Offer
 const editOffer = async (req,res)=>{
@@ -75,12 +74,7 @@ const editOffer = async (req,res)=>{
                 discountAmount:req.body.discount,
                 activationDate:req.body.activationDate,
                 expiryDate:req.body.expiryDate,
-                offerFor:req.body.offerFor
             })
-
-            if((req.body.offerFor !="Selected Products")){
-                const categoryData = await Category.findOneAndUpdate({name:req.body.offerFor},{$set:{offer:req.body.discount}})
-            }
 
         res.redirect("/admin/offer")
 

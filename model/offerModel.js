@@ -18,10 +18,6 @@ const offerSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  offerFor: {
-    type: String,
-    required: true,
-  },
   
   is_blocked: {
     type: Boolean,

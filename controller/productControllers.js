@@ -45,12 +45,10 @@ const loadShop = async(req,res)=>{
 const loadProduct = async (req, res) => {
   try {
     const product_id=req.query._id
-    const productData = await Product.findOne({_id:product_id}).populate('category')
-    const largeOffer = productData.offer<productData.category.offer ? productData.category.offer : productData.offer
-    const offerPrice = productData.price-largeOffer
-console.log(productData.price,largeOffer,offerPrice);
+    const productData = await Product.findOne({_id:product_id}).populate('category').populate('offer')
+    const offerPrice = productData.price-productData.offer.discountAmount 
     const relatedProducts =await Product.find({category:productData.category._id})
-    res.render("product",{product:productData,relatedProducts:relatedProducts,offerPrice:offerPrice,offer:largeOffer});
+    res.render("product",{product:productData,relatedProducts:relatedProducts,offerPrice:offerPrice});
   } catch {
     console.log(error.message);
   }
@@ -63,7 +61,7 @@ console.log(productData.price,largeOffer,offerPrice);
 // load productManagement page dynamically
 const loadProductManagement = async(req,res)=>{
     try {
-      const productData = await Product.find().populate("category")
+      const productData = await Product.find().populate("category").populate("offer")
       res.render('productManagement',{products:productData})
     } catch (error) {
         console.log(error.message);
@@ -76,7 +74,7 @@ const loadAddProduct = async(req,res)=>{
     try {
      
       const categoryData = await Category.find()
-      const offerData = await Offer.find({offerFor:"Selected Products"})
+      const offerData = await Offer.find({is_blocked:false})
       res.render('addProduct',{categorys:categoryData,offers:offerData})
   
     } catch (error) {
@@ -89,24 +87,23 @@ const loadAddProduct = async(req,res)=>{
 const addProduct = async(req,res)=>{
   try {
       const img=[];
-      let offer = req.body.offer
+      const offer = req.body.offer
+      const offerData = offer !=0 ? await Offer.findOne({name:offer}) : 0
       const category  = await Category.findOne({name:req.body.category})
+
       for (let i = 0; i < req.files.length; i++) {
           img.push(req.files[i].filename);
           await Sharp("public/images/product/orginal/" + req.files[i].filename).resize(500, 500).toFile("public/images/product/sharped/" + req.files[i].filename);
 
       }
-      if(offer!=0){
-        const offerData = await Offer.findOne({name:req.body.offer})
-        offer = offerData.discountAmount
-      }
+     
     const data = new Product({
       name:req.body.name,
       category:category._id,
       quantity:req.body.quantity,
       price:req.body.price,
       image:img,
-      offer:offer,
+      offer: offerData == 0 ? 0 : offerData._id,
       description:req.body.description,
       is_blocked:false
     })
@@ -127,8 +124,8 @@ const loadEditProduct = async(req,res)=>{
     try {
   
       const  product_id =  req.query._id;
-      const productData = await Product.findOne({_id:product_id}).populate('category')
-      const offerData = await Offer.find({offerFor:"Selected Products"})
+      const productData = await Product.findOne({_id:product_id}).populate('category').populate("offer")
+      const offerData = await Offer.find({is_blocked:false})
       const categoryData = await Category.find()
       res.render('editProduct',{product:productData,categorys:categoryData,offers:offerData})
   
@@ -147,38 +144,36 @@ const editProduct = async (req, res) => {
     const productData = await Product.findOne({ _id: product_id });
     const category  = await Category.findOne({name:req.body.category})
     const imagefileName = productData.image;
-    let offer = req.body.offer
+    const offer = req.body.offer
+    const offerData = offer !=0 ? await Offer.findOne({name:offer}) : 0
 
-    const deleteImagePromises = imagefileName.map((image) => {
-      const imagePathOrginal = `public/images/product/orginal/${image}`;
-      const imagePathSharped = `public/images/product/sharped/${image}`;
+    // const deleteImagePromises = imagefileName.map((image) => {
+    //   const imagePathOrginal = `public/images/product/orginal/${image}`;
+    //   const imagePathSharped = `public/images/product/sharped/${image}`;
 
-      return new Promise((resolve, reject) => {
-        try {
-          fs.unlinkSync(imagePathOrginal);
-          fs.unlinkSync(imagePathSharped);
-          resolve();
-        } catch (error) {
-          reject(error);
-        }
-      });
-    });
+    //   return new Promise((resolve, reject) => {
+    //     try {
+    //       fs.unlinkSync(imagePathOrginal);
+    //       fs.unlinkSync(imagePathSharped);
+    //       resolve();
+    //     } catch (error) {
+    //       reject(error);
+    //     }
+    //   });
+    // });
 
 
-    await Promise.all(deleteImagePromises);
+    // await Promise.all(deleteImagePromises);
 
-    const img = [];
-    for (let i = 0; i < req.files.length; i++) { 
-      img.push(req.files[i].filename);
-      await Sharp("public/images/product/orginal/" + req.files[i].filename)
-        .resize(500, 500)
-        .toFile("public/images/product/sharped/" + req.files[i].filename);
-    }
+    // const img = [];
+    // for (let i = 0; i < req.files.length; i++) { 
+    //   img.push(req.files[i].filename);
+    //   await Sharp("public/images/product/orginal/" + req.files[i].filename)
+    //     .resize(500, 500)
+    //     .toFile("public/images/product/sharped/" + req.files[i].filename);
+    // }
     
-    if(offer!=0){
-      const offerData = await Offer.findOne({name:req.body.offer})
-      offer = offerData.discountAmount
-    }
+  
 
     await Product.findByIdAndUpdate(
       { _id: product_id },
@@ -188,8 +183,8 @@ const editProduct = async (req, res) => {
           category: category._id,
           quantity: req.body.quantity,
           price: req.body.price,
-          offer:offer,
-          image: img,
+          offer:offerData == 0 ? 0 : offerData._id,
+          // image: img,
           description: req.body.description,
         },
       }

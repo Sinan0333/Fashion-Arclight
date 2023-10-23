@@ -18,6 +18,7 @@ const loadAddBanner = async (req,res)=>{
     try {
         
         res.render('addBanner')
+
     } catch (error) {
         console.log(error.message);
     }
@@ -27,14 +28,17 @@ const loadAddBanner = async (req,res)=>{
 // Add Banner 
 const addBanner = async (req,res)=>{
     try {
+        
         const data = new Banner({
             title:req.body.title,
             description:req.body.description,
             image:req.file.originalname,
             is_blocked:false
         })
+
         await data.save()
         res.redirect('/admin/banner')
+
     } catch (error) {
         console.log(error.message);
     }
@@ -44,9 +48,11 @@ const addBanner = async (req,res)=>{
 // Delete Banner 
 const deleteBanner = async (req,res)=>{
     try {
+
         const bannerId = req.body._id
         await Banner.findOneAndDelete({_id:bannerId})
         res.json({delete:true})
+
     } catch (error) {
         console.log(error.message);
     }
@@ -56,6 +62,7 @@ const deleteBanner = async (req,res)=>{
 // Block Banner 
 const blockBanner = async (req,res)=>{
     try {
+
         const bannerId = req.body._id
         const bannerData = await Banner.findById(bannerId)
         if(bannerData.is_blocked===true){
@@ -64,6 +71,7 @@ const blockBanner = async (req,res)=>{
             await Banner.findOneAndUpdate({_id:bannerId},{$set:{is_blocked:true}})
         }
         res.json({block:true})
+
     } catch (error) {
         console.log(error.message);
     }
@@ -72,9 +80,11 @@ const blockBanner = async (req,res)=>{
 // Load Edit Banner Form  
 const loadEditBanner = async (req,res)=>{
     try {
+
         const bannerId = req.query._id
         const bannerData = await Banner.findById(bannerId)
         res.render("editBanner",{banner:bannerData})
+
     } catch (error) {
         console.log(error.message);
     }
@@ -83,6 +93,7 @@ const loadEditBanner = async (req,res)=>{
 // Edit Banner 
 const editBanner = async (req,res)=>{
     try {
+        
         let image;
         const bannerId = req.query._id
         const bannerData = await Banner.findById(bannerId)

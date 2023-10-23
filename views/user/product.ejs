@@ -77,10 +77,10 @@
                                 </div><!-- End .rating-container -->
 
                                 <div class="product-price">
-                                    <% if (product.category.offer === 0 && product.offer == 0) { %>
+                                    <% if ( product.offer.discountAmount == 0 || product.offer.is_blocked==true) { %>
                                         ₹ <%= product.price %>
                                         <% } else { %>
-                                            <span style="color: limegreen;margin-right: 20px;">₹ <%= offer %> off</span>
+                                            <span style="color: limegreen;margin-right: 20px;">₹ <%= product.offer.discountAmount %> off</span>
                                             <span style="color: grey;text-decoration: line-through;margin-right: 20px;">₹ <%= product.price %></span>
                                             <span style="margin-right: 20px;">₹ <%= offerPrice %></span>
                                         <% } %>

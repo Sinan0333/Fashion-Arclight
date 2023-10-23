@@ -78,20 +78,20 @@ admin_route.post('/editBanner',multer.banner.single('image'),bannerControllers.e
 
 
 // =========================================< Coupon Management  >=================================================
-admin_route.get('/coupon',couponControllers.loadCouponManagement)
-admin_route.get('/addCoupon',couponControllers.loadAddCoupon)
+admin_route.get('/coupon',auth.isLogin,couponControllers.loadCouponManagement)
+admin_route.get('/addCoupon',auth.isLogin,couponControllers.loadAddCoupon)
 admin_route.post('/addCoupon',couponControllers.addCoupon)
-admin_route.get('/editCoupon',couponControllers.loadEditCoupon)
+admin_route.get('/editCoupon',auth.isLogin,couponControllers.loadEditCoupon)
 admin_route.post('/editCoupon',couponControllers.editCoupon)
 admin_route.post('/blockCoupon',couponControllers.blockCoupon)
 admin_route.post('/deleteCoupon',couponControllers.deleteCoupon)
 
 
 // =========================================< Offer Management  >=================================================
-admin_route.get('/offer',offerControllers.loadOfferrManagement)
-admin_route.get('/addOffer',offerControllers.loadAddOffer)
+admin_route.get('/offer',auth.isLogin,offerControllers.loadOfferrManagement)
+admin_route.get('/addOffer',auth.isLogin,offerControllers.loadAddOffer)
 admin_route.post('/addOffer',offerControllers.addOffer)
-admin_route.get('/editOffer',offerControllers.loadEditOffer)
+admin_route.get('/editOffer',auth.isLogin,offerControllers.loadEditOffer)
 admin_route.post('/editOffer',offerControllers.editOffer)
 admin_route.post('/blockOffer',offerControllers.blockOffer)
 admin_route.post('/deleteOffer',offerControllers.deleteOffer)

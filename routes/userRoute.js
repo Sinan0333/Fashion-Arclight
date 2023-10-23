@@ -73,7 +73,7 @@ user_route.post('/removeProduct',cartControllers.removeProduct)
 
 
 // =========================================< Checkout and order >=================================================
-user_route.get('/checkout',cartControllers.loadCheckout)
+user_route.get('/checkout',auth.isLogin,cartControllers.loadCheckout)
 user_route.post('/placeOrder',orderControllers.placeOrder)
 user_route.post('/verify-payment',orderControllers.verifyPayment)
 user_route.get('/orderDetails',auth.isLogin,orderControllers.loadOrderDetails)
@@ -84,7 +84,7 @@ user_route.get('/sample',userControllers.sample)
 
 // =========================================< Wishlist >=================================================
 user_route.post('/addToWishList',wishlistControllers.addToWishList)
-user_route.get('/wishlist',wishlistControllers.loadWishlist)
+user_route.get('/wishlist',auth.isLogin,wishlistControllers.loadWishlist)
 user_route.post('/removeWish',wishlistControllers.removeProduct)
 
 

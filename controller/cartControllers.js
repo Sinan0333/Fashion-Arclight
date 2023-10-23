@@ -9,26 +9,23 @@ const loadCart = async(req,res)=>{
         
         const user_id = req.session.user_id
         const cartData =  await Cart.findOne({user:user_id}).populate('products.productId')
-        const categoryData = cartData? await cartData.populate("products.productId.category"):0
-        let subTotal = cartData ? cartData.products.reduce((acc,val)=>acc+val.totalPrice,0) : 0
+        const offerData = cartData ? await cartData.populate('products.productId.offer'):0
+        const subTotal = cartData ? cartData.products.reduce((acc,val)=>acc+val.totalPrice,0) : 0
         let eachProductDiscount=[];
 
         if(cartData){
-          
-        for(let i=0;i<cartData.products.length;i++){
-          if(cartData.products[i].productId.offer<categoryData.products[i].productId.category.offer){
-           let amount = categoryData.products[i].productId.category.offer*cartData.products[i].count
-           eachProductDiscount.push(amount)
-          }else{
-            let amount = cartData.products[i].productId.offer*cartData.products[i].count
-            eachProductDiscount.push(amount)
-          }
-        }
 
-        const discount = eachProductDiscount.reduce((acc,val)=>acc+val,0)
-        const total = subTotal-discount
-        
-          res.render('cart',{cart:cartData,subTotal:subTotal,subTotal,total:total,discount:discount})
+          for(let i=0;i<cartData.products.length;i++){
+            if( cartData.products[i].productId.offer.discountAmount !=0 && cartData.products[i].productId.offer.is_blocked==false){
+              let amount = cartData.products[i].productId.offer.discountAmount * cartData.products[i].count
+              eachProductDiscount.push(amount)
+            }
+          }
+            const discount = eachProductDiscount.reduce((acc,val)=>acc+val,0)
+            const total = subTotal-discount
+
+          res.render('cart',{cart:cartData,subTotal:subTotal,total:total,discount:discount})
+
         }else{
           res.render('cart',{cart:null})
         }
@@ -173,23 +170,19 @@ const loadCheckout = async(req,res)=>{
     const user_id = req.session.user_id
     let addressData = await Address.findOne({user:user_id})
     const cartData = await Cart.findOne({user:user_id}).populate('products.productId')
-    const categoryData = await cartData.populate("products.productId.category")
+    const offerData = await cartData.populate('products.productId.offer')
     const subTotal = cartData.products.reduce((acc,val)=>acc+val.totalPrice,0)
     const stock = cartData.products.filter((val,ind)=>val.productId.quantity>0)
     let eachProductDiscount=[];
 
     for(let i=0;i<cartData.products.length;i++){
-      if(cartData.products[i].productId.offer<categoryData.products[i].productId.category.offer){
-       let amount = categoryData.products[i].productId.category.offer*cartData.products[i].count
-       eachProductDiscount.push(amount)
-      }else{
-        let amount = cartData.products[i].productId.offer*cartData.products[i].count
+      if( cartData.products[i].productId.offer.discountAmount !=0 && cartData.products[i].productId.offer.is_blocked == false){
+        let amount = cartData.products[i].productId.offer.discountAmount * cartData.products[i].count
         eachProductDiscount.push(amount)
       }
     }
-
-    const discount = eachProductDiscount.reduce((acc,val)=>acc+val,0)
-    const total = subTotal-discount-cartData.couponDiscount
+      const discount = eachProductDiscount.reduce((acc,val)=>acc+val,0)
+      const total = subTotal-discount
 
 
     if(addressData == null){
