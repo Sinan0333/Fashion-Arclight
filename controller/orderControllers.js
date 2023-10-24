@@ -1,4 +1,5 @@
 const Order = require("../model/orderModel")
+const User = require("../model/userModel")
 const Address = require("../model/addressModel");
 const Cart = require('../model/cartModel')
 const Product = require('../model/productModel');
@@ -136,8 +137,9 @@ const loadOrderDetails = async(req,res)=>{
   try {
   
     const order_id = req.query._id
-    const OrderData = await Order.findOne({_id:order_id}).populate('products.productId')
-    res.render('orderDetails',{order:OrderData})
+    const orderData = await Order.findOne({_id:order_id}).populate('products.productId')
+    await orderData.populate('products.productId.category')
+    res.render('orderDetails',{order:orderData})
 
   } catch (error) {
 
@@ -151,9 +153,24 @@ const loadOrderDetails = async(req,res)=>{
 const cancelOrder = async(req,res)=>{
   try {
 
+    const user_id = req.session.user_id
     const order_id = req.body.orderId
     const cancelReaon = req.body.cancelReason
-    const OrderData = await Order.updateOne({_id:order_id},{$set:{status:'cancelled',cancelReason:cancelReaon}})
+    const orderData = await Order.findOneAndUpdate({_id:order_id},{$set:{status:'cancelled',cancelReason:cancelReaon}})
+
+    for( let i=0;i<orderData.products.length;i++){
+      let product = orderData.products[i].productId
+      let count = orderData.products[i].count
+      await Product.updateOne({_id:product},{$inc:{quantity:count}})
+    }
+
+    const data = {
+      amount:orderData.totalAmount,
+      date:new Date()
+    }
+
+    const ussrData = await User.findOneAndUpdate({_id:user_id},{$set:{wallet:orderData.totalAmount},$push:{walletHistory:data}})
+    
     res.json({cancel:true})  
   } catch (error) {
 

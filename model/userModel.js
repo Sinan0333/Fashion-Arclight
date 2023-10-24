@@ -29,7 +29,20 @@ const userSchema=mongoose.Schema({
     is_blocked:{
         type:Boolean,
         required:true
-    }
+    },
+    wallet:{
+        type:Number,
+        default:0
+    },
+    walletHistory:[{
+        date:{
+            type:Date
+        },
+        amount:{
+            type:Number,
+        },
+    }]
+
     
 })
 

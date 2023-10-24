@@ -110,3 +110,61 @@
     font-size: 14px;
     color: #999;
 }
+
+.walletContainer {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+.wallet {
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.wallet h2 {
+    color: #333;
+}
+
+.balance {
+    font-size: 24px;
+    color: #333;
+}
+
+.transactions {
+    border: 1px solid #ccc;
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.transaction {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f9f9f9;
+}
+
+.transaction .info {
+    flex: 1;
+}
+
+.transaction .date {
+    font-size: 12px;
+    color: #999;
+}

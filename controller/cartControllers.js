@@ -182,7 +182,7 @@ const loadCheckout = async(req,res)=>{
       }
     }
       const discount = eachProductDiscount.reduce((acc,val)=>acc+val,0)
-      const total = subTotal-discount
+      const total = subTotal-discount-cartData.couponDiscount
 
 
     if(addressData == null){

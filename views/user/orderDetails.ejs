@@ -64,10 +64,10 @@
                                         <td>
                                             <a href="/product?_id=<%= product.productId._id %>"><%= product.productId.name %></a>
                                         </td>                                          
-                                        <td><%= product.productId.category %></td>
-                                        <td>$<%= product.price %></td>
+                                        <td><%= product.productId.category.name %></td>
+                                        <td> $<%= product.price %></td>
                                         <td ><%= product.count %></td>
-                                        <td><%= product.totalPrice %></td>
+                                        <td> $<%= product.totalPrice %></td>
                                     </tr>
                                 <% }); %>
                             </tbody>

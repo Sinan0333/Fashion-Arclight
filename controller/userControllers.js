@@ -372,7 +372,10 @@ const editProfile = async (req, res) => {
       email:req.body.email,
       mobile:req.body.mobile,
       password:sPassword,
-      image:img
+      image:img,
+      wallet:0,
+      walletHistory:[]
+
     }}) 
 
     console.log(data);
