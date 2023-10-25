@@ -207,7 +207,10 @@
                 success: function (response) {
                     if(response.placed==true){
                         window.location.href = '/orderSuccess'
-                    }else{
+                    }else if(response.wallet == false){
+                        swal("Anj paisa illa !!", "", "error")
+                    }
+                    else{
                         
                         razorpayPayment(response.order)
                     }

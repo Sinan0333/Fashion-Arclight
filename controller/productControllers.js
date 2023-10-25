@@ -2,6 +2,7 @@ const Product = require('../model/productModel')
 const Category = require('../model/categoryModel')
 const Banner = require('../model/bannerModel')
 const Offer = require("../model/offerModel")
+const Review = require('../model/reviewModel')
 const Sharp = require('sharp')
 const fs = require('fs');
 
@@ -48,7 +49,10 @@ const loadProduct = async (req, res) => {
     const productData = await Product.findOne({_id:product_id}).populate('category').populate('offer')
     const offerPrice = productData.price-productData.offer.discountAmount 
     const relatedProducts =await Product.find({category:productData.category._id})
-    res.render("product",{product:productData,relatedProducts:relatedProducts,offerPrice:offerPrice});
+    const reviewData = await Review.findOne({productId:product_id}).populate('review.user')
+    const reviews =reviewData ? reviewData.review:[]
+    const avgRatig =reviews ? reviews.reduce((acc,val)=>acc+val.rating,0)/reviews.length : 0
+    res.render("product",{product:productData,relatedProducts:relatedProducts,offerPrice:offerPrice,reviews:reviews,avgRatig:avgRatig});
   } catch {
     console.log(error.message);
   }
@@ -247,6 +251,9 @@ const deleteProduct = async(req,res)=>{
 
   }
 }
+
+
+
 
 
 

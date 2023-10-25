@@ -24,6 +24,8 @@ const placeOrder = async(req,res)=>{
         const addressIndex = !req.body.address? 0:req.body.address
         const status = paymentMethod=="COD"?"placed":'pending'
         const total = req.body.total
+        const userData = await User.findOne({_id:user_id})
+
         if(!req.body.address){
           const data = {
             fullName:req.body.name,
@@ -75,7 +77,32 @@ const placeOrder = async(req,res)=>{
         await Cart.deleteOne({user:user_id})
         res.json({placed:true})
 
-       }else{
+       }else if(paymentMethod == 'wallet'){
+
+        if(userData.wallet >= total){
+
+          const data ={
+            amount:-total,
+            date:new Date()
+          }
+
+          const updateOrder = await Order.findOneAndUpdate({_id:orderData._id},{$set:{status:'placed'}})
+          const updateWallet = await User.findOneAndUpdate({_id:user_id},{$inc:{wallet:-total},$push:{walletHistory:data}})
+
+          for( let i=0;i<cartData.products.length;i++){
+            let product = cartData.products[i].productId
+            let count = cartData.products[i].count
+            await Product.updateOne({_id:product},{$inc:{quantity:-count}})
+          }
+
+          res.json({placed:true})
+
+        }else{
+          res.json({wallet:false})
+        }
+
+       }
+       else{
 
         const options ={
           amount: total*100,
@@ -169,7 +196,7 @@ const cancelOrder = async(req,res)=>{
       date:new Date()
     }
 
-    const ussrData = await User.findOneAndUpdate({_id:user_id},{$set:{wallet:orderData.totalAmount},$push:{walletHistory:data}})
+    const ussrData = await User.findOneAndUpdate({_id:user_id},{$inc:{wallet:orderData.totalAmount},$push:{walletHistory:data}})
     
     res.json({cancel:true})  
   } catch (error) {

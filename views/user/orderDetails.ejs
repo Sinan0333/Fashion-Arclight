@@ -76,9 +76,45 @@
                 </div>
             </div>
         </div> 
+
+        <div id="review-form" style="display: none;">
+            <h2 class="review-form-title">Add a Review</h2>
+            <form id="add-review-form" class="review-form">
+                <div class="Review-form-group">
+
+                    <label id="review-Lb" for="rating">Product:</label>
+                    <select  id="product" name="product" class="form-control review-Select">
+                        <% order.products.forEach(function(product,index) { %>
+                        <option value="<%= product.productId._id %>"><%= product.productId.name %></option>
+                        <% }); %>
+                    </select>
+
+                    <label id="review-Lb" for="rating">Rating:</label>
+                    <select  id="rating" name="rating" class="form-control review-Select">
+                        <option value="5">5 Stars</option>
+                        <option value="4">4 Stars</option>
+                        <option value="3">3 Stars</option>
+                        <option value="2">2 Stars</option>
+                        <option value="1">1 Star</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="comment">Comment:</label>
+                    <textarea id="comment" name="comment" class="form-control" rows="4" cols="50"></textarea>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="submitReview()">Submit Review</button>
+            </form>
+        </div>
+
+       
+
         <% if (order.status !=='cancelled' && order.status !=='delivered') { %>
             <button type="button" class="btn btn-danger btn-block" onclick="cancelOrder('<%= order._id %>')">Cancel Order</button>
-        <% } %>     
+        <% } %> 
+        <% if (order.status === 'delivered') { %>
+            <button class="add-review-button btn btn-success btn-block" onclick="showReviewForm()" >Add Review</button>
+         <% } %> 
+
         <div style="width: 100%; height: 77px; background-color: white;"></div>
     </div><!-- End .container -->
 </main><!-- End .main -->
@@ -119,6 +155,43 @@
     allowOutsideClick: () => !Swal.isLoading(),
   });
 }
+
+function showReviewForm() {
+    document.getElementById("review-form").style.display = "block";
+}
+
+
+function submitReview() {
+
+    const productId = document.getElementById("product").value;
+    const rating = document.getElementById("rating").value;
+    const comment = document.getElementById("comment").value;
+   
+console.log(rating,comment,productId);
+
+    $.ajax({
+        method: "POST",
+        url: "/productReview",
+        data: {
+            rating: rating,
+            comment: comment,
+            _id:productId
+        },
+        success: function (response) {
+
+            if(response.added){
+                document.getElementById("review-form").style.display = "none";
+            }
+            
+        },
+        error: function (error) {
+            console.error("Failed to submit the review:", error);
+
+        },
+    });
+}
+
+
 
 </script>
 

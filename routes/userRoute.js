@@ -11,6 +11,7 @@ const cartControllers=require('../controller/cartControllers')
 const orderControllers=require('../controller/orderControllers')
 const wishlistControllers=require('../controller/wishlistControllers')
 const couponControllers=require('../controller/couponControllers')
+const reviewControllers=require('../controller/reviewControllers')
 
 const config = require('../config/mongodb')
 const auth = require('../middleware/auth')
@@ -90,6 +91,9 @@ user_route.post('/removeWish',wishlistControllers.removeProduct)
 
 // =========================================< Coupon >=================================================
 user_route.post('/checkCoupon',couponControllers.checkCoupon)
+
+
+user_route.post('/productReview',reviewControllers.addReview)
 
 
 module.exports =user_route

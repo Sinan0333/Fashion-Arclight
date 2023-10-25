@@ -168,7 +168,7 @@ const insertUser = async (req, res) => {
       if(req.file){
         var img = req.file.originalname
       }else{
-        var img = 'default profile'
+        var img = 'default.avif'
       }
       
       userData.name=req.body.username

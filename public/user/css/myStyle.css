@@ -168,3 +168,28 @@ h1 {
     font-size: 12px;
     color: #999;
 }
+
+.review-form {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.review-form-title {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.Review-form-group {
+    margin-bottom: 15px;
+}
+
+#review-Lb {
+    font-weight: bold;
+}
+
+.review-Select {
+    width: 100%;
+}

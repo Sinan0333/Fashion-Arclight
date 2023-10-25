@@ -35,6 +35,23 @@ const productSchema=mongoose.Schema({
         type:Boolean,
         required:true
     }
+    ,review: [
+        {
+          user: {
+            type: String,
+            required: true,
+            ref: "User",
+          },
+          rating: {
+            type: Number,
+            required:true
+          },
+          comment: {
+            type: String,
+            required: true,
+          },
+        },
+      ],
 
 })
 
