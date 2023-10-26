@@ -1,0 +1,71 @@
+<%- include('../layout/admin/header.ejs') -%>
+
+<div class="main-panel">
+    <div class="content-wrapper">
+
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Sales Report</h4>
+            
+            <div class="page-header">
+              <div class="dropdown">
+                <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuOutlineButton1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Report Download </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuOutlineButton1">
+                  <a class="dropdown-item" href="/admin/reportDown?format=excel&duration=1">Excel Format</a>
+                  <a class="dropdown-item" href="/admin/reportDown?format=pdf&duration=1">Pdf Format</a>                  
+                </div>
+              </div>
+            </div>
+
+            <div class="dropdown" style="float: right;">
+              <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuOutlineButton1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Filter </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuOutlineButton1">
+                <h6 class="dropdown-header">Report Sorting</h6>
+                
+                <a class="dropdown-item" href="/admin/salesReport?sort=<%= 1 %>">Daily</a>
+                <a class="dropdown-item" href="/admin/salesReport?sort=<%= 7 %>">Weekly</a>
+                <a class="dropdown-item" href="/admin/salesReport?sort=<%= 30 %>">Monthly</a>
+                <a class="dropdown-item" href="/admin/salesReport?sort=<%= 365 %>">Yearly</a>
+                
+              </div>
+            </div>
+      
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>No</th>
+                    
+                    <th>Order Id</th>
+                    <th>Products - Qty</th>
+                    <th>Date</th>
+                    
+                    <th>Customer</th>
+                    <th>Total Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if(orders.length > 0){ %>
+                    <% orders.forEach((data,i)=> { %>
+                  <tr>
+                    <td><%= i+1 %>.</td>
+                    <td><%= data._id %></td>
+                    <td><%= data.products.productDetails.name %>&nbsp;-&nbsp;<%= data.products.count %></td>
+                    <td><%= data.date.toLocaleDateString('en-US', { year:
+                      'numeric', month: 'short', day: '2-digit' }).replace(/\//g,
+                      '-') %></td>
+                    <td><%= data.deliveryDetails.fullName %></td>
+                    <td><%= data.products.totalPrice %></td>
+                  </tr>
+                  <% }) %>
+                  <% } %>                
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<%- include('../layout/admin/footer.ejs') -%>

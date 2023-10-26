@@ -97,5 +97,8 @@ admin_route.post('/blockOffer',offerControllers.blockOffer)
 admin_route.post('/deleteOffer',offerControllers.deleteOffer)
 
 
+// =========================================< Sales Report  >=================================================
+admin_route.get('/salesReport',adminControllers.salesReport)
+admin_route.get('/reportDown',adminControllers.downloadReport)
 
 module.exports = admin_route
