@@ -69,6 +69,12 @@
             </div> 
           </div>   
         </div> 
+        <div class="col-lg-6">
+          <div class="card card-dashboard">
+            <div  id="chart2">  
+            </div> 
+          </div>   
+        </div> 
       </div>
 
       <br>
@@ -131,15 +137,19 @@
           </div>
         </div>
       </div>
-
     </div>
+    <div id="monthlySales" data-monthly-order-counts="<%= JSON.stringify(data) %>"></div>
+    <div id="paymentMethods" data-payment-method-counts="<%= JSON.stringify(paymentMethodsData) %>"></div>
+  
+  <script>
+//this script code for the monthly sales report chart
+      var monthlySales = document.getElementById('monthlySales');
+      var monthlyOrderCounts = JSON.parse(monthlySales.getAttribute('data-monthly-order-counts')); 
 
-    
-    <script>
-              var options = {
+          var options = {
           series: [{
           name: 'Inflation',
-          data: [2.3, 3.1, 4.0, 10.1, 4.0, 3.6, 3.2, 2.3, 1.4, 0.8, 0.5, 0.2]
+          data:monthlyOrderCounts
         }],
           chart: {
           height: 350,
@@ -149,7 +159,7 @@
           bar: {
             borderRadius: 10,
             dataLabels: {
-              position: 'top', // top, center, bottom
+              position: 'top',
             },
           }
         },
@@ -217,6 +227,47 @@
         };
 
         var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+    </script>
+
+
+    <script>
+//this for the payment method chart
+      var paymentMethods = document.getElementById('paymentMethods');
+      var paymentMethodsCount = JSON.parse(paymentMethods.getAttribute('data-payment-method-counts')); 
+      var methods = paymentMethodsCount.map((val)=>val._id)
+      var count = paymentMethodsCount.map((val)=>val.count*13)
+      var total =paymentMethodsCount.reduce((acc,val)=>acc+val.count,0)
+
+       var options = {
+          series: count,
+          chart: {
+          height: 385,
+          type: 'radialBar',
+        },
+        plotOptions: {
+          radialBar: {
+            dataLabels: {
+              name: {
+                fontSize: '22px',
+              },
+              value: {
+                fontSize: '16px',
+              },
+              total: {
+                show: true,
+                label: 'Total',
+                formatter: function (w) {
+                  return total
+                }
+              }
+            }
+          }
+        },
+        labels: methods,
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart2"), options);
         chart.render();
     </script>
 

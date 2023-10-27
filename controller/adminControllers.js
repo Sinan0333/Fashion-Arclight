@@ -5,7 +5,8 @@ const puppeteer = require('puppeteer')
 const ExcelJS = require('exceljs')
 const path = require('path')
 const fs = require('fs')
-const ejs = require('ejs')
+const ejs = require('ejs');
+const { log } = require("console");
 
 
 // =========================================< Dashboard >=================================================
@@ -14,7 +15,56 @@ const ejs = require('ejs')
 //load admin Dashboard
 const loadDashboard = async (req,res)=>{
     try {
-        res.render('dashboard')
+      const OrderData = await Order.find()
+      let data=[];
+      let ind=0
+
+      const monthlyOrderCounts = await Order.aggregate([
+        {
+          $match: {
+            status: 'delivered',
+          },
+        },
+        {
+          $group: {
+            _id: { $dateToString: { format: '%m', date: '$date' } },
+            count: { $sum: 1 },
+          },
+        },
+      ])
+var k=0
+      for(let i=0;i<12;i++){
+        k++
+        if(i+1<monthlyOrderCounts[0]._id){
+          data.push(k)
+        }else{
+          if( monthlyOrderCounts[ind]){
+            let count = monthlyOrderCounts[ind].count
+            data.push(count)
+          }else{
+            data.push(k)
+          }
+          ind++
+        }
+      }
+
+      const paymentMethodsData = await Order.aggregate([
+        {
+          $match: {
+            status: 'delivered',
+          },
+        },
+        {
+          $group: {
+            _id: '$paymentMethod',
+            count: { $sum: 1 },
+          },
+        },
+      ])
+
+      
+
+        res.render('dashboard',{data,paymentMethodsData})
     } catch (error) {
         console.log(error.message);
     }
@@ -137,7 +187,7 @@ const salesReport = async (req, res) => {
         },
       },
       {
-        $sort: { deliveryDate: -1 },
+        $sort: { date: -1 },
       },
       {
         $lookup: {
