@@ -27,9 +27,34 @@ const addReview = async (req, res) => {
     }
   };
 
+  const addReplay = async (req, res) => {
+    try {
+    
+      const data = {
+        user:req.session.user_id,
+        comment:req.body.replyText
+      }
+
+      await Review.findOneAndUpdate(
+    
+        { productId: req.body.productId,'review._id':req.body.reviewId },
+        {
+          $push: { 'review.$.replay': data }
+        },
+        { upsert: true, new: true }
+
+    )
+      res.json({added:true})
+
+    } catch (error){
+      console.log(error.message);
+    }
+  };
+
 
 
 module.exports ={
  addReview,
+ addReplay,
   
 }

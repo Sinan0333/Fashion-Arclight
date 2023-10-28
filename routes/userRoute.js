@@ -94,6 +94,8 @@ user_route.post('/checkCoupon',couponControllers.checkCoupon)
 
 
 user_route.post('/productReview',reviewControllers.addReview)
+user_route.post('/submitReply',reviewControllers.addReplay)
+
 
 
 module.exports =user_route

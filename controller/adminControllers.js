@@ -15,9 +15,19 @@ const { log } = require("console");
 //load admin Dashboard
 const loadDashboard = async (req,res)=>{
     try {
-      const OrderData = await Order.find()
       let data=[];
       let ind=0
+      const currentDate = new Date();
+      const startDate = new Date(currentDate - 30 * 24 * 60 * 60 * 1000);
+      const userData = await User.find()
+      const usersCount = userData.length
+      const orderData =await Order.find({ date: { $gte: startDate, $lt: currentDate }})
+      const revenue = orderData.reduce((acc, val) => (val.status === 'delivered' ? acc + val.totalAmount : acc), 0);
+      const totalOrders = orderData.length
+      const soldProducts = orderData.reduce((acc,val)=> (val.status === 'delivered' ? acc + val.products.length : acc), 0)
+      const deliveredOrders = orderData.reduce((acc,val)=> (val.status === 'delivered' ? acc + 1: acc), 0)
+      const cancelledOrders = orderData.reduce((acc,val)=> (val.status === 'cancelled' ? acc + 1: acc), 0)
+
 
       const monthlyOrderCounts = await Order.aggregate([
         {
@@ -32,17 +42,17 @@ const loadDashboard = async (req,res)=>{
           },
         },
       ])
-var k=0
+
       for(let i=0;i<12;i++){
-        k++
+
         if(i+1<monthlyOrderCounts[0]._id){
-          data.push(k)
+          data.push(0)
         }else{
           if( monthlyOrderCounts[ind]){
             let count = monthlyOrderCounts[ind].count
             data.push(count)
           }else{
-            data.push(k)
+            data.push(0)
           }
           ind++
         }
@@ -62,9 +72,17 @@ var k=0
         },
       ])
 
-      
 
-        res.render('dashboard',{data,paymentMethodsData})
+        res.render('dashboard',{
+          data,
+          paymentMethodsData,
+          revenue,
+          soldProducts,
+          usersCount,
+          totalOrders,
+          deliveredOrders,
+          cancelledOrders,
+        })
     } catch (error) {
         console.log(error.message);
     }
@@ -171,7 +189,6 @@ const blockUser = async(req,res)=>{
 const salesReport = async (req, res) => {
   try {
     const duration = req.query.sort;
-    console.log(duration);
     const currentDate = new Date();
     const startDate = new Date(currentDate - duration * 24 * 60 * 60 * 1000);
     console.log(startDate);

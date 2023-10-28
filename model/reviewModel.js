@@ -21,6 +21,18 @@ const reviewSchema = new mongoose.Schema({
         type: String,
         required: true,
       },
+      replay:[
+        {
+          user:{
+            type:String,
+            ref:"User"
+          },
+          comment: {
+            type: String,
+            required: true,
+          }
+        }
+      ]
     },
   ],
   

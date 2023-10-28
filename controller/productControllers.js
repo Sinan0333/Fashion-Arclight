@@ -49,7 +49,7 @@ const loadProduct = async (req, res) => {
     const productData = await Product.findOne({_id:product_id}).populate('category').populate('offer')
     const offerPrice = productData.price-productData.offer.discountAmount 
     const relatedProducts =await Product.find({category:productData.category._id})
-    const reviewData = await Review.findOne({productId:product_id}).populate('review.user')
+    const reviewData = await Review.findOne({productId:product_id}).populate('review.user').populate('review.replay.user')
     const reviews =reviewData ? reviewData.review:[]
     const avgRatig =reviews ? reviews.reduce((acc,val)=>acc+val.rating,0)/reviews.length : 0
     res.render("product",{product:productData,relatedProducts:relatedProducts,offerPrice:offerPrice,reviews:reviews,avgRatig:avgRatig});

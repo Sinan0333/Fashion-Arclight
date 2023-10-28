@@ -249,7 +249,7 @@
 
             <!-- - -->
             <div class="tab-pane fade" id="reviews" role="tabpanel">
-                <div class="row">
+                <div class="row" id="reloadArea">
                     <div class="col-sm-10 col-md-8 col-lg-6 m-lr-auto">
                         <div class="p-b-30 m-lr-15-sm">
                             <!-- Review -->
@@ -261,9 +261,7 @@
 
                                 <div class="size-207">
                                     <div class="flex-w flex-sb-m p-b-17">
-                                        <!-- <h3 class="mtext-107 cl2 p-r-20"> -->
                                             <h5><%= review.user.name %></h5>
-                                        <!-- </h3> -->
 
                                         <span class="fs-18 cl11">
                                             <% for (let i = 0; i <  review.rating ; i++) { %>
@@ -275,6 +273,24 @@
                                     <p class="stext-102 cl6">
                                         <%= review.comment %>
                                     </p>
+                                    <button class="reply-button" onclick="showReplyForm('<%= review._id %>')">Reply</button>
+                                    <div id="reply-form-<%= review._id %>" style="display: none;">
+                                        <form class="reply-form" onsubmit="submitReply('<%= review._id %>','<%= product._id %>'); return false;">
+                                            <div class="form-group">
+                                                <label for="reply-text-<%= review._id %>">Your Reply:</label>
+                                                <textarea id="reply-text-<%= review._id %>" class="form-control" rows="3"></textarea>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </form>
+                                    </div>
+
+                                    <div class="replies">
+                                        <% review.replay.forEach(function(reply) { %>
+                                        <div class="reply">
+                                            <p class="stext-102 cl6"><strong><%= reply.user.name %>:</strong> <%= reply.comment %></p>
+                                        </div>
+                                        <% }); %>
+                                    </div>
                                 </div>
                             </div>
                             <% }); %>
@@ -419,6 +435,33 @@
             }
         });
     }
+
+    function showReplyForm(reviewId) {
+    const replyForm = document.getElementById(`reply-form-${reviewId}`);
+    replyForm.style.display = 'block';
+    }
+
+    function submitReply(reviewId,productId) {
+    const replyText = $(`#reply-text-${reviewId}`).val();
+    console.log(replyText);
+    console.log(productId);
+
+    $.ajax({
+        method: 'POST',
+        url: '/submitReply', 
+        data: {
+            productId:productId,
+            reviewId: reviewId,
+            replyText: replyText,
+        },
+        success: function (response) {
+            // $('#reloadArea').load('/product #reloadArea')
+        },
+        error: function (error) {
+        },
+    });
+}
+
 </script>
 
 
