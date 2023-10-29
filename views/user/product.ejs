@@ -273,6 +273,12 @@
                                     <p class="stext-102 cl6">
                                         <%= review.comment %>
                                     </p>
+                                    <div class="block2-txt-child2 flex-r p-t-3" style="display: flex;float: right;">
+                                        <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2" onclick="addLike('<%= review._id %>','<%= product._id %>')"  >
+                                            <img class="icon-heart1 dis-block trans-04" src="user/images/icons/icon-heart-01.png"  alt="ICON">
+                                            <img class="icon-heart2 dis-block trans-04 ab-t-l" src="user/images/icons/icon-heart-02.png" alt="ICON">
+                                        </a>
+                                    </div>
                                     <button class="reply-button" onclick="showReplyForm('<%= review._id %>')">Reply</button>
                                     <div id="reply-form-<%= review._id %>" style="display: none;">
                                         <form class="reply-form" onsubmit="submitReply('<%= review._id %>','<%= product._id %>'); return false;">
@@ -283,7 +289,7 @@
                                             <button type="submit" class="btn btn-primary">Submit</button>
                                         </form>
                                     </div>
-
+                                    
                                     <div class="replies">
                                         <% review.replay.forEach(function(reply) { %>
                                         <div class="reply">
@@ -453,6 +459,24 @@
             productId:productId,
             reviewId: reviewId,
             replyText: replyText,
+        },
+        success: function (response) {
+            // $('#reloadArea').load('/product #reloadArea')
+        },
+        error: function (error) {
+        },
+    });
+}
+
+function addLike(reviewId,productId) {
+    console.log(productId,reviewId);
+
+    $.ajax({
+        method: 'POST',
+        url: '/addLike', 
+        data: {
+            productId:productId,
+            reviewId: reviewId,
         },
         success: function (response) {
             // $('#reloadArea').load('/product #reloadArea')

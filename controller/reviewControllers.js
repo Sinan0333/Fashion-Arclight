@@ -27,21 +27,23 @@ const addReview = async (req, res) => {
     }
   };
 
-  const addReplay = async (req, res) => {
-    try {
-    
-      const data = {
-        user:req.session.user_id,
-        comment:req.body.replyText
-      }
 
-      await Review.findOneAndUpdate(
+// to replay to a review
+const addReplay = async (req, res) => {
+  try {
     
-        { productId: req.body.productId,'review._id':req.body.reviewId },
-        {
-          $push: { 'review.$.replay': data }
-        },
-        { upsert: true, new: true }
+    const data = {
+      user:req.session.user_id,
+      comment:req.body.replyText
+    }
+
+    await Review.findOneAndUpdate(
+    
+      { productId: req.body.productId,'review._id':req.body.reviewId },
+      {
+        $push: { 'review.$.replay': data }
+      },
+      { upsert: true, new: true }
 
     )
       res.json({added:true})
@@ -49,8 +51,33 @@ const addReview = async (req, res) => {
     } catch (error){
       console.log(error.message);
     }
-  };
+};
 
+
+//to like a review
+const addLike = async (req, res) => {
+  try {
+    
+    const data = {
+      user:req.session.user_id,
+      comment:req.body.replyText
+    }
+
+    await Review.findOneAndUpdate(
+    
+      { productId: req.body.productId,'review._id':req.body.reviewId },
+      {
+        $push: { 'review.$.replay': data }
+      },
+      { upsert: true, new: true }
+
+    )
+      res.json({added:true})
+
+    } catch (error){
+      console.log(error.message);
+    }
+};
 
 
 module.exports ={

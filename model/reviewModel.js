@@ -21,6 +21,10 @@ const reviewSchema = new mongoose.Schema({
         type: String,
         required: true,
       },
+      likes: {
+        type: Array,
+        required: true,
+      },
       replay:[
         {
           user:{
