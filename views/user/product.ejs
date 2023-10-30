@@ -36,7 +36,7 @@
                             <div class="product-gallery product-gallery-vertical">
                                 <div class="row">
                                     <figure class="product-main-image">
-                                        <img id="product-zoom" src="images/product/sharped/<%= product.image[0] %>" data-zoom-image="images/product/orginal/<%= product.image[0] %>" alt="<%= product.name %>">
+                                        <img id="product-zoom" src="images/product/sharped/<%= product.images.image1 %>" data-zoom-image="images/product/orginal/<%= product.images.image1 %>" alt="<%= product.name %>">
 
                                         <a href="#" id="btn-product-gallery" class="btn-product-gallery">
                                             <i class="icon-arrows"></i>
@@ -44,21 +44,21 @@
                                     </figure><!-- End .product-main-image -->
 
                                     <div id="product-zoom-gallery" class="product-image-gallery">
-                                        <a class="product-gallery-item active" href="#" data-image="images/product/sharped/<%= product.image[0] %>" data-zoom-image="images/product/orginal/<%= product.image[0] %>">
+                                        <a class="product-gallery-item active" href="#" data-image="images/product/sharped/<%= product.images.image1 %>" data-zoom-image="images/product/orginal/<%= product.images.image1 %>">
                                              <!-- this image for the side small image -->
-                                            <img src="images/product/sharped/<%= product.image[0] %>" alt="<%= product.name %>">
+                                            <img src="images/product/sharped/<%= product.images.image1 %>" alt="<%= product.name %>">
                                         </a>
 
-                                        <a class="product-gallery-item" href="#" data-image="images/product/sharped/<%= product.image[1] %>" data-zoom-image="images/product/orginal/<%= product.image[1] %>">
-                                            <img src="images/product/sharped/<%= product.image[1] %>" alt="<%= product.name %>">
+                                        <a class="product-gallery-item" href="#" data-image="images/product/sharped/<%= product.images.image2 %>" data-zoom-image="images/product/orginal/<%= product.images.image2 %>">
+                                            <img src="images/product/sharped/<%= product.images.image2 %>" alt="<%= product.name %>">
                                         </a>
 
-                                        <a class="product-gallery-item" href="#" data-image="images/product/sharped/<%= product.image[2] %>" data-zoom-image="images/product/orginal/<%= product.image[2] %>">
-                                            <img src="images/product/sharped/<%= product.image[2] %>" alt="<%= product.name %>">
+                                        <a class="product-gallery-item" href="#" data-image="images/product/sharped/<%= product.images.image3 %>" data-zoom-image="images/product/orginal/<%= product.images.image3 %>">
+                                            <img src="images/product/sharped/<%= product.images.image3 %>" alt="<%= product.name %>">
                                         </a>
 
-                                        <a class="product-gallery-item" href="#" data-image="images/product/sharped/<%= product.image[3] %>" data-zoom-image="images/product/orginal/<%= product.image[3] %>">
-                                            <img src="images/product/sharped/<%= product.image[3] %>" alt="<%= product.name %>">
+                                        <a class="product-gallery-item" href="#" data-image="images/product/sharped/<%= product.images.image4 %>" data-zoom-image="images/product/orginal/<%= product.images.image4 %>">
+                                            <img src="images/product/sharped/<%= product.images.image4 %>" alt="<%= product.name %>">
                                         </a>
                                     </div><!-- End .product-image-gallery -->
                                 </div><!-- End .row -->
@@ -97,10 +97,10 @@
 
                                     <div class="product-nav product-nav-thumbs">
                                         <a href="#" class="active">
-                                            <img src="images/product/sharped/<%= product.image[3] %>" alt="<%= product.name %>">
+                                            <img src="images/product/sharped/<%= product.images.image1 %>" alt="<%= product.name %>">
                                         </a>
                                         <a href="#">
-                                            <img src="images/product/sharped/<%= product.image[3] %>" alt="<%= product.name %>">
+                                            <img src="images/product/sharped/<%= product.images.image1 %>" alt="<%= product.name %>">
                                         </a>
                                     </div><!-- End .product-nav -->
                                 </div><!-- End .details-filter-row -->
@@ -273,11 +273,11 @@
                                     <p class="stext-102 cl6">
                                         <%= review.comment %>
                                     </p>
-                                    <div class="block2-txt-child2 flex-r p-t-3" style="display: flex;float: right;">
-                                        <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2" onclick="addLike('<%= review._id %>','<%= product._id %>')"  >
-                                            <img class="icon-heart1 dis-block trans-04" src="user/images/icons/icon-heart-01.png"  alt="ICON">
-                                            <img class="icon-heart2 dis-block trans-04 ab-t-l" src="user/images/icons/icon-heart-02.png" alt="ICON">
-                                        </a>
+                                    <div class="like-button">
+                                        <button id="pd-like-btn"  onclick="addLike('<%= review._id %>','<%= product._id %>')" >
+                                            <i class="far fa-thumbs-up"></i> 
+                                        </button>
+                                        <span class="likes-count"><%= review.likes.length %> Likes</span>
                                     </div>
                                     <button class="reply-button" onclick="showReplyForm('<%= review._id %>')">Reply</button>
                                     <div id="reply-form-<%= review._id %>" style="display: none;">
@@ -292,7 +292,10 @@
                                     
                                     <div class="replies">
                                         <% review.replay.forEach(function(reply) { %>
-                                        <div class="reply">
+                                        <div class="reply flex-w flex-t p-b-68">
+                                            <div class="wrap-pic-s size-109 bor0 of-hidden m-r-18 m-t-6">
+                                                <img src="images/user/orginal/<%= reply.user.image %>" alt="AVATAR">
+                                            </div>
                                             <p class="stext-102 cl6"><strong><%= reply.user.name %>:</strong> <%= reply.comment %></p>
                                         </div>
                                         <% }); %>
@@ -385,7 +388,7 @@
                     <!-- Block2 -->
                     <div class="block2">
                         <div class="block2-pic hov-img0">
-                            <img src="images/product/orginal/<%= related.image[0] %>" alt="<%= product.name %>" >
+                            <img src="images/product/orginal/<%= related.images.image1 %>" alt="<%= product.name %>" >
                         </div>
 
                         <div class="block2-txt flex-w flex-t p-t-14">
@@ -461,7 +464,7 @@
             replyText: replyText,
         },
         success: function (response) {
-            // $('#reloadArea').load('/product #reloadArea')
+            $('#reloadArea').load(`/product?_id=${productId} #reloadArea`)
         },
         error: function (error) {
         },
@@ -479,7 +482,7 @@ function addLike(reviewId,productId) {
             reviewId: reviewId,
         },
         success: function (response) {
-            // $('#reloadArea').load('/product #reloadArea')
+             $('#reloadArea').load(`/product?_id=${productId} #reloadArea`)
         },
         error: function (error) {
         },

@@ -193,3 +193,15 @@ h1 {
 .review-Select {
     width: 100%;
 }
+
+#pd-like-btn {
+    background-color: transparent;
+    border: none;
+    color: #333;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+#pd-like-btn:hover {
+    color: #007bff;
+}

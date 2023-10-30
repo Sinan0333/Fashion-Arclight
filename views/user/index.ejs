@@ -166,14 +166,15 @@
             </div>
             
             <!-- Search product -->
-            <form action="/searchProduct" class="dis-none panel-search w-full p-t-10 p-b-15" method="post" >
+            
+            <div  class="dis-none panel-search w-full p-t-10 p-b-15">
                 <div class="bor8 dis-flex p-l-15">
                     <input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="search"  id="search-input"  placeholder="Search">
-                    <button class="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04">
+                    <button class="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04" onclick="search()">
                         <i class="zmdi zmdi-search" style="font-size: 30px;"></i>
                     </button>
                 </div>	
-            </form>
+            </div>
 
             <!-- Filter -->
             <form id="price-filter-form" method="post" action="/filter">
@@ -358,7 +359,7 @@
                         <!-- Block2 -->
                         <div class="block2">
                             <div class="block2-pic hov-img0">                             
-                                <img src="images/product/orginal/<%= product.image[0] %>" alt="<%= product.name %>" >                              
+                                <img src="images/product/orginal/<%= product.images.image1 %>" alt="<%= product.name %>" >                              
                             </div>
                 
                             <div class="block2-txt flex-w flex-t p-t-14">
@@ -438,6 +439,31 @@ function addToWish(productId) {
 				$(this).off('click');
 			});
 		});
+
+    function search(){
+        const searchInput = document.getElementById('search-input');
+        const searchValue = searchInput.value;
+        console.log(searchValue);
+        const data = {search:searchValue}
+        $.ajax({
+            method: 'POST',
+            url: '/shop', 
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: function (response) {
+                if(response.search===true){
+                    $('#reloadArea').load('/shop #reloadArea'); 
+                }else{
+                    swal("somthing wrong", "", "error")
+                }
+
+            },
+            error: function (error) {
+
+                console.error(error);
+            }
+        });
+    }
 </script>
 
 <%- include('../layout/user/footer.ejs') -%>

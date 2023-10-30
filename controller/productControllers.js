@@ -32,7 +32,7 @@ const loadShop = async(req,res)=>{
         const searchResult=await Product.find(
             { name:{ $regex:searchQuery, $options:'i'}
         });
-        res.render("shop",{products:searchResult});
+       res.json({search:true})
 
   } catch (error) {
 
@@ -49,6 +49,7 @@ const loadProduct = async (req, res) => {
     const productData = await Product.findOne({_id:product_id}).populate('category').populate('offer')
     const offerPrice = productData.price-productData.offer.discountAmount 
     const relatedProducts =await Product.find({category:productData.category._id})
+    console.log(relatedProducts);
     const reviewData = await Review.findOne({productId:product_id}).populate('review.user').populate('review.replay.user')
     const reviews =reviewData ? reviewData.review:[]
     const avgRatig =reviews ? reviews.reduce((acc,val)=>acc+val.rating,0)/reviews.length : 0
@@ -90,15 +91,20 @@ const loadAddProduct = async(req,res)=>{
 // to add product 
 const addProduct = async(req,res)=>{
   try {
-      const img=[];
       const offer = req.body.offer
       const offerData = offer !=0 ? await Offer.findOne({name:offer}) : 0
       const category  = await Category.findOne({name:req.body.category})
+      const files = await req.files;
 
-      for (let i = 0; i < req.files.length; i++) {
-          img.push(req.files[i].filename);
-          await Sharp("public/images/product/orginal/" + req.files[i].filename).resize(500, 500).toFile("public/images/product/sharped/" + req.files[i].filename);
+      const img = [
+        files.image1[0].filename,
+        files.image2[0].filename,
+        files.image3[0].filename,
+        files.image4[0].filename,
+      ];
 
+      for (let i = 0; i < img.length; i++) {
+          await Sharp("public/images/product/orginal/" + img[i]).resize(500, 500).toFile("public/images/product/sharped/" + img[i]);
       }
      
     const data = new Product({
@@ -106,7 +112,10 @@ const addProduct = async(req,res)=>{
       category:category._id,
       quantity:req.body.quantity,
       price:req.body.price,
-      image:img,
+      "images.image1": files.image1[0].filename,
+      "images.image2": files.image2[0].filename,
+      "images.image3": files.image3[0].filename,
+      "images.image4": files.image4[0].filename,
       offer: offerData == 0 ? 0 : offerData._id,
       description:req.body.description,
       is_blocked:false
@@ -145,11 +154,31 @@ const loadEditProduct = async(req,res)=>{
 const editProduct = async (req, res) => {
   try {
     const product_id = req.query._id;
+    let imagesFiles = await req.files;
     const productData = await Product.findOne({ _id: product_id });
     const category  = await Category.findOne({name:req.body.category})
-    const imagefileName = productData.image;
     const offer = req.body.offer
     const offerData = offer !=0 ? await Offer.findOne({name:offer}) : 0
+
+    const img = [
+      imagesFiles.image1 ? imagesFiles.image1[0].filename : productData.images.image1,
+      imagesFiles.image2 ? imagesFiles.image2[0].filename : productData.images.image2,
+      imagesFiles.image3 ? imagesFiles.image3[0].filename : productData.images.image3,
+      imagesFiles.image4 ? imagesFiles.image4[0].filename : productData.images.image4,
+    ];
+
+    for (let i = 0; i < img.length; i++) { 
+        await Sharp("public/images/product/orginal/" + img[i])
+          .resize(500, 500)
+          .toFile("public/images/product/sharped/" + img[i]);
+      }
+
+      let img1, img2, img3, img4;
+
+      img1 = imagesFiles.image1 ? imagesFiles.image1[0].filename : productData.images.image1;
+      img2 = imagesFiles.image2 ? imagesFiles.image2[0].filename : productData.images.image2;
+      img3 = imagesFiles.image3 ? imagesFiles.image3[0].filename : productData.images.image3;
+      img4 = imagesFiles.image4 ? imagesFiles.image4[0].filename : productData.images.image4;
 
     // const deleteImagePromises = imagefileName.map((image) => {
     //   const imagePathOrginal = `public/images/product/orginal/${image}`;
@@ -188,7 +217,10 @@ const editProduct = async (req, res) => {
           quantity: req.body.quantity,
           price: req.body.price,
           offer:offerData == 0 ? 0 : offerData._id,
-          // image: img,
+          "images.image1": img1,
+          "images.image2": img2,
+          "images.image3": img3,
+          "images.image4": img4,
           description: req.body.description,
         },
       }
@@ -229,20 +261,21 @@ const deleteProduct = async(req,res)=>{
 
     const  product_id =  req.query._id
     const productData =await Product.findOne({_id:product_id})
-    const imagefileName = productData.image
+    
+    for (const key in productData.images) {
+
+      if ( productData.images.hasOwnProperty(key)) {
+
+        const value = productData.images[key];
+        const imagePathOrginal = `public/images/product/orginal/${value}`
+        const imagePathSharped = `public/images/product/sharped/${value}`
+
+        fs.unlinkSync(imagePathOrginal)
+        fs.unlinkSync(imagePathSharped)
+      }
+    }
 
     await Product.findByIdAndDelete(product_id)
-
-    imagefileName.forEach( async (image) => {
-
-      const imagePathOrginal = `public/images/product/orginal/${image}`
-      const imagePathSharped = `public/images/product/sharped/${image}`
-
-      fs.unlinkSync(imagePathOrginal)
-      fs.unlinkSync(imagePathSharped)
- 
-    });
-
     res.redirect('/admin/product')
 
   } catch (error) {

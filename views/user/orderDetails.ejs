@@ -40,6 +40,9 @@
                         Total Amount: <%= order.totalAmount %><br>
                         Payment Method: <%= order.paymentMethod %><br>
                         Status: <%= order.status %><br>
+                        <% if (order.status=="cancel") { %>
+                            cancel Reason:<%= order.cancelReason %>
+                        <% } %>
                     </div>
                 </div>
             </div>
@@ -59,7 +62,7 @@
                                     <tr>
                                         <td><%= index + 1 %></td>
                                         <td>
-                                            <img src="/images/product/orginal/<%= product.productId.image[3] %>" alt="" class="img-thumbnail" style="max-width: 80px;">
+                                            <img src="/images/product/orginal/<%= product.productId.images.image1 %>" alt="" class="img-thumbnail" style="max-width: 80px;">
                                         </td>
                                         <td>
                                             <a href="/product?_id=<%= product.productId._id %>"><%= product.productId.name %></a>
@@ -108,7 +111,7 @@
 
        
 
-        <% if (order.status !=='cancelled' && order.status !=='delivered') { %>
+        <% if (order.status !=='cancel' && order.status !=='delivered') { %>
             <button type="button" class="btn btn-danger btn-block" onclick="cancelOrder('<%= order._id %>')">Cancel Order</button>
         <% } %> 
         <% if (order.status === 'delivered') { %>

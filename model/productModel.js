@@ -23,9 +23,23 @@ const productSchema=mongoose.Schema({
         type:String,
         ref: "Offer",
     },
-    image:{
-        type:Array,
+    images: {
+      image1:{
+        type:String,
         required:true
+      },
+      image2:{
+        type:String,
+        required:true
+      }
+      ,image3:{
+        type:String,
+        required:true
+      }
+      ,image4:{
+        type:String,
+        required:true
+      }
     },
     description:{
         type:String,
@@ -35,23 +49,6 @@ const productSchema=mongoose.Schema({
         type:Boolean,
         required:true
     }
-    ,review: [
-        {
-          user: {
-            type: String,
-            required: true,
-            ref: "User",
-          },
-          rating: {
-            type: Number,
-            required:true
-          },
-          comment: {
-            type: String,
-            required: true,
-          },
-        },
-      ],
 
 })
 

@@ -49,7 +49,7 @@ user_route.post('/changePassword',userControllers.changePassword)
 // =========================================< Home Page >=================================================
 user_route.get('/',productControllers.loadHome)
 user_route.get('/product',auth.isLogin,productControllers.loadProduct)
-user_route.post('/searchProduct',productControllers.loadShop)
+user_route.post('/shop',productControllers.loadShop)
 user_route.get('/shop',productControllers.loadShop)
 
 // =========================================< Profile >=================================================
@@ -95,6 +95,7 @@ user_route.post('/checkCoupon',couponControllers.checkCoupon)
 
 user_route.post('/productReview',reviewControllers.addReview)
 user_route.post('/submitReply',reviewControllers.addReplay)
+user_route.post('/addLike',reviewControllers.addLike)
 
 
 

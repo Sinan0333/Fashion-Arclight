@@ -57,9 +57,15 @@ const couponStorage = multer.diskStorage({
 
 
 const prducts = multer({ storage: productStorage})
+const uploadProduct = prducts.fields([
+  { name: "image1", maxCount: 1 },
+  { name: "image2", maxCount: 1 },
+  { name: "image3", maxCount: 1 },
+  { name: "image4", maxCount: 1 },
+]);
 const user =multer({storage:userStorage})
 const banner =multer({storage:bannerStorage})
 const coupon =multer({storage:couponStorage})
 
 
-module.exports = {prducts,user,banner,coupon}
+module.exports = {uploadProduct,user,banner,coupon}

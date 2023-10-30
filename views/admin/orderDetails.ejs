@@ -58,18 +58,13 @@
                     <tr>
                         <td><%= index+1 %></td>
                         <td>
-                          <img src="/images/product/orginal/<%= product.productId.image[0] %>" alt="<%= product.name %>" >  
+                          <img src="/images/product/orginal/<%= product.productId.images.image1 %>" alt="<%= product.name %>" >  
                               <span class="pl-2"><%= product.productId.name %></span>
                         </td>
                       <td><%= product.productId.category %></td>
                       <td><%= product.count %></td>
                       <td><%= product.price %></td>
                       <td><%= product.totalPrice %></td>                        
-                        <!-- <td>
-                          <a href="/admin/deleteProduct?_id=<%= product._id %>" data-category-id="<%= product._id %>" class="btn btn-primary delete-button">
-                              Delete
-                          </a>
-                      </td>                       -->
                     </tr>
                   <% }); %>
                 </tbody>
@@ -79,10 +74,7 @@
         </div>
       </div>
      </div>  
-     <br>
-     <% if (order.status != 'cancelled') { %>
-      <button type="button" class="btn btn-danger btn-block" onclick="cancelOrder('<%= order._id %>')">Cancel Order</button>
-  <% } %>   
+     <br> 
     </div>
 
 <%- include('../layout/admin/footer.ejs') -%>

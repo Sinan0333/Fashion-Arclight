@@ -183,7 +183,7 @@ const cancelOrder = async(req,res)=>{
     const user_id = req.session.user_id
     const order_id = req.body.orderId
     const cancelReaon = req.body.cancelReason
-    const orderData = await Order.findOneAndUpdate({_id:order_id},{$set:{status:'cancelled',cancelReason:cancelReaon}})
+    const orderData = await Order.findOneAndUpdate({_id:order_id},{$set:{status:'cancel',cancelReason:cancelReaon}})
 
     for( let i=0;i<orderData.products.length;i++){
       let product = orderData.products[i].productId
@@ -246,20 +246,27 @@ const updateOrder = async(req,res)=>{
   try {
 
     const order_id = req.body.orderId
-    const cancelOrder = req.body.cancel
-    const OrderData = await Order.findOne({_id:order_id})
+    const orderStatus = req.body.status
+    const user_id = req.session.user_id
+    if(orderStatus == 'cancel'){
+      const orderData = await Order.findOneAndUpdate({_id:order_id},{$set:{status:orderStatus,cancelReason:'There was a problem in youre order'}})
 
-    if(cancelOrder){
-      await Order.findOneAndUpdate({_id:order_id},{$set:{status:'cancelled'}})
-    }else{
-      if(OrderData.status =='placed'){
-        await Order.findOneAndUpdate({_id:order_id},{$set:{status:'shipped'}})
-      }else if(OrderData.status =='shipped'){
-        await Order.findOneAndUpdate({_id:order_id},{$set:{status:'out for delivery'}})
-      }else if(OrderData.status =='out for delivery'){
-        await Order.findOneAndUpdate({_id:order_id},{$set:{status:'delivered'}})
+      for( let i=0;i<orderData.products.length;i++){
+        let product = orderData.products[i].productId
+        let count = orderData.products[i].count
+        await Product.updateOne({_id:product},{$inc:{quantity:count}})
       }
+  
+      const data = {
+        amount:orderData.totalAmount,
+        date:new Date()
+      }
+  
+      const userData = await User.findOneAndUpdate({_id:user_id},{$inc:{wallet:orderData.totalAmount},$push:{walletHistory:data}})
+    }else{
+      const OrderData = await Order.findOneAndUpdate({_id:order_id},{$set:{status:orderStatus}})
     }
+   
       res.json({update:true})  
 
   } catch (error) {
