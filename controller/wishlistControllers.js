@@ -28,21 +28,31 @@ const addToWishList = async(req,res)=>{
         
       const product_id = req.body.productId
       const user_id = req.session.user_id
-      const data={
-        productId:product_id,
-    }
-    await Wishlist.findOneAndUpdate(
 
+      const wishlistData =await Wishlist.findOne({'products.productId':product_id})
+
+      if(wishlistData){
+        await Wishlist.findOneAndUpdate(
+          { 'products.productId': product_id },
+          { $pull: { 'products': { 'productId': product_id } } }
+        );
+        res.json({remove:true})
+      }else{
+
+        const data={
+          productId:product_id,
+        }
+
+      await Wishlist.findOneAndUpdate(
         { user: user_id },
-        {
-          $set: { user: user_id },
-          $push: { products: data }
-        },
+        { $addToSet: { products: data } },
         { upsert: true, new: true }
+      );
 
-    )
-    res.json({add:true})
-      
+      res.json({add:true})
+
+      }
+     
     } catch (error) {
         console.log(error.message);
     }

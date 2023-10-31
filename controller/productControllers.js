@@ -16,7 +16,8 @@ const loadHome = async (req, res) => {
 
     const productData = await Product.find({is_blocked:false})
     const bannerData =await Banner.find({is_blocked:false})
-    res.render("index",{products:productData,banners:bannerData});
+    const categoryData = await Category.find()
+    res.render("index",{products:productData,banners:bannerData,categorys:categoryData});
   } catch {
     console.log(error.message);
   }
@@ -27,12 +28,12 @@ const loadHome = async (req, res) => {
 const loadShop = async(req,res)=>{
   try {
 
-    const  searchQuery =  req.body.search? req.body.search:""
-
+    const searchQuery =  req.body.search? req.body.search : ""
+    const categoryData = await Category.find()
         const searchResult=await Product.find(
             { name:{ $regex:searchQuery, $options:'i'}
         });
-       res.json({search:true})
+       res.render('shop',{products:searchResult,categorys:categoryData})
 
   } catch (error) {
 
@@ -49,7 +50,6 @@ const loadProduct = async (req, res) => {
     const productData = await Product.findOne({_id:product_id}).populate('category').populate('offer')
     const offerPrice = productData.price-productData.offer.discountAmount 
     const relatedProducts =await Product.find({category:productData.category._id})
-    console.log(relatedProducts);
     const reviewData = await Review.findOne({productId:product_id}).populate('review.user').populate('review.replay.user')
     const reviews =reviewData ? reviewData.review:[]
     const avgRatig =reviews ? reviews.reduce((acc,val)=>acc+val.rating,0)/reviews.length : 0
@@ -59,6 +59,29 @@ const loadProduct = async (req, res) => {
   }
 };
 
+
+// For sort products
+const productFilter = async (req, res) => {
+  try {
+
+    const price = req.body.price
+    const splitPrice =price.split('-')
+    const minimum= parseInt(splitPrice[0])
+    const maximum = parseInt(splitPrice[1])  
+    const sort =parseInt( req.body.sort)
+    const category = req.body.category
+    const categoryData = await Category.find()
+
+    const productData = await Product.find({
+      price: { $gte: minimum, $lte: maximum },category:category
+    }).sort({ price: sort });
+
+    res.render('shop',{products:productData,categorys:categoryData})
+
+  } catch(error) {
+    console.log(error.message);
+  }
+};
 
 // =========================================< Admin side >=================================================
 
@@ -301,5 +324,6 @@ module.exports ={
     loadHome,
     loadShop,
     loadProduct,
+    productFilter
 
 }

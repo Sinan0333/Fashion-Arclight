@@ -103,7 +103,7 @@ const editBanner = async (req,res)=>{
             const imagePathOrginal = `public/images/banner/orginal/${bannerData.image}`
             fs.unlinkSync(imagePathOrginal)
          }else{
-            img = bannerData.image
+            image = bannerData.image
          }
 
         await Banner.findOneAndUpdate({_id:bannerId},

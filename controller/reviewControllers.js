@@ -8,12 +8,13 @@ const addReview = async (req, res) => {
       const data = {
         user:req.session.user_id,
         rating:req.body.rating,
-        comment:req.body.comment
+        comment:req.body.comment,
+        likes:0
       }
 
       await Review.findOneAndUpdate(
     
-        { productId: req.body._id ,'review.user':req.session.user_id },
+        { productId: req.body._id },
         { $push: { review: data }
         },
         { upsert: true, new: true }

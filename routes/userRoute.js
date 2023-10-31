@@ -51,6 +51,7 @@ user_route.get('/',productControllers.loadHome)
 user_route.get('/product',auth.isLogin,productControllers.loadProduct)
 user_route.post('/shop',productControllers.loadShop)
 user_route.get('/shop',productControllers.loadShop)
+user_route.post('/filter',productControllers.productFilter)
 
 // =========================================< Profile >=================================================
 user_route.get('/profile',auth.isLogin,userControllers.loadprofile)
