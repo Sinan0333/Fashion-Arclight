@@ -286,6 +286,7 @@ const loadprofile = async (req, res) => {
 
     const user_id=req.session.user_id
     const userData =await User.findById(user_id)
+    userData.walletHistory.sort((a,b)=>b.date-a.date)
     const addressData = await Address.findOne({user:user_id})
     const OrderData = await Order.find({user:user_id})
     // const couponData = await Coupon.find({is_blocked:false,usedUsers:{$nin:[user_id]},expiryDate:{$gte:new Date()}})
@@ -378,7 +379,6 @@ const editProfile = async (req, res) => {
 
     }}) 
 
-    console.log(data);
     res.redirect("/profile")
 
   } catch (error){

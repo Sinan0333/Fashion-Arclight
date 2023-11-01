@@ -22,11 +22,11 @@ const loadDashboard = async (req,res)=>{
       const userData = await User.find()
       const usersCount = userData.length
       const orderData =await Order.find({ date: { $gte: startDate, $lt: currentDate }})
-      const revenue = orderData.reduce((acc, val) => (val.status === 'delivered' ? acc + val.totalAmount : acc), 0);
-      const totalOrders = orderData.length
-      const soldProducts = orderData.reduce((acc,val)=> (val.status === 'delivered' ? acc + val.products.length : acc), 0)
-      const deliveredOrders = orderData.reduce((acc,val)=> (val.status === 'delivered' ? acc + 1: acc), 0)
-      const cancelledOrders = orderData.reduce((acc,val)=> (val.status === 'cancelled' ? acc + 1: acc), 0)
+      const revenue = orderData ? orderData.reduce((acc, val) => (val.status === 'delivered' ? acc + val.totalAmount : acc), 0) : 0
+      const totalOrders = orderData ? orderData.length : 0
+      const soldProducts = orderData ? orderData.reduce((acc,val)=> (val.status === 'delivered' ? acc + val.products.length : acc), 0) :0
+      const deliveredOrders = orderData ? orderData.reduce((acc,val)=> (val.status === 'delivered' ? acc + 1: acc), 0) : 0
+      const cancelledOrders = orderData ? orderData.reduce((acc,val)=> (val.status === 'cancelled' ? acc + 1: acc), 0) : 0
 
 
       const monthlyOrderCounts = await Order.aggregate([
@@ -43,21 +43,23 @@ const loadDashboard = async (req,res)=>{
         },
       ])
 
-      for(let i=0;i<12;i++){
+      if(monthlyOrderCounts.length !=0){
+        for(let i=0;i<12;i++){
 
-        if(i+1<monthlyOrderCounts[0]._id){
-          data.push(0)
-        }else{
-          if( monthlyOrderCounts[ind]){
-            let count = monthlyOrderCounts[ind].count
-            data.push(count)
-          }else{
+          if(i+1<monthlyOrderCounts[0]._id){
             data.push(0)
+          }else{
+            if( monthlyOrderCounts[ind]){
+              let count = monthlyOrderCounts[ind].count
+              data.push(count)
+            }else{
+              data.push(0)
+            }
+            ind++
           }
-          ind++
         }
       }
-
+     
       const paymentMethodsData = await Order.aggregate([
         {
           $match: {
@@ -83,6 +85,7 @@ const loadDashboard = async (req,res)=>{
           deliveredOrders,
           cancelledOrders,
         })
+
     } catch (error) {
         console.log(error.message);
     }

@@ -9,7 +9,6 @@ const addReview = async (req, res) => {
         user:req.session.user_id,
         rating:req.body.rating,
         comment:req.body.comment,
-        likes:0
       }
 
       await Review.findOneAndUpdate(

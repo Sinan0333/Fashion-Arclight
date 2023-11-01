@@ -48,7 +48,7 @@ user_route.post('/changePassword',userControllers.changePassword)
 
 // =========================================< Home Page >=================================================
 user_route.get('/',productControllers.loadHome)
-user_route.get('/product',auth.isLogin,productControllers.loadProduct)
+user_route.get('/product',productControllers.loadProduct)
 user_route.post('/shop',productControllers.loadShop)
 user_route.get('/shop',productControllers.loadShop)
 user_route.post('/filter',productControllers.productFilter)
@@ -81,7 +81,7 @@ user_route.post('/verify-payment',orderControllers.verifyPayment)
 user_route.get('/orderDetails',auth.isLogin,orderControllers.loadOrderDetails)
 user_route.post('/cancelOrder',orderControllers.cancelOrder)
 user_route.get('/orderSuccess',auth.isLogin,orderControllers.loadOrderSuccess)
-user_route.get('/sample',userControllers.sample)
+user_route.post('/invoice',orderControllers.loadInvoice)
 
 
 // =========================================< Wishlist >=================================================
@@ -94,6 +94,7 @@ user_route.post('/removeWish',wishlistControllers.removeProduct)
 user_route.post('/checkCoupon',couponControllers.checkCoupon)
 
 
+// =========================================< Product Review >=================================================
 user_route.post('/productReview',reviewControllers.addReview)
 user_route.post('/submitReply',reviewControllers.addReplay)
 user_route.post('/addLike',reviewControllers.addLike)

@@ -95,6 +95,7 @@ const placeOrder = async(req,res)=>{
             await Product.updateOne({_id:product},{$inc:{quantity:-count}})
           }
 
+          await Cart.deleteOne({user:user_id})
           res.json({placed:true})
 
         }else{
@@ -207,6 +208,23 @@ const cancelOrder = async(req,res)=>{
 }
 
 
+// Load User Order Details
+const loadInvoice = async(req,res)=>{
+  try {
+
+    const order_id = req.query._id
+    const orderData = await Order.findOne({_id:order_id}).populate('products.productId')
+    await orderData.populate('products.productId.category')
+    res.render('invoice',{orders:orderData})
+
+  } catch (error) {
+
+      console.log(error.message);
+
+  }
+}
+
+
 // =========================================< Admin side >=================================================
 
 
@@ -240,6 +258,7 @@ const loadOrderSummary = async(req,res)=>{
 
   }
 }
+
 
 // to update order status
 const updateOrder = async(req,res)=>{
@@ -300,5 +319,6 @@ module.exports ={
   updateOrder,
   loadOrderSuccess,
   verifyPayment,
+  loadInvoice,
     
   }

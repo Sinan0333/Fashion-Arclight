@@ -87,6 +87,7 @@ const editCoupon = async (req,res)=>{
     }
 }
 
+
 // Block Coupon 
 const blockCoupon = async (req,res)=>{
     try {
@@ -102,6 +103,7 @@ const blockCoupon = async (req,res)=>{
         console.log(error.message);
     }
 }
+
 
 // Delete Coupon 
 const deleteCoupon = async (req,res)=>{
@@ -125,7 +127,7 @@ const checkCoupon = async (req,res)=>{
         const couponData = await Coupon.findOne({couponCode:couponCode})
         const cartData = await Cart.findOne({user:user_id})
         const cartTotal = cartData.products.reduce((acc,val)=>acc+val.totalPrice,0)
-        if(couponData){
+        if(couponData && couponData.is_blocked==false){
             if(currentDate >= couponData.activationDate && currentDate <= couponData.expiryDate){
                 if (couponData.usedUsers.length < couponData.usersLimit) {
                     const exists = couponData.usedUsers.includes(user_id)

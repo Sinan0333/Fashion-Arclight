@@ -14,7 +14,10 @@ const fs = require('fs');
 const loadHome = async (req, res) => {
   try {
 
-    const productData = await Product.find({is_blocked:false})
+    let productData = await Product.find({is_blocked:false}).populate({
+      path: 'category',
+      match: { is_blocked: false } 
+    })
     const bannerData =await Banner.find({is_blocked:false})
     const categoryData = await Category.find()
     res.render("index",{products:productData,banners:bannerData,categorys:categoryData});
@@ -47,13 +50,14 @@ const loadShop = async(req,res)=>{
 const loadProduct = async (req, res) => {
   try {
     const product_id=req.query._id
+    const user_id =req.session.user_id
     const productData = await Product.findOne({_id:product_id}).populate('category').populate('offer')
     const offerPrice = productData.price-productData.offer.discountAmount 
     const relatedProducts =await Product.find({category:productData.category._id})
     const reviewData = await Review.findOne({productId:product_id}).populate('review.user').populate('review.replay.user')
     const reviews =reviewData ? reviewData.review:[]
     const avgRatig =reviews ? reviews.reduce((acc,val)=>acc+val.rating,0)/reviews.length : 0
-    res.render("product",{product:productData,relatedProducts:relatedProducts,offerPrice:offerPrice,reviews:reviews,avgRatig:avgRatig});
+    res.render("product",{product:productData,relatedProducts:relatedProducts,offerPrice:offerPrice,reviews:reviews,avgRatig:avgRatig,user:user_id});
   } catch {
     console.log(error.message);
   }
@@ -101,7 +105,7 @@ const loadProductManagement = async(req,res)=>{
 const loadAddProduct = async(req,res)=>{
     try {
      
-      const categoryData = await Category.find()
+      const categoryData = await Category.find({is_blocked:false})
       const offerData = await Offer.find({is_blocked:false})
       res.render('addProduct',{categorys:categoryData,offers:offerData})
   
@@ -115,7 +119,7 @@ const loadAddProduct = async(req,res)=>{
 const addProduct = async(req,res)=>{
   try {
       const offer = req.body.offer
-      const offerData = offer !=0 ? await Offer.findOne({name:offer}) : 0
+      const offerData = await Offer.findOne({name:offer})
       const category  = await Category.findOne({name:req.body.category})
       const files = await req.files;
 
@@ -139,7 +143,7 @@ const addProduct = async(req,res)=>{
       "images.image2": files.image2[0].filename,
       "images.image3": files.image3[0].filename,
       "images.image4": files.image4[0].filename,
-      offer: offerData == 0 ? 0 : offerData._id,
+      offer:offerData._id,
       description:req.body.description,
       is_blocked:false
     })
@@ -162,7 +166,7 @@ const loadEditProduct = async(req,res)=>{
       const  product_id =  req.query._id;
       const productData = await Product.findOne({_id:product_id}).populate('category').populate("offer")
       const offerData = await Offer.find({is_blocked:false})
-      const categoryData = await Category.find()
+      const categoryData = await Category.find({is_blocked:false})
       res.render('editProduct',{product:productData,categorys:categoryData,offers:offerData})
   
     } catch (error) {

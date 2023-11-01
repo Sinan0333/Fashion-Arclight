@@ -21,7 +21,6 @@ const loadWishlist = async(req,res)=>{
 }
 
 
-
 // add to wishlist
 const addToWishList = async(req,res)=>{
     try {
@@ -58,6 +57,7 @@ const addToWishList = async(req,res)=>{
     }
 }
   
+
 // remove products from the cart
 const removeProduct = async(req,res)=>{
     try {
@@ -75,6 +75,7 @@ const removeProduct = async(req,res)=>{
     }
   }
 
+  
 module.exports ={
   addToWishList,
   loadWishlist,

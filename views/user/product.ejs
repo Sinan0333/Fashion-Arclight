@@ -128,7 +128,7 @@
                                     <p class="btn-product btn-cart " onclick="addToCart('<%= product._id %>');"><span> add to cart</span></p>
 
                                     <div class="details-action-wrapper">
-                                        <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to Wishlist</span></a>
+                                        <a style="cursor: pointer;" class="btn-product btn-wishlist" title="Wishlist"  onclick="addToWish('<%= product._id %>')"><span>Add to Wishlist</span></a>
                                         <a href="#" class="btn-product btn-compare" title="Compare"><span>Add to Compare</span></a>
                                     </div><!-- End .details-action-wrapper -->
                                 </div><!-- End .product-details-action -->
@@ -249,9 +249,9 @@
 
             <!-- - -->
             <div class="tab-pane fade" id="reviews" role="tabpanel">
-                <div class="row" id="reloadArea">
-                    <div class="col-sm-10 col-md-8 col-lg-6 m-lr-auto">
-                        <div class="p-b-30 m-lr-15-sm">
+                <div class="row">
+                    <div class="col-sm-10 col-md-8 col-lg-6 m-lr-auto" >
+                        <div class="p-b-30 m-lr-15-sm"  id="reloadArea">
                             <!-- Review -->
                             <% reviews.forEach(function(review) { %>
                             <div class="flex-w flex-t p-b-68">
@@ -279,7 +279,9 @@
                                         </button>
                                         <span class="likes-count"><%= review.likes.length %> Likes</span>
                                     </div>
+                                    <% if (review.user._id != user) { %>
                                     <button class="reply-button" onclick="showReplyForm('<%= review._id %>')">Reply</button>
+                                    <% } %>
                                     <div id="reply-form-<%= review._id %>" style="display: none;">
                                         <form class="reply-form" onsubmit="submitReply('<%= review._id %>','<%= product._id %>'); return false;">
                                             <div class="form-group">
@@ -489,6 +491,32 @@ function addLike(reviewId,productId) {
     });
 }
 
+
+function addToWish(productId) {
+        const data = {productId:productId}
+
+        $.ajax({
+            method: 'POST',
+            url: '/addToWishList', 
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: function (response) {
+                if(response.add===true){
+                    swal("Success", "Item added to whishlist!", "success")
+                }else if(response.remove===true){
+                    swal("Success", "Item removed from the wishlist!", "success")
+                }
+                else{
+                    // swal("Sorry", "No stock!", "error");
+                }
+
+            },
+            error: function (error) {
+                // Handle any errors from the server
+                console.error(error);
+            }
+        });
+    }
 </script>
 
 

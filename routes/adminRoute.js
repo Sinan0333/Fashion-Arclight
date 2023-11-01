@@ -73,7 +73,7 @@ admin_route.get('/addBanner',auth.isLogin,bannerControllers.loadAddBanner)
 admin_route.post('/addBanner',multer.banner.single('image'),bannerControllers.addBanner)
 admin_route.post('/deleteBanner',bannerControllers.deleteBanner)
 admin_route.post('/blockBanner',bannerControllers.blockBanner)
-admin_route.get('/editBanner',bannerControllers.loadEditBanner)
+admin_route.get('/editBanner',auth.isLogin,bannerControllers.loadEditBanner)
 admin_route.post('/editBanner',multer.banner.single('image'),bannerControllers.editBanner)
 
 
@@ -98,7 +98,7 @@ admin_route.post('/deleteOffer',offerControllers.deleteOffer)
 
 
 // =========================================< Sales Report  >=================================================
-admin_route.get('/salesReport',adminControllers.salesReport)
-admin_route.get('/reportDown',adminControllers.downloadReport)
+admin_route.get('/salesReport',auth.isLogin,adminControllers.salesReport)
+admin_route.get('/reportDown',auth.isLogin,adminControllers.downloadReport)
 
 module.exports = admin_route

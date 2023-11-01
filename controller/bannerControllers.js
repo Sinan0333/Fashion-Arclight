@@ -1,6 +1,7 @@
 const Banner = require("../model/bannerModel");
 const fs = require("fs")
 
+
 //load Banner Mangement
 const loadBannerManagement = async (req,res)=>{
     try {
@@ -77,6 +78,7 @@ const blockBanner = async (req,res)=>{
     }
 }
 
+
 // Load Edit Banner Form  
 const loadEditBanner = async (req,res)=>{
     try {
@@ -89,6 +91,7 @@ const loadEditBanner = async (req,res)=>{
         console.log(error.message);
     }
 }
+
 
 // Edit Banner 
 const editBanner = async (req,res)=>{
