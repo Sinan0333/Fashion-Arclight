@@ -17,7 +17,7 @@
         <form action="/validate" method="post">
             <div class="card p-2 text-center">
                 <h6>Please enter the one-time password <br> to verify your account</h6>
-                <!-- <div> <span>A code has been sent to</span> <small>*******9897</small> </div> -->
+                <div> <span>A code has been sent to</span> <small> <%= email %></small> </div>
                 <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2">
                     <input class="m-2 text-center form-control rounded" type="text" id="first" name="first" maxlength="1" />
                     <input class="m-2 text-center form-control rounded" type="text" id="second" name="second" maxlength="1" />

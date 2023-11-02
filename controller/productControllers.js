@@ -3,6 +3,7 @@ const Category = require('../model/categoryModel')
 const Banner = require('../model/bannerModel')
 const Offer = require("../model/offerModel")
 const Review = require('../model/reviewModel')
+const Wishlist = require('../model/wishlistModel')
 const Sharp = require('sharp')
 const fs = require('fs');
 
@@ -20,7 +21,10 @@ const loadHome = async (req, res) => {
     })
     const bannerData =await Banner.find({is_blocked:false})
     const categoryData = await Category.find()
-    res.render("index",{products:productData,banners:bannerData,categorys:categoryData});
+    const wishlistData = await Wishlist.findOne({user:req.session.user_id})
+    const wishData = wishlistData ? wishlistData.products.map((val) => val.productId) : [];
+
+    res.render("index",{products:productData,banners:bannerData,categorys:categoryData,wishData});
   } catch {
     console.log(error.message);
   }
@@ -57,7 +61,9 @@ const loadProduct = async (req, res) => {
     const reviewData = await Review.findOne({productId:product_id}).populate('review.user').populate('review.replay.user')
     const reviews =reviewData ? reviewData.review:[]
     const avgRatig =reviews ? reviews.reduce((acc,val)=>acc+val.rating,0)/reviews.length : 0
-    res.render("product",{product:productData,relatedProducts:relatedProducts,offerPrice:offerPrice,reviews:reviews,avgRatig:avgRatig,user:user_id});
+    const wishlistData = await Wishlist.findOne({user:req.session.user_id})
+    const wishData = wishlistData ? wishlistData.products.map((val) => val.productId) : [];
+    res.render("product",{product:productData,relatedProducts:relatedProducts,offerPrice:offerPrice,reviews:reviews,avgRatig:avgRatig,user:user_id,wishData});
   } catch {
     console.log(error.message);
   }
@@ -76,11 +82,23 @@ const productFilter = async (req, res) => {
     const category = req.body.category
     const categoryData = await Category.find()
 
-    const productData = await Product.find({
-      price: { $gte: minimum, $lte: maximum },category:category
-    }).sort({ price: sort });
+    if(category=='all'){
 
-    res.render('shop',{products:productData,categorys:categoryData})
+      const productData = await Product.find({
+        price: { $gte: minimum, $lte: maximum }
+      }).sort({ price: sort });
+
+      res.render('shop',{products:productData,categorys:categoryData})
+
+    }else{
+
+      const productData = await Product.find({
+        price: { $gte: minimum, $lte: maximum },category:category
+      }).sort({ price: sort });
+
+      res.render('shop',{products:productData,categorys:categoryData})
+    }
+
 
   } catch(error) {
     console.log(error.message);
@@ -185,7 +203,7 @@ const editProduct = async (req, res) => {
     const productData = await Product.findOne({ _id: product_id });
     const category  = await Category.findOne({name:req.body.category})
     const offer = req.body.offer
-    const offerData = offer !=0 ? await Offer.findOne({name:offer}) : 0
+    const offerData = await Offer.findOne({name:offer}) 
 
     const img = [
       imagesFiles.image1 ? imagesFiles.image1[0].filename : productData.images.image1,
@@ -243,7 +261,7 @@ const editProduct = async (req, res) => {
           category: category._id,
           quantity: req.body.quantity,
           price: req.body.price,
-          offer:offerData == 0 ? 0 : offerData._id,
+          offer: offerData._id,
           "images.image1": img1,
           "images.image2": img2,
           "images.image3": img3,

@@ -182,7 +182,7 @@ const insertUser = async (req, res) => {
       // const result = await data.save();
       sendVerifyMail(req.body.username,req.body.email)
       // req.session.user_id = result._id
-      res.render("verification");
+      res.render("verification",{email:req.body.email});
     }
   } catch (error) {
     res.send(error.message);

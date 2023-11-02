@@ -21,14 +21,20 @@ const loadDashboard = async (req,res)=>{
       const startDate = new Date(currentDate - 30 * 24 * 60 * 60 * 1000);
       const userData = await User.find()
       const usersCount = userData.length
+      let soldProducts=0
       const orderData =await Order.find({ date: { $gte: startDate, $lt: currentDate }})
       const revenue = orderData ? orderData.reduce((acc, val) => (val.status === 'delivered' ? acc + val.totalAmount : acc), 0) : 0
       const totalOrders = orderData ? orderData.length : 0
-      const soldProducts = orderData ? orderData.reduce((acc,val)=> (val.status === 'delivered' ? acc + val.products.length : acc), 0) :0
       const deliveredOrders = orderData ? orderData.reduce((acc,val)=> (val.status === 'delivered' ? acc + 1: acc), 0) : 0
       const cancelledOrders = orderData ? orderData.reduce((acc,val)=> (val.status === 'cancelled' ? acc + 1: acc), 0) : 0
 
-
+      if(orderData){
+        for(let i=0;i<orderData.length;i++){
+            let soldCount = orderData[i].products.reduce((acc,val)=>acc+val.count,0)
+            soldProducts+=soldCount
+        }
+      }
+     
       const monthlyOrderCounts = await Order.aggregate([
         {
           $match: {
@@ -310,13 +316,13 @@ const downloadReport = async (req, res) => {
       // Add rows from the reportData to the worksheet
       orders.forEach((data) => {
         worksheet.addRow({
-          orderId: data.uniqueId,
+          orderId: data._id,
           productName: data.products.productDetails.name,
           qty: data.products.count,
           date: data.date.toLocaleDateString('en-US', { year:
             'numeric', month: 'short', day: '2-digit' }).replace(/\//g,
             '-'),
-          customer: data.userName,
+          customer: data.deliveryDetails.fullName,
           totalAmount: data.products.totalPrice,
         });
       });

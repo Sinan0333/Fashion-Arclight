@@ -42,8 +42,8 @@
                                     <a class="nav-link " id="tab-dashboard-link" data-toggle="tab" href="#tab-dashboard" role="tab" aria-controls="tab-dashboard" aria-selected="false">Coupon</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="logout">Sign Out</a>
-                                </li>
+                                    <a class="nav-link" href="logout" id="signOutLink">Sign Out</a>
+                                </li>                                
                             </ul>
                         </aside><!-- End .col-lg-3 --><!-- Show Addresses end -->
 
@@ -230,5 +230,19 @@
         </div><!-- End .page-content -->
     </main><!-- End .main -->
 </div><!-- End .page-wrapper -->
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const signOutLink = document.getElementById("signOutLink");
+        signOutLink.addEventListener("click", function (e) {
+            e.preventDefault(); 
+            const confirmLogout = confirm("Are you sure you want to log out?");
+            if (confirmLogout) {
+                window.location.href = signOutLink.getAttribute("href");
+            }
+        });
+    });
+</script>
 
 <%- include('../layout/user/footer.ejs') -%>

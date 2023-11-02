@@ -362,11 +362,11 @@
 
  <div class="bg6 flex-c-m flex-w size-302 m-t-73 p-tb-15">
     <span class="stext-107 cl6 p-lr-25">
-        SKU: JAK-01
+        S<%= product.name %>
     </span>
 
     <span class="stext-107 cl6 p-lr-25">
-        Categories: Jacket, Men
+        Categories: <%= product.category.name %>
     </span>
 </div>
 
@@ -382,13 +382,13 @@
         <!-- Slide2 -->
        
         <div class="wrap-slick2">
-            <div class="slick2">
+            <div class="slick2" id="#reloadArea2">
                 <% relatedProducts.forEach(function(related) { %>
-                <div class="item-slick2 p-l-15 p-r-15 p-t-15 p-b-15">
+                <div class="item-slick2 p-l-15 p-r-15 p-t-15 p-b-15" >
 
                     <a href="/product?_id=<%= related._id %>">
                     <!-- Block2 -->
-                    <div class="block2">
+                    <div class="block2" >
                         <div class="block2-pic hov-img0">
                             <img src="images/product/orginal/<%= related.images.image1 %>" alt="<%= product.name %>" >
                         </div>
@@ -404,10 +404,13 @@
                                 </span>
                             </div>
 
-                            <div class="block2-txt-child2 flex-r p-t-3">
-                                <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-                                    <img class="icon-heart1 dis-block trans-04" src="user/images/icons/icon-heart-01.png" alt="ICON">
-                                    <img class="icon-heart2 dis-block trans-04 ab-t-l" src="user/images/icons/icon-heart-02.png" alt="ICON">
+                            <div class="block2-txt-child2 flex-r p-t-3" >
+                                <a  class="btn-addwish-b2 dis-block pos-relative js-addwish-b2" onclick="addToWish('<%= product._id %>','<%= related._id %>')"  >
+                                    <% if (wishData.includes(related._id.toString())) { %>
+                                    <i class="fas fa-heart" ></i>
+                                <% } else { %>
+                                    <i class="far fa-heart"  ></i>
+                                <% } %>
                                 </a>
                             </div>
                         </div>
@@ -492,9 +495,8 @@ function addLike(reviewId,productId) {
 }
 
 
-function addToWish(productId) {
-        const data = {productId:productId}
-
+function addToWish(productId,relatedId) {
+        const data = {productId:relatedId}
         $.ajax({
             method: 'POST',
             url: '/addToWishList', 
@@ -502,9 +504,11 @@ function addToWish(productId) {
             contentType: 'application/json',
             success: function (response) {
                 if(response.add===true){
+                    $('#reloadArea2').load(`/product?_id=${productId} #reloadArea2`); 
                     swal("Success", "Item added to whishlist!", "success")
                 }else if(response.remove===true){
-                    swal("Success", "Item removed from the wishlist!", "success")
+                    $('#reloadArea2').load(`/product?_id=${productId} #reloadArea2`); 
+                    swal("Success", "Item removed from the wishlist!", "success")  
                 }
                 else{
                     // swal("Sorry", "No stock!", "error");
