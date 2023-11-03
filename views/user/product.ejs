@@ -66,7 +66,7 @@
                         </div><!-- End .col-md-6 -->
 
                         <div class="col-md-6">
-                            <div class="product-details">
+                            <div class="product-details" id="reloadArea2">
                                 <h1 class="product-title" ><%= product.name %></h1><!-- End .product-title -->
 
                                 <div class="ratings-container">
@@ -80,11 +80,11 @@
 
                                 <div class="product-price">
                                     <% if ( product.offer.discountAmount == 0 || product.offer.is_blocked==true) { %>
-                                        ₹ <%= product.price %>
+                                        <i class="fa-solid fa-indian-rupee-sign"></i><%= product.price %>
                                         <% } else { %>
-                                            <span style="color: limegreen;margin-right: 20px;">₹ <%= product.offer.discountAmount %> off</span>
-                                            <span style="color: grey;text-decoration: line-through;margin-right: 20px;">₹ <%= product.price %></span>
-                                            <span style="margin-right: 20px;">₹ <%= offerPrice %></span>
+                                            <span style="color: limegreen;margin-right: 20px;"><i class="fa-solid fa-indian-rupee-sign"></i><%= product.offer.discountAmount %> off</span>
+                                            <span style="color: grey;text-decoration: line-through;margin-right: 20px;"><i class="fa-solid fa-indian-rupee-sign"></i><%= product.price %></span>
+                                            <span style="margin-right: 20px;"><i class="fa-solid fa-indian-rupee-sign"></i><%= offerPrice %></span>
                                         <% } %>
                                 </div><!-- End .product-price -->
 
@@ -124,11 +124,15 @@
                                     <!-- <a href="#" class="size-guide"><i class="icon-th-list"></i>size guide</a> -->
                                 </div>
 
-                                <div class="product-details-action">
+                                <div class="product-details-action" >
                                     <p class="btn-product btn-cart " onclick="addToCart('<%= product._id %>');"><span> add to cart</span></p>
 
                                     <div class="details-action-wrapper">
-                                        <a style="cursor: pointer;" class="btn-product btn-wishlist" title="Wishlist"  onclick="addToWish('<%= product._id %>')"><span>Add to Wishlist</span></a>
+                                        <% if (wishProduct != null) { %>
+                                            <a style="cursor: pointer;" class="btn-product " title="Wishlist"  onclick="addToWish('<%= product._id %>')"><span> <i class="fas fa-heart" style="font-size: 18px; color: #cc9967;" ></i> Add to Wishlist</span></a>
+                                        <% } else { %>
+                                            <a style="cursor: pointer;" class="btn-product " title="Wishlist"  onclick="addToWish('<%= product._id %>')"><span> <i class="far fa-heart" style="font-size: 18px; " ></i> Add to Wishlist</span></a>
+                                        <% } %>
                                         <a href="#" class="btn-product btn-compare" title="Compare"><span>Add to Compare</span></a>
                                     </div><!-- End .details-action-wrapper -->
                                 </div><!-- End .product-details-action -->
@@ -305,52 +309,6 @@
                                 </div>
                             </div>
                             <% }); %>
-                            <!-- Add review -->
-                            <!-- <form class="w-full">
-                                <h5 class="mtext-108 cl2 p-b-7">
-                                    Add a review
-                                </h5>
-
-                                <p class="stext-102 cl6">
-                                    Your email address will not be published. Required fields are marked *
-                                </p>
-
-                                <div class="flex-w flex-m p-t-50 p-b-23">
-                                    <span class="stext-102 cl3 m-r-16">
-                                        Your Rating
-                                    </span>
-
-                                    <span class="wrap-rating fs-18 cl11 pointer">
-                                        <i class="item-rating pointer zmdi zmdi-star-outline"></i>
-                                        <i class="item-rating pointer zmdi zmdi-star-outline"></i>
-                                        <i class="item-rating pointer zmdi zmdi-star-outline"></i>
-                                        <i class="item-rating pointer zmdi zmdi-star-outline"></i>
-                                        <i class="item-rating pointer zmdi zmdi-star-outline"></i>
-                                        <input class="dis-none" type="number" name="rating">
-                                    </span>
-                                </div>
-
-                                <div class="row p-b-25">
-                                    <div class="col-12 p-b-5">
-                                        <label class="stext-102 cl3" for="review">Your review</label>
-                                        <textarea class="size-110 bor8 stext-102 cl2 p-lr-20 p-tb-10" id="review" name="review"></textarea>
-                                    </div>
-
-                                    <div class="col-sm-6 p-b-5">
-                                        <label class="stext-102 cl3" for="name">Name</label>
-                                        <input class="size-111 bor8 stext-102 cl2 p-lr-20" id="name" type="text" name="name">
-                                    </div>
-
-                                    <div class="col-sm-6 p-b-5">
-                                        <label class="stext-102 cl3" for="email">Email</label>
-                                        <input class="size-111 bor8 stext-102 cl2 p-lr-20" id="email" type="text" name="email">
-                                    </div>
-                                </div>
-
-                                <button class="flex-c-m stext-101 cl0 size-112 bg7 bor11 hov-btn3 p-lr-15 trans-04 m-b-10">
-                                    Submit
-                                </button>
-                            </form> -->
                         </div>
                     </div>
                 </div>
@@ -371,8 +329,8 @@
 </div>
 
 
-<section class="sec-relate-product bg0 p-t-45 p-b-105">
-    <div class="container">
+<section class="sec-relate-product bg0 p-t-45 p-b-105" >
+    <div class="container" >
         <div class="p-b-45">
             <h3 class="ltext-106 cl5 txt-center">
                 Related Products
@@ -381,11 +339,10 @@
 
         <!-- Slide2 -->
        
-        <div class="wrap-slick2">
-            <div class="slick2" id="#reloadArea2">
+        <div class="wrap-slick2" >
+            <div class="slick2" >
                 <% relatedProducts.forEach(function(related) { %>
-                <div class="item-slick2 p-l-15 p-r-15 p-t-15 p-b-15" >
-
+                <div class="item-slick2 p-l-15 p-r-15 p-t-15 p-b-15"  >
                     <a href="/product?_id=<%= related._id %>">
                     <!-- Block2 -->
                     <div class="block2" >
@@ -399,19 +356,9 @@
                                     <%= related.name %>
                                 </a>
 
-                                <span class="stext-105 cl3">
-                                    <%= related.price %>
+                                <span class="stext-105 cl3" style="font-weight: bold;color: black;">
+                                    <i class="fa-solid fa-indian-rupee-sign"></i> <%= product.price %>
                                 </span>
-                            </div>
-
-                            <div class="block2-txt-child2 flex-r p-t-3" >
-                                <a  class="btn-addwish-b2 dis-block pos-relative js-addwish-b2" onclick="addToWish('<%= product._id %>','<%= related._id %>')"  >
-                                    <% if (wishData.includes(related._id.toString())) { %>
-                                    <i class="fas fa-heart" ></i>
-                                <% } else { %>
-                                    <i class="far fa-heart"  ></i>
-                                <% } %>
-                                </a>
                             </div>
                         </div>
                     </div>
@@ -495,8 +442,8 @@ function addLike(reviewId,productId) {
 }
 
 
-function addToWish(productId,relatedId) {
-        const data = {productId:relatedId}
+function addToWish(productId) {
+        const data = {productId:productId}
         $.ajax({
             method: 'POST',
             url: '/addToWishList', 

@@ -15,16 +15,17 @@ const fs = require('fs');
 const loadHome = async (req, res) => {
   try {
 
-    let productData = await Product.find({is_blocked:false}).populate({
+    const productData = await Product.find({is_blocked:false}).populate({
       path: 'category',
       match: { is_blocked: false } 
     })
     const bannerData =await Banner.find({is_blocked:false})
-    const categoryData = await Category.find()
+    const categoryData = await Category.find().sort({name:1})
+    const categoryId = categoryData.map((val)=>val._id.toString())
     const wishlistData = await Wishlist.findOne({user:req.session.user_id})
     const wishData = wishlistData ? wishlistData.products.map((val) => val.productId) : [];
 
-    res.render("index",{products:productData,banners:bannerData,categorys:categoryData,wishData});
+    res.render("index",{products:productData,banners:bannerData,categorys:categoryId,wishData});
   } catch {
     console.log(error.message);
   }
@@ -34,14 +35,18 @@ const loadHome = async (req, res) => {
 //to load shop page
 const loadShop = async(req,res)=>{
   try {
-
-    const searchQuery =  req.body.search? req.body.search : ""
+    const category = req.query.category 
     const categoryData = await Category.find()
-        const searchResult=await Product.find(
-            { name:{ $regex:searchQuery, $options:'i'}
-        });
-       res.render('shop',{products:searchResult,categorys:categoryData})
-
+    const wishlistData = await Wishlist.findOne({user:req.session.user_id})
+    const wishData = wishlistData ? wishlistData.products.map((val) => val.productId) : [];
+    if(category){
+      const productData =await Product.find({category:category})
+      res.render('shop',{products:productData,categorys:categoryData,wishData})
+    }else{
+      const productData =await Product.find()
+      res.render('shop',{products:productData,categorys:categoryData,wishData})
+    }
+      
   } catch (error) {
 
       console.log(error.message);
@@ -61,9 +66,8 @@ const loadProduct = async (req, res) => {
     const reviewData = await Review.findOne({productId:product_id}).populate('review.user').populate('review.replay.user')
     const reviews =reviewData ? reviewData.review:[]
     const avgRatig =reviews ? reviews.reduce((acc,val)=>acc+val.rating,0)/reviews.length : 0
-    const wishlistData = await Wishlist.findOne({user:req.session.user_id})
-    const wishData = wishlistData ? wishlistData.products.map((val) => val.productId) : [];
-    res.render("product",{product:productData,relatedProducts:relatedProducts,offerPrice:offerPrice,reviews:reviews,avgRatig:avgRatig,user:user_id,wishData});
+    const wishProduct = await Wishlist.findOne({user:user_id,'products.productId':product_id})
+    res.render("product",{product:productData,relatedProducts:relatedProducts,offerPrice:offerPrice,reviews:reviews,avgRatig:avgRatig,user:user_id,wishProduct});
   } catch {
     console.log(error.message);
   }
@@ -74,29 +78,33 @@ const loadProduct = async (req, res) => {
 const productFilter = async (req, res) => {
   try {
 
-    const price = req.body.price
+    const price = req.query.price
     const splitPrice =price.split('-')
     const minimum= parseInt(splitPrice[0])
     const maximum = parseInt(splitPrice[1])  
-    const sort =parseInt( req.body.sort)
-    const category = req.body.category
+    const sort =parseInt( req.query.sort)
+    const category = req.query.category
+    const searchQuery =  req.query.search? req.query.search : ""
     const categoryData = await Category.find()
-
+    const wishlistData = await Wishlist.findOne({user:req.session.user_id})
+    const wishData = wishlistData ? wishlistData.products.map((val) => val.productId) : [];
     if(category=='all'){
 
       const productData = await Product.find({
+        name:{ $regex:searchQuery, $options:'i'},
         price: { $gte: minimum, $lte: maximum }
       }).sort({ price: sort });
 
-      res.render('shop',{products:productData,categorys:categoryData})
+      res.render('shop',{products:productData,categorys:categoryData,wishData})
 
     }else{
 
       const productData = await Product.find({
+        name:{ $regex:searchQuery, $options:'i'},
         price: { $gte: minimum, $lte: maximum },category:category
       }).sort({ price: sort });
 
-      res.render('shop',{products:productData,categorys:categoryData})
+      res.render('shop',{products:productData,categorys:categoryData,wishData})
     }
 
 

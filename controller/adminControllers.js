@@ -26,7 +26,7 @@ const loadDashboard = async (req,res)=>{
       const revenue = orderData ? orderData.reduce((acc, val) => (val.status === 'delivered' ? acc + val.totalAmount : acc), 0) : 0
       const totalOrders = orderData ? orderData.length : 0
       const deliveredOrders = orderData ? orderData.reduce((acc,val)=> (val.status === 'delivered' ? acc + 1: acc), 0) : 0
-      const cancelledOrders = orderData ? orderData.reduce((acc,val)=> (val.status === 'cancelled' ? acc + 1: acc), 0) : 0
+      const cancelledOrders = orderData ? orderData.reduce((acc,val)=> (val.status === 'cancel' ? acc + 1: acc), 0) : 0
 
       if(orderData){
         for(let i=0;i<orderData.length;i++){

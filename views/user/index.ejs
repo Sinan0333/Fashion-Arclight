@@ -42,7 +42,7 @@
 					<div class="block1 wrap-pic-w">
 						<img src="user/images/banner-03.jpg" alt="IMG-BANNER">
 
-						<a href="product.html" class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
+						<a href="/shop?category=<%= categorys[0] %>"class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
 							<div class="block1-txt-child1 flex-col-l">
 								<span class="block1-name ltext-102 trans-04 p-b-8">
 									Pants
@@ -67,7 +67,7 @@
 					<div class="block1 wrap-pic-w">
 						<img src="user/images/banner-02.jpg" alt="IMG-BANNER">
 
-						<a href="product.html" class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
+						<a href="/shop?category=<%= categorys[1] %>" class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
 							<div class="block1-txt-child1 flex-col-l">
 								<span class="block1-name ltext-102 trans-04 p-b-8">
 									Shirts
@@ -92,7 +92,7 @@
 					<div class="block1 wrap-pic-w">
 						<img src="user/images/banner-04.jpg" alt="IMG-BANNER">
 
-						<a href="product.html" class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
+						<a href="/shop?category=<%= categorys[2] %>" class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
 							<div class="block1-txt-child1 flex-col-l">
 								<span class="block1-name ltext-102 trans-04 p-b-8">
 									T shirts
@@ -130,16 +130,16 @@
                     All Products
                 </button>
 
-                <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".women">
-                    Women
+                <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter="<%= categorys[0] %>">
+                    Pants
                 </button>
 
-                <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".men">
-                    Men
+                <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter="<%= categorys[1] %>">
+                    Shirts
                 </button>
 
-                <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".bag">
-                    Bag
+                <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter="<%= categorys[2] %>">
+                    T shirts
                 </button>
 
                 <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".shoes">
@@ -152,12 +152,6 @@
             </div>
 
             <div class="flex-w flex-c-m m-tb-10">
-                <div class="flex-c-m stext-106 cl6 size-104 bor4 pointer hov-btn3 trans-04 m-r-8 m-tb-4 js-show-filter">
-                    <i class="icon-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-filter-list"></i>
-                    <i class="icon-close-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i>
-                     Filter
-                </div>
-
                 <div class="flex-c-m stext-106 cl6 size-105 bor4 pointer hov-btn3 trans-04 m-tb-4 js-show-search">
                     <i class="icon-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-search"></i>
                     <i class="icon-close-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i>
@@ -168,187 +162,33 @@
             <!-- Search product -->
             
             <div class="dis-none panel-search w-full p-t-10 p-b-15">
-                <form id="search-form" action="/shop" method="post">
+                <form id="search-form" action="/filter" method="get">
                     <div class="bor8 dis-flex p-l-15">
                         <button type="submit" class="search-icon size-113 flex-c-m fs-24 cl2 hov-cl1 trans-04">
                             <i class="zmdi zmdi-search" style="font-size: 27px;"></i>
                         </button>
                         <input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" id="search-input" name="search" placeholder="Search">
+                        <input type="radio" name="sort" value="0" checked hidden>
+                        <input type="radio" name="price" value="0-10000000000" checked hidden>
+                        <input type="radio" name="category" value="all"  checked hidden>
                     </div>
                 </form>
             </div>            
-            
-            <!-- Filter -->
-            <form id="price-filter-form" method="post" action="/filter" style="width: 100%;">
-                <div class="dis-none panel-filter w-full p-t-10">
-                    <div class="wrap-filter flex-w bg6 w-full p-lr-40 p-t-27 p-lr-15-sm" style="width: 100%;">
-                        <div class="filter-col1 p-r-15 p-b-27">
-                            <div class="mtext-102 cl2 p-b-15">
-                                Sort By
-                            </div>
-                        
-                            <ul>
-                                <li class="p-b-6">
-                                    <label class="radio-label">
-                                        <input type="radio" name="sort" value="0" checked>
-                                        Default
-                                    </label>
-                                </li>
-                        
-                                <li class="p-b-6">
-                                    <label class="radio-label">
-                                        <input type="radio" name="sort" value="1">
-                                        Price: Low to High
-                                    </label>
-                                </li>
-                        
-                                <li class="p-b-6">
-                                    <label class="radio-label">
-                                        <input type="radio" name="sort" value="-1">
-                                        Price: High to Low
-                                    </label>
-                                </li>
-                            </ul>
-                        </div>
-                        
-
-                        <div class="filter-col2 p-r-15 p-b-27">
-                            <div class="mtext-102 cl2 p-b-15">
-                                Price
-                            </div>
-                        
-                            <ul>
-                                <li class="p-b-6">
-                                    <label  class="radio-label">
-                                        <input type="radio" name="price" value="0-10000000000" checked>
-                                        All
-                                    </label>
-                                </li>
-                        
-                                <li class="p-b-6">
-                                    <label  class="radio-label">
-                                        <input type="radio" name="price" value="150-350">
-                                        ₹ 150 - ₹350
-                                    </label>
-                                </li>
-                        
-                                <li class="p-b-6">
-                                    <label  class="radio-label">
-                                        <input type="radio" name="price" value="350-550">
-                                        ₹ 350 - ₹ 550
-                                    </label>
-                                </li>
-                        
-                                <li class="p-b-6">
-                                    <label  class="radio-label">
-                                        <input type="radio" name="price" value="550-750">
-                                        ₹ 550 - ₹ 750
-                                    </label>
-                                </li>
-                        
-                                <li class="p-b-6">
-                                    <label  class="radio-label">
-                                        <input type="radio" name="price" value="750-1000">
-                                        ₹ 750 - ₹ 1000
-                                    </label>
-                                </li>
-                        
-                                <li class="p-b-6">
-                                    <label  class="radio-label">
-                                        <input type="radio" name="price" value="1000-10000000">
-                                        ₹ 1000+
-                                    </label>
-                                </li>
-                            </ul>
-                        </div>
-                        
-
-                        <div class="filter-col3 p-r-15 p-b-27">
-                            <div class="mtext-102 cl2 p-b-15">
-                                Color
-                            </div>
-                        
-                            <ul>
-                                <li class="p-b-6">
-                                    <label class="radio-label">
-                                        <input type="radio" name="color" value="black" checked>
-                                        Black
-                                    </label>
-                                </li>
-                        
-                                <li class="p-b-6">
-                                    <label class="radio-label">
-                                        <input type="radio" name="color" value="blue">
-                                        Blue
-                                    </label>
-                                </li>
-                        
-                                <li class="p-b-6">
-                                    <label class="radio-label">
-                                        <input type="radio" name="color" value="grey">
-                                        Grey
-                                    </label>
-                                </li>
-                        
-                                <li class="p-b-6">
-                                    <label class="radio-label">
-                                        <input type="radio" name="color" value="green">
-                                        Green
-                                    </label>
-                                </li>
-                        
-                                <li class="p-b-6">
-                                    <label class="radio-label">
-                                        <input type="radio" name="color" value="red">
-                                        Red
-                                    </label>
-                                </li>
-                        
-                                <li class="p-b-6">
-                                    <label class="radio-label">
-                                        <input type="radio" name="color" value="white">
-                                        White
-                                    </label>
-                                </li>
-                            </ul>
-                        </div>
-                        
-
-                        <div class="filter-col4 p-b-27">
-                            <div class="mtext-102 cl2 p-b-15">
-                                Category
-                            </div>
-                        
-                            <div class="flex-w p-t-4 m-r--5">
-                                <label class="radio-label">
-                                    <input type="radio" name="category" value="all"  checked >
-                                    <p class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-                                        All
-                                    </p>
-                                </label>  
-                                <% categorys.forEach(function(category,index) { %>
-                                <label class="radio-label">
-                                    <input type="radio" name="category" value="<%= category._id %>"   >
-                                    <p class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-                                        <%= category.name %>
-                                    </p>
-                                </label>  
-                                <% }); %>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-light">Apply Filters</button>
-                    </div>
-                </div>
-            </form>
         </div>
 
        
         <div class="row isotope-grid"  id="reloadArea">
             <% products.forEach(function(product) { %>
-                <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women" >
-                    <!-- Wrap the product content in an anchor tag -->
+                <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item <%= product.category %>" >
+                    <div class="block2-txt-child2 flex-r p-t-3" style="display: flex;">
+                        <a  class="btn-addwish-b2 dis-block pos-relative js-addwish-b2" onclick="addToWish('<%= product._id %>')"  >
+                            <% if (wishData.includes(product._id.toString())) { %>
+                            <i class="fas fa-heart" style="font-size: 20px; " ></i>
+                        <% } else { %>
+                            <i class="far fa-heart" style="font-size: 20px;" ></i>
+                        <% } %>
+                        </a>
+                    </div>
                     <a href="/product?_id=<%= product._id %>">
                         <!-- Block2 -->
                         <div class="block2" >
@@ -363,9 +203,8 @@
                                         <%= product.name %>
                                     </span>
                 
-                                    <span class="stext-105 cl3">
-                                        <!-- $16.64 -->
-                                        <%= product.price %>
+                                    <span class="stext-105 cl3" style="font-weight: bold;color: black;">
+                                        <i class="fa-solid fa-indian-rupee-sign"></i> <%= product.price %>
                                     </span>
                                 </div>
                                 <% if (product.quantity==0) { %>
@@ -373,15 +212,7 @@
                                 <% }  else if(product.quantity <6 ){ %>
                                     <p style="color:red;">(Only <%= product.quantity %> left)</p>
                                 <% } %>
-                                <div class="block2-txt-child2 flex-r p-t-3" >
-                                    <a  class="btn-addwish-b2 dis-block pos-relative js-addwish-b2" onclick="addToWish('<%= product._id %>')"  >
-                                        <% if (wishData.includes(product._id.toString())) { %>
-                                        <i class="fas fa-heart" ></i>
-                                    <% } else { %>
-                                        <i class="far fa-heart"  ></i>
-                                    <% } %>
-                                    </a>
-                                </div>
+
                             </div>
                         </div>
                     </a> <!-- Close the anchor tag here -->

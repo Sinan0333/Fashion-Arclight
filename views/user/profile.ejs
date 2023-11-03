@@ -120,9 +120,9 @@
                                                         }).replace(/\//g, '-') %></div>
                                                 </div>
                                                 <% if (transaction.amount < 0 ) { %>
-                                                    <div class="amount" style="color: red;">-$<%= transaction.amount %></div>
+                                                    <div class="amount" style="color: red;"><%= transaction.amount %></div>
                                                 <% } else { %>
-                                                    <div class="amount" style="color: limegreen;">+$<%= transaction.amount %></div>
+                                                    <div class="amount" style="color: limegreen;">+<%= transaction.amount %></div>
                                                 <% } %>
                                             </div>
                                             <% }); %>

@@ -32,7 +32,7 @@
 
                               <span class="pl-2"><%= offer.name %></span>
                         </td>
-                      <td><%= offer.discountAmount %></td> 
+                      <td><i class="fa-solid fa-indian-rupee-sign"></i><%= offer.discountAmount %></td> 
                       <td><%= offer.activationDate.toLocaleDateString('en-US', { year:'numeric', month: 'short', day: '2-digit'}).replace(/\//g, '-') %></td> 
                       <td><%= offer.expiryDate.toLocaleDateString('en-US', { year:'numeric', month: 'short', day: '2-digit'}).replace(/\//g, '-') %></td> 
                       <td>

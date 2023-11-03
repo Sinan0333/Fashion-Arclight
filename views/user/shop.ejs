@@ -52,12 +52,15 @@
             <!-- Search product -->
 
             <div class="dis-none panel-search w-full p-t-10 p-b-15">
-                <form id="search-form" action="/shop" method="post">
+                <form id="search-form" action="/filter" method="get">
                     <div class="bor8 dis-flex p-l-15">
                         <button type="submit" class="search-icon size-113 flex-c-m fs-24 cl2 hov-cl1 trans-04">
                             <i class="zmdi zmdi-search" style="font-size: 27px;"></i>
                         </button>
                         <input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" id="search-input" name="search" placeholder="Search">
+                        <input type="radio" name="sort" value="0" checked hidden>
+                        <input type="radio" name="price" value="0-10000000000" checked hidden>
+                        <input type="radio" name="category" value="all"  checked hidden>
                     </div>
                 </form>
             </div>    
@@ -204,9 +207,15 @@
                             </div>
                         
                             <div class="flex-w p-t-4 m-r--5">
+                                <label class="radio-label">
+                                    <input type="radio" name="category" value="all"  checked >
+                                    <p class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
+                                        All
+                                    </p>
+                                </label>  
                                 <% categorys.forEach(function(category,index) { %>
                                 <label class="radio-label">
-                                    <input type="radio" name="category" value="<%= category._id %>"  <%= index === 0 ? 'checked' : '' %> >
+                                    <input type="radio" name="category" value="<%= category._id %>"  >
                                     <p class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
                                         <%= category.name %>
                                     </p>
@@ -226,7 +235,15 @@
         <div class="row isotope-grid"  id="reloadArea">
             <% products.forEach(function(product) { %>
                 <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
-                    <!-- Wrap the product content in an anchor tag -->
+                    <div class="block2-txt-child2 flex-r p-t-3" style="display: flex;">
+                        <a  class="btn-addwish-b2 dis-block pos-relative js-addwish-b2" onclick="addToWish('<%= product._id %>')"  >
+                            <% if (wishData.includes(product._id.toString())) { %>
+                            <i class="fas fa-heart" style="font-size: 20px; " ></i>
+                        <% } else { %>
+                            <i class="far fa-heart" style="font-size: 20px;" ></i>
+                        <% } %>
+                        </a>
+                    </div>
                     <a href="/product?_id=<%= product._id %>">
                         <!-- Block2 -->
                         <div class="block2">
@@ -241,22 +258,16 @@
                                         <%= product.name %>
                                     </span>
                 
-                                    <span class="stext-105 cl3">
-                                        <!-- $16.64 -->
-                                        <%= product.price %>
+                                    <span class="stext-105 cl3" style="font-weight: bold;color: black;">
+                                        <i class="fa-solid fa-indian-rupee-sign"></i> <%= product.price %>
                                     </span>
+                                    
                                 </div>
                                 <% if (product.quantity==0) { %>
                                     <p style="color:blue;">(Out Of Stock)</p>
                                 <% }  else if(product.quantity <6 ){ %>
                                     <p style="color:red;">(Only <%= product.quantity %> left)</p>
                                 <% } %>
-                                <div class="block2-txt-child2 flex-r p-t-3">
-                                    <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-                                        <img class="icon-heart1 dis-block trans-04" src="user/images/icons/icon-heart-01.png" alt="ICON">
-                                        <img class="icon-heart2 dis-block trans-04 ab-t-l" src="user/images/icons/icon-heart-02.png" alt="ICON">
-                                    </a>
-                                </div>
                             </div>
                         </div>
                     </a> <!-- Close the anchor tag here -->
@@ -293,6 +304,34 @@
             },
             error: function (error) {
 
+                console.error(error);
+            }
+        });
+    }
+
+    function addToWish(productId) {
+        const data = {productId:productId}
+
+        $.ajax({
+            method: 'POST',
+            url: '/addToWishList', 
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: function (response) {
+                if(response.add===true){
+                    $('#reloadArea').load('/ #reloadArea'); 
+                    swal("Success", "Item added to whishlist!", "success")
+                }else if(response.remove===true){
+                    $('#reloadArea').load('/ #reloadArea'); 
+                    swal("Success", "Item removed from the wishlist!", "success")  
+                }
+                else{
+                    // swal("Sorry", "No stock!", "error");
+                }
+
+            },
+            error: function (error) {
+                // Handle any errors from the server
                 console.error(error);
             }
         });

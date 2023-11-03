@@ -68,7 +68,7 @@
                                     </div>
                                 </td>
                                 <td class="column-2"><a href="/product?_id=<%= product.productId._id %>"><%= product.productId.name %></a></td>
-                                <td class="column-3"><%= product.productId.price %></td>
+                                <td class="column-3"><i class="fa-solid fa-indian-rupee-sign"></i><%= product.productId.price %></td>
                                 <% if (product.productId.quantity === 0) { %>
                                     <td class="column-3 " style="color: blue;">Out of stock</td>
                                 <% } else if (product.productId.quantity < 6) { %>

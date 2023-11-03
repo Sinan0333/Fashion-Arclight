@@ -44,9 +44,9 @@
 <!-- Shoping Cart -->
 <form class="bg0 p-t-20 p-b-85">
     <div class="container">
-        <div class="row" id="reloadArea">
+        <div class="row"  id="reloadArea">
             <div class="col-lg-10 col-xl-8 m-lr-auto m-b-50" >
-                <div class="m-l-25 m-r--38 m-lr-0-xl">
+                <div class="m-l-25 m-r--38 m-lr-0-xl" >
                     <div class="wrap-table-shopping-cart" >
                         <table class="table-shopping-cart">
                             <tr class="table_head">
@@ -65,7 +65,7 @@
                                     </div>
                                 </td>
                                 <td class="column-2"><a href="/product?_id=<%= product.productId._id %>"><%= product.productId.name %></a></td>
-                                <td class="column-3"><%= product.price %></td>
+                                <td class="column-3"> <i class="fa-solid fa-indian-rupee-sign"></i><%= product.price %></td>
                                 <% if (product.productId.quantity === 0) { %>
                                     <td class="column-3 " style="color: blue;">Out of stock</td>
                                 <% } else if (product.productId.quantity < 6) { %>
@@ -86,7 +86,7 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="column-5"><%= product.totalPrice %></td>
+                                <td class="column-5"> <i class="fa-solid fa-indian-rupee-sign"></i> <%= product.totalPrice %></td>
                                 <td><p class="btn-remove" title="Remove Product" onclick="removeProduct('<%= product.productId._id %>')"><i class="icon-close"></i></p></td>
                             <% }); %>
                         </table>
@@ -117,7 +117,7 @@
                             <tbody>
                                     <tr class="summary-subtotal">
                                         <td>Subtotal:</td>
-                                        <td>$ <%= subTotal %> %></td>
+                                        <td> <i class="fa-solid fa-indian-rupee-sign"></i><%= subTotal %> %></td>
                                     </tr><!-- End .summary-subtotal -->
                                     <tr class="summary-shipping">
                                         <td>Shipping:</td>
@@ -130,7 +130,7 @@
                                                 <label class="custom-control-label" for="free-shipping">Free Shipping</label>
                                             </div><!-- End .custom-control -->
                                         </td>
-                                        <td>$0.00</td>
+                                        <td> 0.00</td>
                                     </tr><!-- End .summary-shipping-row -->
 
                                         <tr class="summary-shipping-row">
@@ -140,7 +140,7 @@
                                                     <label class="custom-control-label" for="standart-shipping">Standart:</label>
                                                 </div><!-- End .custom-control -->
                                             </td>
-                                            <td>$10.00</td>
+                                            <td>10.00</td>
                                         </tr><!-- End .summary-shipping-row -->
 
                                         <tr class="summary-shipping-row">
@@ -150,15 +150,15 @@
                                                     <label class="custom-control-label" for="express-shipping">Express:</label>
                                                 </div><!-- End .custom-control -->
                                             </td>
-                                            <td>$20.00</td>
+                                            <td>20.00</td>
                                         </tr><!-- End .summary-shipping-row -->
                                         <tr>
                                             <td>Discount:</td>
-                                            <td>$ <%= discount %></td>
+                                            <td><%= discount %></td>
                                         </tr>
                                         <tr class="summary-total">
                                             <td>Total:</td>
-                                            <td>$ <%= total %></td>
+                                            <td><i class="fa-solid fa-indian-rupee-sign"></i><%= total %></td>
                                         </tr><!-- End .summary-total -->
                             </tbody>
                         </table><!-- End .table table-summary -->

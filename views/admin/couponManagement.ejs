@@ -36,8 +36,8 @@
                               <span class="pl-2"><%= coupon.name %></span>
                         </td>
                       <td><%= coupon.couponCode %></td>
-                      <td><%= coupon.discountAmount %></td> 
-                      <td><%= coupon.criteriaAmount %></td> 
+                      <td><i class="fa-solid fa-indian-rupee-sign"></i><%= coupon.discountAmount %></td> 
+                      <td><i class="fa-solid fa-indian-rupee-sign"></i><%= coupon.criteriaAmount %></td> 
                       <td><%= coupon.activationDate.toLocaleDateString('en-US', { year:'numeric', month: 'short', day: '2-digit'}).replace(/\//g, '-') %></td> 
                       <td><%= coupon.expiryDate.toLocaleDateString('en-US', { year:'numeric', month: 'short', day: '2-digit'}).replace(/\//g, '-') %></td> 
                       <td><%= coupon.usedUsers.length %>/<%= coupon.usersLimit %></td>

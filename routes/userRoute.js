@@ -46,12 +46,17 @@ user_route.post('/getEmail',auth.isLogout,userControllers.getEmail)
 user_route.post('/changePassword',userControllers.changePassword)
 
 
-// =========================================< Home Page >=================================================
+// =========================================< Header buttons >=================================================
 user_route.get('/',productControllers.loadHome)
-user_route.get('/product',productControllers.loadProduct)
-user_route.post('/shop',productControllers.loadShop)
 user_route.get('/shop',productControllers.loadShop)
-user_route.post('/filter',productControllers.productFilter)
+user_route.get('/aboutUS',userControllers.loadAboutUs)
+user_route.get('/contactUs',userControllers.loadContactUs)
+
+
+// =========================================< Search,Filter,Product Datails >=================================================
+user_route.get('/product',productControllers.loadProduct)
+user_route.get('/filter',productControllers.productFilter)
+
 
 // =========================================< Profile >=================================================
 user_route.get('/profile',auth.isLogin,userControllers.loadprofile)

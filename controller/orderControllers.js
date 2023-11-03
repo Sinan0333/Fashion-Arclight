@@ -225,6 +225,17 @@ const loadInvoice = async(req,res)=>{
 }
 
 
+// Load order succes page
+const loadOrderSuccess = async(req,res)=>{
+  try {
+    res.render('orderSuccess')
+  } catch (error) {
+
+      console.log(error.message);
+
+  }
+}
+
 // =========================================< Admin side >=================================================
 
 
@@ -296,10 +307,15 @@ const updateOrder = async(req,res)=>{
 }
 
 
-// Load order succes page
-const loadOrderSuccess = async(req,res)=>{
+// Load Admin Order Detail
+const userOrders= async(req,res)=>{
   try {
-    res.render('orderSuccess')
+  
+    const user_id = req.query.userId
+    const userData = await User.findOne({_id:user_id})
+    const OrderData = await Order.find({user:user_id})
+    res.render('userOrder',{orders:OrderData,user:userData})
+
   } catch (error) {
 
       console.log(error.message);
@@ -320,5 +336,6 @@ module.exports ={
   loadOrderSuccess,
   verifyPayment,
   loadInvoice,
+  userOrders,
     
   }

@@ -65,6 +65,7 @@ admin_route.get('/deleteProduct',productControllers.deleteProduct)
 admin_route.get('/order',auth.isLogin,orderControllers.loadOrderManagement)
 admin_route.get('/orderSummary',auth.isLogin,orderControllers.loadOrderSummary)
 admin_route.post('/updateOrder',orderControllers.updateOrder)
+admin_route.get('/userOrders',auth.isLogin,orderControllers.userOrders)
 
 
 // =========================================< Banner Management  >=================================================

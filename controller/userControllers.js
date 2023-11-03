@@ -241,7 +241,7 @@ const otpVarification = async (req, res) => {
     const otp = first + second + third + fourth;
 
   if(otp!==OTP){
-    res.render('verification',{error:'Otp verification failed'})
+    res.render('verification',{error:'Otp verification failed',email:'**********'})
   }
   else{
 
@@ -391,12 +391,31 @@ const editProfile = async (req, res) => {
 const sample = async (req, res) => {
   try {
     
-    res.render("S")
+    res.render("aboutUs")
   } catch (error){
     console.log(error.message);
   }
 };
 
+
+//load about Us page
+const loadAboutUs = async (req, res) => {
+  try {
+    res.render("aboutUs")
+  } catch (error){
+    console.log(error.message);
+  }
+};
+
+
+//load contact Us page
+const loadContactUs = async (req, res) => {
+  try {
+    res.render("contactUs")
+  } catch (error){
+    console.log(error.message);
+  }
+};
 
 
 
@@ -419,6 +438,8 @@ module.exports = {
   loadprofile,
   loadEditProfile,
   editProfile,
+  loadAboutUs,
+  loadContactUs,
   sample,
 
 

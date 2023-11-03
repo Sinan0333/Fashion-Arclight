@@ -14,6 +14,7 @@
                     <th>Email</th>
                     <th>Mobile</th>
                     <th>Action</th>
+                    <th>Orders</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -33,6 +34,11 @@
                         </button>
                         
                       </td>
+                      <td>
+                        <a href="/admin/userOrders?userId=<%= user._id %>" class="btn btn-primary delete-button" >
+                            Show
+                        </a>
+                    </td>  
                     </tr>
                   <% }); %>
                 </tbody>
@@ -81,7 +87,6 @@
         });
         }
         })
-        
     }
 </script>
 

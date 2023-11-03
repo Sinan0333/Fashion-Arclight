@@ -51,6 +51,7 @@
                                 </div>
                             <% }); %>
                         </div>
+                        <a class="btn btn-primary" href="/addAddress">Add Address</a>
                         <% } else { %>
                             <div class="tab-pane "  >
                                 <h3>Add Address</h1>
@@ -107,12 +108,12 @@
                                     <% cart.products.forEach(function(product, index) { %>
                                     <tr>
                                         <td><a href="/product?_id=<%= product.productId._id %>"><%= product.productId.name %></a></td>
-                                        <td>$ <%= product.totalPrice %></td>
+                                        <td><i class="fa-solid fa-indian-rupee-sign"></i><%= product.totalPrice %></td>
                                     </tr>
                                     <% }); %>
                                     <tr class="summary-subtotal">
                                         <td>Subtotal:</td>
-                                        <td>$ <%= subTotal %></td>
+                                        <td><i class="fa-solid fa-indian-rupee-sign"></i><%= subTotal %></td>
                                     </tr><!-- End .summary-subtotal -->
                                     <tr>
                                         <td>Shipping:</td>
@@ -128,7 +129,7 @@
                                     </tr>
                                     <tr class="summary-total">
                                         <td>Total:</td>
-                                        <td id="total1"> <%= total %></td>
+                                        <td id="total1"><i class="fa-solid fa-indian-rupee-sign"></i> <%= total %></td>
                                     </tr><!-- End .summary-total -->
                                 </tbody>
                                
@@ -196,8 +197,9 @@
             event.preventDefault();
 
             const total = document.getElementById("total1").innerHTML;
+            const splitTotal = total.split(' ')
             var formDataArray = $(this).serializeArray();
-            formDataArray.push({ name: 'total', value: total })
+            formDataArray.push({ name: 'total', value: splitTotal[3] })
             var formData = $.param(formDataArray)
 
             console.log(formData,);
