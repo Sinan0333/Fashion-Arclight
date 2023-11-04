@@ -8,22 +8,24 @@
         <br>
         <h1 class="card-title">Edit Offer</h1>
         <p class="card-description"> Edit offer form</p>
-          <form action="/admin/editOffer?_id=<%= offer._id %>" class="forms-sample" method="post" >  
+          <form action="/admin/editOffer?_id=<%= offer._id %>" id="form" class="forms-sample" method="post" >  
             <div class="form-group">
-                <label for="exampleInputName1">Offer Name</label>
-                <input type="text" class="form-control" id="exampleInputName1" name="name" placeholder="name"  value="<%= offer.name %>"  style="color: white;">
+                <label for="for offername">Offer Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="name"  value="<%= offer.name %>"  style="color: white;">
+                <p style="color: red;" id="nameLengthError"></p>
             </div>
             <div class="form-group">
-                <label for="exampleInputEmail3">Discount Amount</label>
-                <input type="number" class="form-control" id="exampleInputEmail3" name="discount" placeholder="discount amount" value="<%= offer.discountAmount %>" style="color: white;">
+                <label for="discount">Discount Amount</label>
+                <input type="number" class="form-control" id="discount" name="discount" placeholder="discount amount" value="<%= offer.discountAmount %>" style="color: white;">
+                <p style="color: red;" id="discountError"></p>
             </div>
             <div class="form-group">
               <label for="exampleInputEmail3">Activation Date</label>
-              <input type="text" class="form-control" id="exampleInputEmail3" name="activationDate" placeholder="activation date" value="<%= offer.activationDate.toLocaleDateString('en-US', { year:'numeric', month: 'short', day: '2-digit'}).replace(/\//g, '-') %>" style="color: white;">
+              <input type="date" class="form-control" id="exampleInputEmail3" name="activationDate" placeholder="activation date" value="<%= offer.activationDate.toISOString().split('T')[0] %>" style="color: white;">
           </div>
             <div class="form-group">
                 <label for="exampleInputEmail3">Expire Date</label>
-                <input type="text" class="form-control" id="exampleInputEmail3" name="expiryDate" placeholder="expire date" value="<%= offer.expiryDate.toLocaleDateString('en-US', { year:'numeric', month: 'short', day: '2-digit'}).replace(/\//g, '-') %>" style="color: white;">
+                <input type="date" class="form-control" id="exampleInputEmail3" name="expiryDate" placeholder="expire date" value="<%= offer.expiryDate.toISOString().split('T')[0] %>" style="color: white;">
             </div>
             <br>
           <button type="submit" class="btn btn-primary mr-2">Submit</button>
@@ -33,6 +35,6 @@
     </div>
   </div>
 
-
+  <script src="/admin/js/formValidation.js"></script>
 
 <%- include('../layout/admin/footer.ejs') -%>

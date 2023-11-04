@@ -37,6 +37,7 @@
                         <p>OrdeId: <%= order._id %><br>
                         Date: <%= order.date.toLocaleDateString('en-US', { year:'numeric', month: 'short', day: '2-digit'}).replace(/\//g, '-') %><br>
                         Items: <%= order.products.length %><br>
+                        Shipping:<%= order.shippingMethod %><br>
                         Total Amount: <%= order.totalAmount %><br>
                         Payment Method: <%= order.paymentMethod %><br>
                         Status: <%= order.status %><br>

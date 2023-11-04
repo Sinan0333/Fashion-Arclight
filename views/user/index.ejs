@@ -181,7 +181,7 @@
             <% products.forEach(function(product) { %>
                 <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item <%= product.category %>" >
                     <div class="block2-txt-child2 flex-r p-t-3" style="display: flex;">
-                        <a  class="btn-addwish-b2 dis-block pos-relative js-addwish-b2" onclick="addToWish('<%= product._id %>')"  >
+                        <a  class="btn-addwish-b2 dis-block pos-relative " onclick="addToWish('<%= product._id %>')"  >
                             <% if (wishData.includes(product._id.toString())) { %>
                             <i class="fas fa-heart" style="font-size: 20px; " ></i>
                         <% } else { %>

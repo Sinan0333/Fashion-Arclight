@@ -7,19 +7,22 @@
         <!-- Add address form start -->
         <div class="tab-pane "  >
             <h3>Add Address</h1>
-            <form action="/editAddress" method="post">
+            <form action="/editAddress" id="form" method="post">
                 <input type="hidden" class="form-control" name="_id" value="<%= edit._id %>" required>
                 <label>Full name *</label>
-                <input type="text" class="form-control" name="name" value="<%= edit.fullName %>" required>
+                <input type="text" class="form-control" name="name" id="name" value="<%= edit.fullName %>" required>
+                <p style="color: red;" id="nameLengthError"></p>
                 <div class="row">                                       
                     <div class="col-sm-6">
                         <label>Email *</label>
-                        <input type="email" class="form-control" name="email" value="<%= edit.email %>" required>
+                        <input type="email" class="form-control" name="email" id="email" value="<%= edit.email %>" required>
+                        <p style="color: red;" id="emailError"></p>
                     </div><!-- End .col-sm-6 -->
 
                     <div class="col-sm-6">
                         <label>Mobile *</label>
-                        <input type="number" class="form-control" name="mobile" value="<%= edit.mobile %>" autocomplete="off" required>
+                        <input type="number" class="form-control" name="mobile" id="mobile" value="<%= edit.mobile %>" autocomplete="off" required>
+                        <p style="color: red;" id="mobileLngthErrror"></p>
                     </div><!-- End .col-sm-6 -->
 
                     <div class="col-sm-6">
@@ -34,7 +37,8 @@
 
                     <div class="col-sm-6">
                         <label>Pincode *</label>
-                        <input type="number" class="form-control" name="pincode" value="<%= edit.pin %>"  required>
+                        <input type="number" class="form-control" name="pincode" id="pincode" value="<%= edit.pin %>"  required>
+                        <p style="color: red;" id="pincodeLngthErrror"></p>
                     </div><!-- End .col-sm-6 -->
                                           
                     <div class="col-sm-6">
@@ -53,4 +57,48 @@
     </div><!-- End .container -->
 </main><!-- End .main -->
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const nameInput = document.getElementById("name");
+        const nameLengthError = document.getElementById('nameLengthError')
+        const emailInput = document.getElementById("email");
+        const emailError = document.getElementById("emailError");
+        const mobile = document.getElementById('mobile')
+        const mobileLngthErrror = document.getElementById('mobileLngthErrror')
+        const pincode = document.getElementById('pincode')
+        const pincodeLngthErrror = document.getElementById('pincodeLngthErrror')
+        const emailPattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+        document.getElementById("form").addEventListener("submit", function (event) {
+            if (emailInput.value.trim() === "") {
+            emailError.textContent = "Email is required.";
+            event.preventDefault();
+            } else if (!emailPattern.test(emailInput.value)) {
+                emailError.textContent = "Invalid email format.";
+                event.preventDefault();
+            } else {
+                emailError.textContent = "";
+            }
+            if (mobile.value.length < 10) {
+                mobileLngthErrror.textContent = "Mobile number must be at least 10 digits"
+                event.preventDefault()
+            } else {
+                mobileLngthErrror.textContent = ""
+            }
+            if (nameInput.value.length < 4) {
+                nameLengthError.textContent = "User name  must be at least 4 characters"
+                event.preventDefault()
+            } else {
+                nameLengthError.textContent = ""
+            }
+            if (pincode.value.length != 6) {
+                pincodeLngthErrror.textContent = "Type a  6 digit Pincode"
+                event.preventDefault()
+            }
+             else {
+                pincodeLngthErrror.textContent = ""
+            }
+        });
+    });
+</script>
 <%- include('../layout/user/footer.ejs') -%>

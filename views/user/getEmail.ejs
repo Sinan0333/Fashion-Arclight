@@ -13,26 +13,39 @@
 <body>
 <div class="bg-img">
     <div class="position-relative">
-        <form action="/getEmail" method="post">
+        <form action="/getEmail" id="form" method="post">
             <div class="card p-2 text-center">
                 <h6>Please enter your email we send a otp to your email   to verify your account</h6>
                 <!-- <div> <span>A code has been sent to</span> <small>*******9897</small> </div> -->
                 <div class="form-group mt-4">
                     <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+                    <p style="color: red;" id="emailError"></p>
                 </div>
-                <div >
-                    <% if (typeof error !== 'undefined') { %>
-                      <p style="color: red;"><%= error %></p>
-                    <% } %>
-                      
-                  </div>
                 <div class="mt-4">
-                    <button class="btn btn-danger px-4 validate">Sent</button>
+                    <button type="submit" class="btn btn-danger px-4 validate">Sent</button>
                 </div>
             </div>
         </form>
     </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const emailInput = document.getElementById("email");
+        const emailError = document.getElementById("emailError");
+        const emailPattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
+        document.getElementById("form").addEventListener("submit", function (event) {
+            if (emailInput.value.trim() === "") {
+            emailError.textContent = "Email is required.";
+            event.preventDefault();
+            } else if (!emailPattern.test(emailInput.value)) {
+                emailError.textContent = "Invalid email format.";
+                event.preventDefault();
+            } else {
+                emailError.textContent = "";
+            }
+        });
+    });
+</script>
 </body>
 </html>

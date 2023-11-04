@@ -57,6 +57,15 @@ const orderSchema = new mongoose.Schema({
   },
   paymentId: {
     type: String
+  },
+  shippingMethod: {
+    type: String,
+  },
+  shippingAmount: {
+    type: Number,
+  },
+  couponDiscount: {
+    type: Number,
   }
 });
 

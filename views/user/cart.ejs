@@ -18,158 +18,172 @@
     </div><!-- End .container -->
 </nav><!-- End .breadcrumb-nav -->
 
-<% if (cart===null||cart.products.length==0) { %>
-    <div  style=" max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-        text-align: center;">
-    <h1 style=" font-size: 24px;
-        margin-bottom: 20px;">Your Shopping Cart</h1>
-    <div style=" border: 1px solid #ddd;
-        padding: 20px;
-        background-color: #fff;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
-    <div style=" font-size: 18px;
-        margin-bottom: 20px;">
-    <div style="font-size: 48px;
-        color: #ccc;">&#128722;</div>
-    <p style="font-size: 16px;">Your shopping cart is empty.</p>
-     <p><a style=" text-decoration: none;
-        color: #007bff;" href="/">Continue shopping</a></p>
-    </div>
-    </div>
-    <div style="width: 100%;height: 77px;"></div>
-    </div>
-<% }else { %>
-<!-- Shoping Cart -->
-<form class="bg0 p-t-20 p-b-85">
-    <div class="container">
-        <div class="row"  id="reloadArea">
-            <div class="col-lg-10 col-xl-8 m-lr-auto m-b-50" >
-                <div class="m-l-25 m-r--38 m-lr-0-xl" >
-                    <div class="wrap-table-shopping-cart" >
-                        <table class="table-shopping-cart">
-                            <tr class="table_head">
-                                <th class="column-1">Product</th>
-                                <th class="column-2"></th>
-                                <th class="column-3">Price</th>
-                                <th class="column-3">Stock</th>
-                                <th class="column-4">Quantity</th>
-                                <th class="column-5">Total</th>
-                            </tr>
-                                <% cart.products.forEach(function(product, index) { %>
-                            <tr class="table_row">
-                                <td class="column-1">
-                                    <div class="how-itemcart1">
-                                        <img src="images/product/orginal/<%= product.productId.images.image1 %>" alt="IMG">
-                                    </div>
-                                </td>
-                                <td class="column-2"><a href="/product?_id=<%= product.productId._id %>"><%= product.productId.name %></a></td>
-                                <td class="column-3"> <i class="fa-solid fa-indian-rupee-sign"></i><%= product.price %></td>
-                                <% if (product.productId.quantity === 0) { %>
-                                    <td class="column-3 " style="color: blue;">Out of stock</td>
-                                <% } else if (product.productId.quantity < 6) { %>
-                                    <td class="column-3" style="color: red;">Only <%= product.productId.quantity %> left</td>
-                                <% } else { %>
-                                    <td class="column-3" style="color: lime;">Available</td>
-                                <% } %>
-                                <td class="column-4">
-                                    <div class="wrap-num-product flex-w m-l-auto m-r-0">
-                                        <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m"  onclick="updateCart('<%= product.productId._id %>',-1);">
-                                            <i class="fs-16 zmdi zmdi-minus"></i>
+<div id="reloadArea">
+    <% if (cart===null||cart.products.length==0) { %>
+        <div  style=" max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;">
+        <h1 style=" font-size: 24px;
+            margin-bottom: 20px;">Your Shopping Cart</h1>
+        <div style=" border: 1px solid #ddd;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+        <div style=" font-size: 18px;
+            margin-bottom: 20px;">
+        <div style="font-size: 48px;
+            color: #ccc;">&#128722;</div>
+        <p style="font-size: 16px;">Your shopping cart is empty.</p>
+        <p><a style=" text-decoration: none;
+            color: #007bff;" href="/">Continue shopping</a></p>
+        </div>
+        </div>
+        <div style="width: 100%;height: 77px;"></div>
+        </div>
+    <% }else { %>
+    <!-- Shoping Cart -->
+    <form class="bg0 p-t-20 p-b-85">
+        <div class="container">
+            <div class="row"  >
+                <div class="col-lg-10 col-xl-8 m-lr-auto m-b-50" >
+                    <div class="m-l-25 m-r--38 m-lr-0-xl" >
+                        <div class="wrap-table-shopping-cart" >
+                            <table class="table-shopping-cart">
+                                <tr class="table_head">
+                                    <th class="column-1">Product</th>
+                                    <th class="column-2"></th>
+                                    <th class="column-3">Price</th>
+                                    <th class="column-3">Stock</th>
+                                    <th class="column-4">Quantity</th>
+                                    <th class="column-5">Total</th>
+                                </tr>
+                                    <% cart.products.forEach(function(product, index) { %>
+                                <tr class="table_row">
+                                    <td class="column-1">
+                                        <div class="how-itemcart1">
+                                            <img src="images/product/orginal/<%= product.productId.images.image1 %>" alt="IMG">
                                         </div>
+                                    </td>
+                                    <td class="column-2"><a href="/product?_id=<%= product.productId._id %>"><%= product.productId.name %></a></td>
+                                    <td class="column-3"> <i class="fa-solid fa-indian-rupee-sign"></i><%= product.price %></td>
+                                    <% if (product.productId.quantity === 0) { %>
+                                        <td class="column-3 " style="color: blue;">Out of stock</td>
+                                    <% } else if (product.productId.quantity < 6) { %>
+                                        <td class="column-3" style="color: red;">Only <%= product.productId.quantity %> left</td>
+                                    <% } else { %>
+                                        <td class="column-3" style="color: lime;">Available</td>
+                                    <% } %>
+                                    <td class="column-4">
+                                        <div class="wrap-num-product flex-w m-l-auto m-r-0">
+                                            <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m"  onclick="updateCart('<%= product.productId._id %>',-1);">
+                                                <i class="fs-16 zmdi zmdi-minus"></i>
+                                            </div>
 
-                                        <input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product1" max="3" value="<%= product.count %>" >
+                                            <input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product1" max="3" value="<%= product.count %>" >
 
-                                        <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m" onclick="updateCart('<%= product.productId._id %>',1);">
-                                            <i class="fs-16 zmdi zmdi-plus"></i>
+                                            <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m" onclick="updateCart('<%= product.productId._id %>',1);">
+                                                <i class="fs-16 zmdi zmdi-plus"></i>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td class="column-5"> <i class="fa-solid fa-indian-rupee-sign"></i> <%= product.totalPrice %></td>
-                                <td><p class="btn-remove" title="Remove Product" onclick="removeProduct('<%= product.productId._id %>')"><i class="icon-close"></i></p></td>
-                            <% }); %>
-                        </table>
-                    </div>
-                   
-                    <div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">
-                        <div class="flex-w flex-m m-r-20 m-tb-5">
-                            <input class="stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5" type="text" name="coupon" placeholder="Coupon Code">
-                                
-                            <div class="flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5">
-                                Apply coupon
-                            </div>
+                                    </td>
+                                    <td class="column-5"> <i class="fa-solid fa-indian-rupee-sign"></i> <%= product.totalPrice %></td>
+                                    <td><p class="btn-remove" title="Remove Product" onclick="removeProduct('<%= product.productId._id %>')"><i class="icon-close"></i></p></td>
+                                <% }); %>
+                            </table>
                         </div>
+                    
+                        <div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">
+                            <div class="flex-w flex-m m-r-20 m-tb-5">
+                                <input class="stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5" type="text" name="coupon" placeholder="Coupon Code">
+                                    
+                                <div class="flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5">
+                                    Apply coupon
+                                </div>
+                            </div>
 
-                        <div class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
-                            Update Cart
+                            <div class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
+                                Update Cart
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            
+                
 
 
-            <aside class="col-lg-3">
-                <div class="summary summary-cart">
-                    <h3 class="summary-title">Cart Total</h3><!-- End .summary-title -->
-                        <table class="table table-summary">
-                            <tbody>
-                                    <tr class="summary-subtotal">
-                                        <td>Subtotal:</td>
-                                        <td> <i class="fa-solid fa-indian-rupee-sign"></i><%= subTotal %> %></td>
-                                    </tr><!-- End .summary-subtotal -->
-                                    <tr class="summary-shipping">
-                                        <td>Shipping:</td>
-                                        <td>&nbsp;</td>
-                                    </tr>
-                                    <tr class="summary-shipping-row">
-                                        <td>
-                                            <div class="custom-control custom-radio">
-                                                <input type="radio" id="free-shipping" name="shipping" class="custom-control-input">
-                                                <label class="custom-control-label" for="free-shipping">Free Shipping</label>
-                                            </div><!-- End .custom-control -->
-                                        </td>
-                                        <td> 0.00</td>
-                                    </tr><!-- End .summary-shipping-row -->
-
-                                        <tr class="summary-shipping-row">
-                                            <td>
-                                                <div class="custom-control custom-radio">
-                                                    <input type="radio" id="standart-shipping" name="shipping" class="custom-control-input">
-                                                    <label class="custom-control-label" for="standart-shipping">Standart:</label>
-                                                </div><!-- End .custom-control -->
-                                            </td>
-                                            <td>10.00</td>
-                                        </tr><!-- End .summary-shipping-row -->
-
-                                        <tr class="summary-shipping-row">
-                                            <td>
-                                                <div class="custom-control custom-radio">
-                                                    <input type="radio" id="express-shipping" name="shipping" class="custom-control-input">
-                                                    <label class="custom-control-label" for="express-shipping">Express:</label>
-                                                </div><!-- End .custom-control -->
-                                            </td>
-                                            <td>20.00</td>
-                                        </tr><!-- End .summary-shipping-row -->
-                                        <tr>
-                                            <td>Discount:</td>
-                                            <td><%= discount %></td>
+                <aside class="col-lg-3">
+                    <div class="summary summary-cart">
+                        <h3 class="summary-title">Cart Total</h3><!-- End .summary-title -->
+                            <table class="table table-summary">
+                                <tbody>
+                                        <tr class="summary-subtotal">
+                                            <td>Subtotal:</td>
+                                            <td> <i class="fa-solid fa-indian-rupee-sign"></i><%= subTotal %> %></td>
+                                        </tr><!-- End .summary-subtotal -->
+                                        <tr class="summary-shipping">
+                                            <td>Shipping:</td>
+                                            <td>&nbsp;</td>
                                         </tr>
-                                        <tr class="summary-total">
-                                            <td>Total:</td>
-                                            <td><i class="fa-solid fa-indian-rupee-sign"></i><%= total %></td>
-                                        </tr><!-- End .summary-total -->
-                            </tbody>
-                        </table><!-- End .table table-summary -->
-                            <p class="btn btn-outline-primary-2 btn-order btn-block" onclick="checkStock()">PROCEED TO CHECKOUT</p>
-                </div><!-- End .summary -->
-                    <a href="/" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a>
-            </aside><!-- End .col-lg-3 -->
+                                        <tr class="summary-shipping-row">
+                                            <td>
+                                                <div class="custom-control custom-radio">
+                                                    <% if (cart.shippingAmount==0) { %>
+                                                        <input type="radio" id="free-shipping" name="shipping"  class="custom-control-input" onclick="addShipping('free-shipping',0)" checked>
+                                                    <% } else { %>
+                                                        <input type="radio" id="free-shipping" name="shipping"  class="custom-control-input" onclick="addShipping('free-shipping',0)" >
+                                                    <% } %>
+                                                    <label class="custom-control-label" for="free-shipping">Free Shipping</label>
+                                                </div><!-- End .custom-control -->
+                                            </td>
+                                            <td> 0.00</td>
+                                        </tr><!-- End .summary-shipping-row -->
+
+                                            <tr class="summary-shipping-row">
+                                                <td>
+                                                    <div class="custom-control custom-radio">
+                                                        <% if (cart.shippingAmount==30) { %>
+                                                        <input type="radio" id="standart-shipping" name="shipping"  class="custom-control-input" onclick="addShipping('standart-shipping',30)" checked>
+                                                        <% } else { %>
+                                                        <input type="radio" id="standart-shipping" name="shipping"  class="custom-control-input" onclick="addShipping('standart-shipping',30)" >
+                                                        <% } %>
+                                                        <label class="custom-control-label" for="standart-shipping">Standart:</label>
+                                                    </div><!-- End .custom-control -->
+                                                </td>
+                                                <td>30.00</td>
+                                            </tr><!-- End .summary-shipping-row -->
+
+                                            <tr class="summary-shipping-row">
+                                                <td>
+                                                    <div class="custom-control custom-radio">
+                                                        <% if (cart.shippingAmount==60) { %>
+                                                        <input type="radio" id="express-shipping" name="shipping" class="custom-control-input" onclick="addShipping('express-shipping',60)" checked>
+                                                        <% } else { %>
+                                                        <input type="radio" id="express-shipping" name="shipping" class="custom-control-input" onclick="addShipping('express-shipping',60)" >
+                                                        <% } %>
+                                                        <label class="custom-control-label" for="express-shipping">Express:</label>
+                                                    </div><!-- End .custom-control -->
+                                                </td>
+                                                <td>60.00</td>
+                                            </tr><!-- End .summary-shipping-row -->
+                                            <tr>
+                                                <td>Discount:</td>
+                                                <td><%= discount %></td>
+                                            </tr>
+                                            <tr class="summary-total">
+                                                <td>Total:</td>
+                                                <td><div id="reloadArea2"><i class="fa-solid fa-indian-rupee-sign" ></i><%= total %></div></td>
+                                            </tr><!-- End .summary-total -->
+                                </tbody>
+                            </table><!-- End .table table-summary -->
+                                <p class="btn btn-outline-primary-2 btn-order btn-block" onclick="checkStock()">PROCEED TO CHECKOUT</p>
+                    </div><!-- End .summary -->
+                        <a href="/" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a>
+                </aside><!-- End .col-lg-3 -->
+            </div>
         </div>
-    </div>
-</form>
-<% } %> 
+    </form>
+    <% } %> 
+</div>
 
 
 <!-- Back to top -->
@@ -237,6 +251,27 @@
                     swal("Stock Limit Reached", "", "error");
                 }else{
                     window.location.href = '/checkout'
+                }
+            },
+            error: function (error) {
+
+                console.error(error);
+            }
+        });
+    }
+
+    function addShipping(method,amount){
+        const data = {method:method,amount:amount}
+        $.ajax({
+            method: 'POST',
+            url: '/addShipping', 
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: function (response) {
+                if(response.added===true){
+                    $('#reloadArea2').load('/cart #reloadArea2'); 
+                }else{
+                 
                 }
             },
             error: function (error) {

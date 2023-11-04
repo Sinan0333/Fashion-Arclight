@@ -22,7 +22,7 @@ const loadCart = async(req,res)=>{
             }
           }
             const discount = eachProductDiscount.reduce((acc,val)=>acc+val,0)
-            const total = subTotal-discount
+            const total = (subTotal-discount)+cartData.shippingAmount
 
           res.render('cart',{cart:cartData,subTotal:subTotal,total:total,discount:discount})
 
@@ -186,7 +186,7 @@ const loadCheckout = async(req,res)=>{
         }
       }
         const discount = eachProductDiscount.reduce((acc,val)=>acc+val,0)
-        const total = subTotal-discount-cartData.couponDiscount
+        const total = (subTotal-discount-cartData.couponDiscount)+cartData.shippingAmount
   
       if(stock.length!=cartData.products.length){
         res.json({stock:false})
@@ -204,6 +204,16 @@ const loadCheckout = async(req,res)=>{
 }
 
 
+//add shipping method
+const addShippingMethod = async (req,res)=>{
+  const method = req.body.method
+  const amount = req.body.amount
+  const cartData = await Cart.findOneAndUpdate({user:req.session.user_id},{$set:{shippingMethod:method,shippingAmount:amount}})
+  res.json({added:true})
+
+}
+
+
 
 module.exports ={
   addToCart,
@@ -211,6 +221,7 @@ module.exports ={
   updateCart,
   removeProduct,
   loadCheckout,
+  addShippingMethod,
 
   
 }

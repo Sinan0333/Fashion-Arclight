@@ -6,6 +6,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const confirmpasswordError = document.getElementById('confirmpasswordError')
     const passwordLengthError = document.getElementById('passwordLengthError')
     const emailError = document.getElementById("emailError");
+    const mobile = document.getElementById('mobile')
+    const mobileLngthErrror = document.getElementById('mobileLngthErrror')
+    const nameInput = document.getElementById("name");
+    const nameLengthError = document.getElementById('nameLengthError')
     const emailPattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     document.getElementById("form").addEventListener("submit", function (event) {
@@ -29,6 +33,18 @@ document.addEventListener("DOMContentLoaded", function () {
             event.preventDefault()
         } else {
             passwordLengthError.textContent = ""
+        }
+        if (mobile.value.length < 10) {
+            mobileLngthErrror.textContent = "Mobile number must be at least 10 digits"
+            event.preventDefault()
+        } else {
+            mobileLngthErrror.textContent = ""
+        }
+        if (nameInput.value.length < 4) {
+            nameLengthError.textContent = "User name  must be at least 4 characters"
+            event.preventDefault()
+        } else {
+            nameLengthError.textContent = ""
         }
     });
 });

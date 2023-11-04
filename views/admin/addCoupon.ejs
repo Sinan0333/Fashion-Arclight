@@ -8,34 +8,40 @@
         <br>
         <h1 class="card-title">Add Coupon</h1>
         <p class="card-description"> Add coupon form</p>
-          <form action="/admin/addCoupon" class="forms-sample" method="post" >  
+          <form action="/admin/addCoupon" id="form" class="forms-sample" method="post"  >  
             <div class="form-group">
-                <label for="exampleInputName1">coupon Name</label>
-                <input type="text" class="form-control" id="exampleInputName1" name="name" placeholder="name"  style="color: white;">
+                <label for="couponName">coupon Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="name"  style="color: white;" required>
+                <p style="color: red;" id="nameLengthError"></p>
             </div>
             <div class="form-group">
-                <label for="exampleInputCouponCode">Coupon Code</label>
-                <input type="text" class="form-control" id="exampleInputEmail3" name="code" placeholder="code"  style="color: white;">
+                <label for="CouponCode">Coupon Code</label>
+                <input type="text" class="form-control" id="exampleInputEmail3" name="code" placeholder="code"  style="color: white;" required>
             </div>
             <div class="form-group">
-                <label for="exampleInputEmail3">Discount Amount</label>
-                <input type="number" class="form-control" id="exampleInputEmail3" name="discount" placeholder="discount amount"  style="color: white;">
+                <label for="discountAmount">Discount Amount</label>
+                <input type="number" class="form-control" id="discount" name="discount" placeholder="discount amount"  style="color: white;" required>
+                <p style="color: red;" id="discountError"></p>
             </div>
             <div class="form-group">
-              <label for="exampleInputEmail3">Activation Date</label>
-              <input type="text" class="form-control" id="exampleInputEmail3" name="activationDate" placeholder="activation date"  style="color: white;">
+              <label for="avtivationDate">Activation Date</label>
+              <input type="date" class="form-control" id="activationErr" name="activationDate" placeholder="activation date"  style="color: white;" required>
+              <p style="color: red;" id="activationErr"></p>
             </div>
             <div class="form-group">
-                <label for="exampleInputEmail3">Expire Date</label>
-                <input type="text" class="form-control" id="exampleInputEmail3" name="expiryDate" placeholder="expire date"  style="color: white;">
+                <label for="expiry date">Expire Date</label>
+                <input type="date" class="form-control" id="expiryDate" name="expiryDate" placeholder="expire date"  style="color: white;" required>
+                <p style="color: red;" id="expirationErr"></p>
             </div>
             <div class="form-group">
-                <label for="exampleInputEmail3">Criteria Amount</label>
-                <input type="number" class="form-control" id="exampleInputEmail3" name="criteriAamount" placeholder="criteria amount"  style="color: white;">
+                <label for="expiryDate">Criteria Amount</label>
+                <input type="number" class="form-control" id="criteriaAmount" name="criteriAamount" placeholder="criteria amount"  style="color: white;" required>
+                <p style="color: red;" id="criteriaAmountErr"></p>
             </div>
             <div class="form-group">
-                <label for="exampleInputEmail3">User Limits</label>
-                <input type="number" class="form-control" id="exampleInputEmail3" name="userLimit" placeholder="user limits"  style="color: white;">
+                <label for="userLimot">User Limits</label>
+                <input type="number" class="form-control"  name="userLimit" id="userLimit" placeholder="user limits"  style="color: white;" required>
+                <p style="color: red;" id="userLimitErr"></p>
             </div>
                   <!-- <div class="col-lg-3 col-md-6 rounded-image-preview">
                     <label for="imageInput1" class="image-label">
@@ -54,7 +60,7 @@
       </div>
     </div>
   </div>
-
+  <script src="/admin/js/formValidation.js"></script>
 
 
 <%- include('../layout/admin/footer.ejs') -%>

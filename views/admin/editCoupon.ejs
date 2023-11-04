@@ -8,34 +8,38 @@
         <br>
         <h1 class="card-title">Edit Coupon</h1>
         <p class="card-description"> Edit coupon form</p>
-          <form action="/admin/editCoupon?_id=<%= coupon._id %>" class="forms-sample" method="post" >  
+          <form action="/admin/editCoupon?_id=<%= coupon._id %>" id="form" class="forms-sample" method="post" >  
             <div class="form-group">
-                <label for="exampleInputName1">coupon Name</label>
-                <input type="text" class="form-control" id="exampleInputName1" name="name" placeholder="name"  value="<%= coupon.name %>"  style="color: white;">
+                <label for="couponName">coupon Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="name"  value="<%= coupon.name %>"  style="color: white;">
+                <p style="color: red;" id="nameLengthError"></p>
             </div>
             <div class="form-group">
-                <label for="exampleInputCouponCode">Coupon Code</label>
+                <label for="couponCode">Coupon Code</label>
                 <input type="text" class="form-control" id="exampleInputEmail3" name="code" placeholder="code" value="<%= coupon.couponCode %>" style="color: white;">
             </div>
             <div class="form-group">
-                <label for="exampleInputEmail3">Discount Amount</label>
-                <input type="number" class="form-control" id="exampleInputEmail3" name="discount" placeholder="discount amount" value="<%= coupon.discountAmount %>" style="color: white;">
+                <label for="discount">Discount Amount</label>
+                <input type="number" class="form-control" id="discount" name="discount" placeholder="discount amount" value="<%= coupon.discountAmount %>" style="color: white;">
+                <p style="color: red;" id="discountError"></p>
             </div>
             <div class="form-group">
               <label for="exampleInputEmail3">Activation Date</label>
-              <input type="text" class="form-control" id="exampleInputEmail3" name="activationDate" placeholder="activation date" value="<%= coupon.activationDate.toLocaleDateString('en-US', { year:'numeric', month: 'short', day: '2-digit'}).replace(/\//g, '-') %>" style="color: white;">
+              <input type="date" class="form-control" id="activationDate" name="activationDate" placeholder="activation date"value="<%= coupon.activationDate.toISOString().split('T')[0] %>" style="color: white;">
             </div>
             <div class="form-group">
                 <label for="exampleInputEmail3">Expire Date</label>
-                <input type="text" class="form-control" id="exampleInputEmail3" name="expiryDate" placeholder="expire date" value="<%= coupon.expiryDate.toLocaleDateString('en-US', { year:'numeric', month: 'short', day: '2-digit'}).replace(/\//g, '-') %>" style="color: white;">
+                <input type="date" class="form-control" id="expiryDate" name="expiryDate" placeholder="expire date" value="<%= coupon.expiryDate.toISOString().split('T')[0] %>" style="color: white;">
             </div>
             <div class="form-group">
-                <label for="exampleInputEmail3">Criteria Amount</label>
-                <input type="number" class="form-control" id="exampleInputEmail3" name="criteriAamount" placeholder="criteria amount" value="<%= coupon.criteriaAmount %>"  style="color: white;">
+                <label for="criteriaAmount">Criteria Amount</label>
+                <input type="number" class="form-control" id="criteriaAmount" name="criteriAamount" placeholder="criteria amount" value="<%= coupon.criteriaAmount %>"  style="color: white;">
+                <p style="color: red;" id="criteriaAmountErr"></p>
             </div>
             <div class="form-group">
-                <label for="exampleInputEmail3">User Limits</label>
-                <input type="number" class="form-control" id="exampleInputEmail3" name="userLimit" placeholder="user limits" value="<%= coupon.usersLimit %>"   style="color: white;">
+                <label for="userLimit">User Limits</label>
+                <input type="number" class="form-control" id="userLimit" name="userLimit" placeholder="user limits" value="<%= coupon.usersLimit %>"   style="color: white;">
+                <p style="color: red;" id="userLimitErr"></p>
             </div>
                   <!-- <div class="col-lg-3 col-md-6 rounded-image-preview">
                     <label for="imageInput1" class="image-label">
@@ -55,6 +59,6 @@
     </div>
   </div>
 
-
+  <script src="/admin/js/formValidation.js"></script>
 
 <%- include('../layout/admin/footer.ejs') -%>

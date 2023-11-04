@@ -62,6 +62,9 @@ const placeOrder = async(req,res)=>{
         totalAmount:total,
         status:status,
         paymentMethod:paymentMethod,
+        shippingMethod:cartData.shippingMethod,
+        shippingAmount:cartData.shippingAmount,
+        couponDiscount:cartData.couponDiscount,
        })
 
        const orderData = await data.save()

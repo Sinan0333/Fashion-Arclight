@@ -31,6 +31,14 @@ const cartSchema = new mongoose.Schema({
     type: Number,
     default:0,
   },
+  shippingMethod: {
+    type: String,
+    default:"free-shipping",
+  },
+  shippingAmount: {
+    type: Number,
+    default:0,
+  }
 });
 
 module.exports = mongoose.model("Cart", cartSchema);

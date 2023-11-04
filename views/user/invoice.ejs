@@ -102,25 +102,25 @@ background-color:#eee;
 </td>
 <td>$<%= product.productId.price %></td>
 <td><%= product.count %></td>
-<td class="text-end">$ <%= product.totalPrice %></td>
+<td class="text-end">₹<%= product.totalPrice %></td>
 </tr>
 <% }); %>
 
 <tr>
 <th scope="row" colspan="4" class="text-end">Sub Total</th>
-<td class="text-end">$ <%= orders.totalAmount %></td>
+<td class="text-end">₹<%= (orders.totalAmount + orders.couponDiscount - orders.shippingAmount ) %></td>
 </tr>
 
-<!-- <tr>
+<tr>
 <th scope="row" colspan="4" class="border-0 text-end">
 Discount :</th>
-<td class="border-0 text-end">- $0.00</td>
-</tr> -->
+<td class="border-0 text-end">- <%= orders.couponDiscount %></td>
+</tr>
 
 <tr>
 <th scope="row" colspan="4" class="border-0 text-end">
 Shipping Charge :</th>
-<td class="border-0 text-end">Free Delivery</td>
+<td class="border-0 text-end">+<%= orders.shippingAmount %></td>
 </tr>
 
 <tr>
@@ -131,7 +131,7 @@ Tax</th>
 
 <tr>
 <th scope="row" colspan="4" class="border-0 text-end">Total</th>
-<td class="border-0 text-end"><h4 class="m-0 fw-semibold">$<%= orders.totalAmount %></h4></td>
+<td class="border-0 text-end"><h4 class="m-0 fw-semibold">₹<%= orders.totalAmount %></h4></td>
 </tr>
 
 </tbody>

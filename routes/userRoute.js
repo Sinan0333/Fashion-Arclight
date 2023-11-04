@@ -77,6 +77,7 @@ user_route.post('/addToCart',cartControllers.addToCart)
 user_route.get('/cart',auth.isLogin,cartControllers.loadCart)
 user_route.post('/updateCart',cartControllers.updateCart)
 user_route.post('/removeProduct',cartControllers.removeProduct)
+user_route.post('/addShipping',cartControllers.addShippingMethod)
 
 
 // =========================================< Checkout and order >=================================================

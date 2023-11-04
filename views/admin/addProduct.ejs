@@ -8,21 +8,24 @@
         <br>
         <h1 class="card-title">Add Product</h1>
         <p class="card-description"> Add product form</p>
-        <form action="/admin/addproduct" class="forms-sample" method="post" enctype="multipart/form-data" >           
+        <form action="/admin/addproduct" id="form" class="forms-sample" method="post" enctype="multipart/form-data" >           
           <div class="form-group">
-            <label for="exampleInputName1">Product Name</label>
-            <input type="text" class="form-control" id="exampleInputName1" name="name" placeholder="name" style="color: white;" >
+            <label for="Product Name">Product Name</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="name" style="color: white;" >
+            <p style="color: red;" id="nameLengthError"></p>
           </div>
           <div class="form-group">
-            <label for="exampleInputEmail3">Quantity</label>
-            <input type="number" class="form-control" id="exampleInputEmail3" name="quantity" placeholder="Quantity" style="color: white;">
+            <label for="quentity">Quantity</label>
+            <input type="number" class="form-control" id="quantity" name="quantity" placeholder="Quantity" style="color: white;">
+            <p style="color: red;" id="quantityErr"></p>
           </div>
           <div class="form-group">
-            <label for="exampleInputPassword4">Price</label>
-            <input type="number" class="form-control" id="exampleInputPassword4" name="price" placeholder="Price" style="color: white;">
+            <label for="pricse">Price</label>
+            <input type="number" class="form-control" id="price" name="price" placeholder="Price" style="color: white;">
+            <p style="color: red;" id="priceErr"></p>
           </div>
           <div class="form-group">
-            <label for="exampleSelectGender">Category</label>
+            <label for="category">Category</label>
             <select class="form-control" id="exampleSelectGender" name="category" style="color: white;">
                 <% categorys.forEach(function(category) { %>
               <option><%= category.name %></option>
@@ -95,5 +98,6 @@
       </div>
     </div>
   </div>
+  <script src="/admin/js/formValidation.js"></script>
 
 <%- include('../layout/admin/footer.ejs') -%>

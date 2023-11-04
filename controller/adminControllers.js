@@ -200,7 +200,6 @@ const salesReport = async (req, res) => {
     const duration = req.query.sort;
     const currentDate = new Date();
     const startDate = new Date(currentDate - duration * 24 * 60 * 60 * 1000);
-    console.log(startDate);
 
     const orders = await Order.aggregate([
       {
