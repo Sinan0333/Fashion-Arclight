@@ -22,7 +22,7 @@ const isLogout = async (req,res,next)=>{
     try {
         
         if (req.session.admin_id) {
-            res.redirect('/admin/login')
+            res.redirect('/admin')
         } else {
             next();
         }

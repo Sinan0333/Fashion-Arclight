@@ -98,6 +98,7 @@ user_route.post('/removeWish',wishlistControllers.removeProduct)
 
 // =========================================< Coupon >=================================================
 user_route.post('/checkCoupon',couponControllers.checkCoupon)
+user_route.post('/removeCoupon',couponControllers.removeCoupon)
 
 
 // =========================================< Product Review >=================================================

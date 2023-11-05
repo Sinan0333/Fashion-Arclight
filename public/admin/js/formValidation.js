@@ -12,6 +12,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const priceErr = document.getElementById('priceErr')
     const quantity = document.getElementById('quantity')
     const quantityErr = document.getElementById('quantityErr')
+    const coupon = document.getElementById('coupon')
+    const couponErr = document.getElementById('couponLengthError')
 
     document.getElementById("form").addEventListener("submit", function (event) {
         if(nameInput){
@@ -60,6 +62,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 event.preventDefault()
             } else {
                 quantityErr.textContent = ""
+            }
+        }
+        if(coupon){
+            if (coupon.value.length < 6) {
+                couponErr.textContent = " Coupon code must be at least 6 characters"
+                event.preventDefault()
+            } else {
+                couponErr.textContent = ""
             }
         }
        

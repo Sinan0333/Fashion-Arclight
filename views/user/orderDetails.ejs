@@ -72,6 +72,9 @@
                                         <td> $<%= product.price %></td>
                                         <td ><%= product.count %></td>
                                         <td> $<%= product.totalPrice %></td>
+                                        <% if (product.status=="returned") { %>
+                                            <td style="color: red;">returned</td>
+                                        <% } %>
                                     </tr>
                                 <% }); %>
                             </tbody>
@@ -109,8 +112,7 @@
                 <button type="button" class="btn btn-primary" onclick="submitReview()">Submit Review</button>
             </form>
         </div>
-
-       
+  
 
         <% if (order.status !=='cancel' && order.status !=='delivered') { %>
             <button type="button" class="btn btn-danger btn-block" onclick="cancelOrder('<%= order._id %>')">Cancel Order</button>
@@ -123,6 +125,7 @@
                     <button class="add-review-button btn btn-info">Invoice</button>
                 </form>
             </div>
+           
             
             
          <% } %> 
@@ -133,6 +136,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+
+    //cancel the all order
     function cancelOrder(orderId) {
   Swal.fire({
     title: 'Cancel Order',
@@ -168,6 +173,8 @@
   });
 }
 
+
+//add review to a product
 function showReviewForm() {
     document.getElementById("review-form").style.display = "block";
 }

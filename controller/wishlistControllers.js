@@ -10,9 +10,9 @@ const loadWishlist = async(req,res)=>{
 
         if(wishlistData){
 
-          res.render('wishlist',{wishlist:wishlistData,})
+          res.render('wishlist',{wishlist:wishlistData,user_id})
         }else{
-          res.render('wishlist',{wishlist:null})
+          res.render('wishlist',{wishlist:null,user_id})
         }
 
     } catch (error) {

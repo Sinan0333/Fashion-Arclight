@@ -26,13 +26,13 @@ const orderSchema = new mongoose.Schema({
       totalPrice: {
         type: Number,
         required: true,
+      },
+      status: {
+        type: String,
       }
     },
   ],
   
-  deliveryDate: {
-    type: Date,
-  },
   cancelReason: {
     type: String
   },

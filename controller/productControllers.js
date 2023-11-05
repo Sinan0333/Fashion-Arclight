@@ -19,13 +19,14 @@ const loadHome = async (req, res) => {
       path: 'category',
       match: { is_blocked: false } 
     })
+    const user_id = req.session.user_id
     const bannerData =await Banner.find({is_blocked:false})
     const categoryData = await Category.find().sort({name:1})
     const categoryId = categoryData.map((val)=>val._id.toString())
     const wishlistData = await Wishlist.findOne({user:req.session.user_id})
     const wishData = wishlistData ? wishlistData.products.map((val) => val.productId) : [];
 
-    res.render("index",{products:productData,banners:bannerData,categorys:categoryId,wishData});
+    res.render("index",{products:productData,banners:bannerData,categorys:categoryId,wishData,user_id});
   } catch {
     console.log(error.message);
   }
@@ -35,16 +36,17 @@ const loadHome = async (req, res) => {
 //to load shop page
 const loadShop = async(req,res)=>{
   try {
+    const user_id = req.session.user_id
     const category = req.query.category 
     const categoryData = await Category.find()
     const wishlistData = await Wishlist.findOne({user:req.session.user_id})
     const wishData = wishlistData ? wishlistData.products.map((val) => val.productId) : [];
     if(category){
       const productData =await Product.find({category:category})
-      res.render('shop',{products:productData,categorys:categoryData,wishData})
+      res.render('shop',{products:productData,categorys:categoryData,wishData,user_id})
     }else{
       const productData =await Product.find()
-      res.render('shop',{products:productData,categorys:categoryData,wishData})
+      res.render('shop',{products:productData,categorys:categoryData,wishData,user_id})
     }
       
   } catch (error) {
@@ -67,7 +69,7 @@ const loadProduct = async (req, res) => {
     const reviews =reviewData ? reviewData.review:[]
     const avgRatig =reviews ? reviews.reduce((acc,val)=>acc+val.rating,0)/reviews.length : 0
     const wishProduct = await Wishlist.findOne({user:user_id,'products.productId':product_id})
-    res.render("product",{product:productData,relatedProducts:relatedProducts,offerPrice:offerPrice,reviews:reviews,avgRatig:avgRatig,user:user_id,wishProduct});
+    res.render("product",{product:productData,relatedProducts:relatedProducts,offerPrice:offerPrice,reviews:reviews,avgRatig:avgRatig,user_id,wishProduct,user:user_id});
   } catch {
     console.log(error.message);
   }
@@ -78,6 +80,7 @@ const loadProduct = async (req, res) => {
 const productFilter = async (req, res) => {
   try {
 
+    const user_id = req.session.user_id
     const price = req.query.price
     const splitPrice =price.split('-')
     const minimum= parseInt(splitPrice[0])
@@ -95,7 +98,7 @@ const productFilter = async (req, res) => {
         price: { $gte: minimum, $lte: maximum }
       }).sort({ price: sort });
 
-      res.render('shop',{products:productData,categorys:categoryData,wishData})
+      res.render('shop',{products:productData,categorys:categoryData,wishData,user_id})
 
     }else{
 
@@ -104,7 +107,7 @@ const productFilter = async (req, res) => {
         price: { $gte: minimum, $lte: maximum },category:category
       }).sort({ price: sort });
 
-      res.render('shop',{products:productData,categorys:categoryData,wishData})
+      res.render('shop',{products:productData,categorys:categoryData,wishData,user_id})
     }
 
 

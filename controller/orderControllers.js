@@ -167,10 +167,11 @@ const verifyPayment = async(req,res)=>{
 const loadOrderDetails = async(req,res)=>{
   try {
   
+    const user_id = req.session.user_id
     const order_id = req.query._id
     const orderData = await Order.findOne({_id:order_id}).populate('products.productId')
     await orderData.populate('products.productId.category')
-    res.render('orderDetails',{order:orderData})
+    res.render('orderDetails',{order:orderData,user_id})
 
   } catch (error) {
 
@@ -195,13 +196,17 @@ const cancelOrder = async(req,res)=>{
       await Product.updateOne({_id:product},{$inc:{quantity:count}})
     }
 
-    const data = {
-      amount:orderData.totalAmount,
-      date:new Date()
-    }
+    if(orderData.paymentMethod != 'COD'&& orderData.status != 'pending'){
 
-    const ussrData = await User.findOneAndUpdate({_id:user_id},{$inc:{wallet:orderData.totalAmount},$push:{walletHistory:data}})
-    
+      const data = {
+        amount:orderData.totalAmount,
+        date:new Date()
+      }
+  
+      const ussrData = await User.findOneAndUpdate({_id:user_id},{$inc:{wallet:orderData.totalAmount},$push:{walletHistory:data}})
+      
+    }
+   
     res.json({cancel:true})  
   } catch (error) {
 
@@ -231,13 +236,13 @@ const loadInvoice = async(req,res)=>{
 // Load order succes page
 const loadOrderSuccess = async(req,res)=>{
   try {
-    res.render('orderSuccess')
+    const user_id = req.session.user_id
+    res.render('orderSuccess',{user_id})
   } catch (error) {
-
       console.log(error.message);
-
   }
 }
+
 
 // =========================================< Admin side >=================================================
 
@@ -289,13 +294,17 @@ const updateOrder = async(req,res)=>{
         let count = orderData.products[i].count
         await Product.updateOne({_id:product},{$inc:{quantity:count}})
       }
-  
-      const data = {
-        amount:orderData.totalAmount,
-        date:new Date()
-      }
-  
-      const userData = await User.findOneAndUpdate({_id:user_id},{$inc:{wallet:orderData.totalAmount},$push:{walletHistory:data}})
+   if(orderData.paymentMethod != 'COD'&& orderData.status != 'pending'){
+
+    const data = {
+      amount:orderData.totalAmount,
+      date:new Date()
+    }
+
+    const userData = await User.findOneAndUpdate({_id:user_id},{$inc:{wallet:orderData.totalAmount},$push:{walletHistory:data}})
+
+   }
+      
     }else{
       const OrderData = await Order.findOneAndUpdate({_id:order_id},{$set:{status:orderStatus}})
     }
@@ -340,5 +349,4 @@ module.exports ={
   verifyPayment,
   loadInvoice,
   userOrders,
-    
   }

@@ -1,3 +1,4 @@
+const { coupon } = require('../middleware/multer');
 const Coupon = require('../model/CouponModel');
 const Cart = require('../model/cartModel')
 
@@ -30,17 +31,24 @@ const loadAddCoupon= async(req,res)=>{
 // Add Coupon
 const addCoupon = async (req,res)=>{
     try {
-        const data = new Coupon({
-            name:req.body.name,
-            couponCode:req.body.code,
-            discountAmount:req.body.discount,
-            activationDate:req.body.activationDate,
-            expiryDate:req.body.expiryDate,
-            criteriaAmount:req.body.criteriAamount,
-            usersLimit:req.body.userLimit,
-        })
-        await data.save()
-        res.redirect('/admin/coupon')
+
+        const couponData = await Coupon.findOne({couponCode:req.body.code})
+        if(couponData){
+            res.render("addCoupon",{error:'coupon code already exist'})
+        }else{
+            const data = new Coupon({
+                name:req.body.name,
+                couponCode:req.body.code,
+                discountAmount:req.body.discount,
+                activationDate:req.body.activationDate,
+                expiryDate:req.body.expiryDate,
+                criteriaAmount:req.body.criteriAamount,
+                usersLimit:req.body.userLimit,
+            })
+            await data.save()
+            res.redirect('/admin/coupon')
+        }
+       
     } catch (error) {
         console.log(error.message);
     }
@@ -66,21 +74,25 @@ const editCoupon = async (req,res)=>{
     try {
 
         const couponId = req.query._id
-        const couponData = await Coupon.findById(couponId)
+        const couponData = await Coupon.findOne({couponCode:req.body.code})
 
-        await Coupon.findOneAndUpdate({_id:couponId},
-            {
-                name:req.body.name,
-                couponCode:req.body.code,
-                discountAmount:req.body.discount,
-                activationDate:req.body.activationDate,
-                expiryDate:req.body.expiryDate,
-                criteriaAmount:req.body.criteriAamount,
-                usersLimit:req.body.userLimit,
-
-            })
-
-        res.redirect("/admin/coupon")
+        if(couponData){
+            res.render("editCoupon",{error:'coupon code already exist'})
+        }else{
+            await Coupon.findOneAndUpdate({_id:couponId},
+                {
+                    name:req.body.name,
+                    couponCode:req.body.code,
+                    discountAmount:req.body.discount,
+                    activationDate:req.body.activationDate,
+                    expiryDate:req.body.expiryDate,
+                    criteriaAmount:req.body.criteriAamount,
+                    usersLimit:req.body.userLimit,
+    
+                })
+    
+            res.redirect("/admin/coupon")
+        }
 
     } catch (error) {
         console.log(error.message);
@@ -134,7 +146,7 @@ const checkCoupon = async (req,res)=>{
                     if(!exists){
                         if(cartTotal>=couponData.criteriaAmount){
                             await Coupon.findOneAndUpdate({couponCode:couponCode},{$push:{usedUsers:user_id}})
-                            await Cart.findOneAndUpdate({user:user_id},{$inc:{couponDiscount:couponData.discountAmount}})
+                            await Cart.findOneAndUpdate({user:user_id},{$set:{couponDiscount:couponData._id}})
                             res.json({coupon:true})
                         }else{
                             res.json({coupon:'amountIssue'})
@@ -159,6 +171,20 @@ const checkCoupon = async (req,res)=>{
     }
 }
 
+
+// Remove Coupon 
+const removeCoupon = async (req,res)=>{
+    try {
+        const user_id = req.session.user_id
+        const cartData = await Cart.findOne({user:user_id})
+        const couponData = await Coupon.findOneAndUpdate({_id:cartData.couponDiscount},{$pull:{usedUsers:user_id}})
+        const updateCart = await Cart.findOneAndUpdate({user:user_id},{$set:{couponDiscount:0}})
+        res.json({remove:true})
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 module.exports ={
    loadCouponManagement,
    loadAddCoupon,
@@ -167,5 +193,6 @@ module.exports ={
    editCoupon,
    blockCoupon,
    deleteCoupon,
-   checkCoupon
+   checkCoupon,
+   removeCoupon,
 }

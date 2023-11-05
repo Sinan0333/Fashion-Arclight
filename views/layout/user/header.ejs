@@ -57,20 +57,24 @@
 					</div>
 
 					<div class="right-top-bar flex-w h-full">
-						<a href="#" class="flex-c-m trans-04 p-lr-25">
+						<a href="/contactUS" class="flex-c-m trans-04 p-lr-25">
 							Help & FAQs
 						</a>
-
-						<a href="#" class="flex-c-m trans-04 p-lr-25">
-							Log out
-						</a>
-
+						<% if (user_id) { %>
+							<a href="/profile" class="flex-c-m trans-04 p-lr-25">
+								Profile
+							</a>
+							<% } else { %>
+							<a href="/login" class="flex-c-m trans-04 p-lr-25">
+								Login
+							</a>
+						<% } %>
 						<a href="#" class="flex-c-m trans-04 p-lr-25">
 							EN
 						</a>
 
 						<a href="#" class="flex-c-m trans-04 p-lr-25">
-							USD
+							INR 
 						</a>
 					</div>
 				</div>

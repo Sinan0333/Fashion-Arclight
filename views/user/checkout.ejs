@@ -1,12 +1,7 @@
 <%- include('../layout/user/header.ejs') -%>
 
 <div style="width: 100%;height: 77px;"></div>
-<section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url('user/images/bg-01.jpg');">
-    <h2 class="ltext-105 cl0 txt-center">
-        Checkout
-    </h2>
-</section>	
-<br>
+
 
 <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
     <div class="container">
@@ -21,12 +16,30 @@
 <div class="page-content">
     <div class="checkout">
         <div class="container">
-            <div class="checkout-discount">
+            <!-- <div class="checkout-discount">
                 <form id="coupon-form">
                     <input type="text" class="form-control" name="coupon" required id="checkout-discount-input">
                     <label for="checkout-discount-input" class="text-truncate">Have a coupon? <span>Click here to enter your code</span></label>
                 </form>
-            </div><!-- End .checkout-discount -->
+            </div>End .checkout-discount -->
+            <div id="reloadArea2">
+                <% if (cart.couponDiscount==0) { %>
+                    <div class="flex-w flex-m m-r-20 m-tb-5">
+                        <input id="couponCodeInput" class="stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5" type="text" name="coupon" placeholder="Coupon Code">
+                            
+                        <div class="flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5" onclick="applyCoupon()">
+                            Apply coupon
+                        </div>
+                    </div>
+                <% } else { %>
+                    <div class="flex-w flex-m m-r-20 m-tb-5">  
+                        <div class="flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5" onclick="removeCoupon()">
+                            Remove coupon
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+
             <form  id="myForm">
                 <div class="row">
                     <div class="col-lg-9">
@@ -119,10 +132,12 @@
                                         <td>Shipping Charge:</td>
                                         <td><%= cart.shippingAmount %></td>
                                     </tr>
+                                    <% if (cart.couponDiscount!=0 ) { %>
                                     <tr>
                                         <td>Coupon Discount:</td>
-                                        <td><%= cart.couponDiscount %></td>
+                                        <td><%= cart.couponDiscount.discountAmount %></td>
                                     </tr>
+                                    <% } %>
                                     <tr>
                                         <td>Offer Discount:</td>
                                         <td><%= discount %></td>
@@ -211,7 +226,7 @@
                     if(response.placed==true){
                         window.location.href = '/orderSuccess'
                     }else if(response.wallet == false){
-                        swal("Anj paisa illa !!", "", "error")
+                        swal("Oops, it looks like your wallet balance is too low to place this order !!", "", "error")
                     }
                     else{
                         
@@ -285,11 +300,10 @@
     }
 
 
-$(document).ready(function() {
-    $("#coupon-form").submit(function(event) {
-        event.preventDefault(); 
-
-        var couponCode = $("#checkout-discount-input").val();
+    // aplly coupon on the cart
+    function applyCoupon(){
+        const couponCodeInput = document.getElementById("couponCodeInput");
+        const couponCode = couponCodeInput.value;
 
         $.ajax({
             type: "POST",
@@ -309,14 +323,34 @@ $(document).ready(function() {
                 }else if(response.coupon){
                     swal("Success", "Coupon Added!", "success")
                     $('#reloadArea').load('/checkout #reloadArea'); 
+                    $('#reloadArea2').load('/checkout #reloadArea2');
                 }else{
                     swal("Somthing Worong", "", "error")
                 }
             }
         });
-    });
-});
+    }
 
+    function removeCoupon(){
+        $.ajax({
+            method: 'POST',
+            url: '/removeCoupon', 
+            data: JSON.stringify(),
+            contentType: 'application/json',
+            success: function (response) {
+                if(response.remove===true){
+                    $('#reloadArea').load('/checkout #reloadArea');
+                    $('#reloadArea2').load('/checkout #reloadArea2');
+                }else{
+                 
+                }
+            },
+            error: function (error) {
+
+                console.error(error);
+            }
+        });
+    }
 
 
 </script>

@@ -1,12 +1,17 @@
 const User = require("../model/userModel");
 const Order = require("../model/orderModel")
+const Banner = require("../model/bannerModel");
+const Category = require('../model/categoryModel')
+const Coupon = require('../model/CouponModel');
+const Offer = require("../model/offerModel")
+const Product = require('../model/productModel')
 const bcrypt = require("bcrypt");
 const puppeteer = require('puppeteer')
 const ExcelJS = require('exceljs')
 const path = require('path')
 const fs = require('fs')
 const ejs = require('ejs');
-const { log } = require("console");
+
 
 
 // =========================================< Dashboard >=================================================
@@ -27,7 +32,7 @@ const loadDashboard = async (req,res)=>{
       const totalOrders = orderData ? orderData.length : 0
       const deliveredOrders = orderData ? orderData.reduce((acc,val)=> (val.status === 'delivered' ? acc + 1: acc), 0) : 0
       const cancelledOrders = orderData ? orderData.reduce((acc,val)=> (val.status === 'cancel' ? acc + 1: acc), 0) : 0
-
+    
       if(orderData){
         for(let i=0;i<orderData.length;i++){
             let soldCount = orderData[i].products.reduce((acc,val)=>acc+val.count,0)
@@ -98,6 +103,7 @@ const loadDashboard = async (req,res)=>{
 }
 
 
+
 // =========================================< Lgin,Logout >=================================================
 
 
@@ -114,7 +120,7 @@ const loadlogin = async(req,res)=>{
 //admin logout
 const adminLogout = async(req,res)=>{
   try {
-    req.session.destroy()
+    req.session.admin_id=false
     res.redirect('/admin/login')
   } catch (error) {
       console.log(error.message);
@@ -341,8 +347,74 @@ const downloadReport = async (req, res) => {
 };
 
 
+// admin seach
+const adminSeach = async(req,res)=>{
+  try {
+
+    const search =req.query.search
+    const previousUrl = req.get('referer');
+    const spliturl = previousUrl.split('/')
+
+    if(spliturl.includes('user')){
+
+      const userData = await User.find({
+        name:{ $regex:search, $options:'i'}
+      })
+      res.render('userManagement',{users:userData})
+      
+    }else if(spliturl.includes('category')){
+
+      const categoryData = await Category.find({
+        name:{ $regex:search, $options:'i'}
+      })
+      res.render('categoryManagement',{categorys:categoryData})
+
+    }else if(spliturl.includes('product')){
+
+      const productData = await Product.find({
+        name:{ $regex:search, $options:'i'}
+      })
+      res.render('productManagement',{products:productData})
+
+    }else if(spliturl.includes('order')){
+
+      const OrderData = await Order.find({
+        name:{ $regex:search, $options:'i'}
+      })
+      res.render('orderManagement',{orders:OrderData})
+
+    }else if(spliturl.includes('banner')){
+
+      const bannerData = await Banner.find({
+        title:{ $regex:search, $options:'i'}
+      })
+      res.render('bannerManagement',{banners:bannerData})
+
+    }else if(spliturl.includes('coupon')){
+
+      const couponData = await Coupon.find({
+        name:{ $regex:search, $options:'i'}
+      })
+      res.render('couponManagement',{coupons:couponData})
+
+    }
+    else if(spliturl.includes('offer')){
+
+      const offerData = await Offer.find({
+        name:{ $regex:search, $options:'i'}
+      })
+      res.render('offerManagement',{offers:offerData})
+      
+    }
+  
+  } catch (error) {
+
+      console.log(error.message);
+
+  }
+}
+
 module.exports ={
-    // loadSample,
     loadlogin,
     verifyLogin,
     loadDashboard,
@@ -351,4 +423,5 @@ module.exports ={
     adminLogout,
     salesReport,
     downloadReport,
+    adminSeach
 }

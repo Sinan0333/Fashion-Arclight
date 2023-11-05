@@ -4,33 +4,23 @@ var addCategoryBtn = document.getElementById("addCategoryBtn");
 var closeBtn = document.getElementsByClassName("close")[0];
 var saveCategoryBtn = document.getElementById("saveCategoryBtn");
 
-// Open the modal when the "Add Category" button is clicked
 addCategoryBtn.onclick = function () {
   modal.style.display = "block";
 };
 
-// Close the modal when the close button is clicked
 closeBtn.onclick = function () {
   modal.style.display = "none";
 };
 
-// Close the modal when clicking outside the modal
 window.onclick = function (event) {
   if (event.target == modal) {
     modal.style.display = "none";
   }
 };
 
-// Save category logic here (you can use AJAX to send the data to the server)
 saveCategoryBtn.onclick = function () {
-  // Get the category name and block status from the form
   var categoryName = document.getElementById("categoryName").value;
   var blockStatus = document.getElementById("blockStatus").checked;
-
-  // You can perform further actions here, like sending data to the server
-  // using AJAX to save the category.
-
-  // Close the modal after saving
   modal.style.display = "none";
 };
 

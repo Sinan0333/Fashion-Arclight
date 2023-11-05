@@ -1,12 +1,12 @@
 <%- include('../layout/user/header.ejs') -%>
 
 <div style="width: 100%;height: 77px;"></div>
-<section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url('user/images/bg-01.jpg');">
+<!-- <section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url('user/images/bg-01.jpg');max-height: 50px;">
     <h2 class="ltext-105 cl0 txt-center">
         Cart
     </h2>
-</section>	
-<br>
+</section>	 -->
+
 
 <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
     <div class="container">
@@ -92,24 +92,8 @@
                                 <% }); %>
                             </table>
                         </div>
-                    
-                        <div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">
-                            <div class="flex-w flex-m m-r-20 m-tb-5">
-                                <input class="stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5" type="text" name="coupon" placeholder="Coupon Code">
-                                    
-                                <div class="flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5">
-                                    Apply coupon
-                                </div>
-                            </div>
-
-                            <div class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
-                                Update Cart
-                            </div>
-                        </div>
                     </div>
                 </div>
-                
-
 
                 <aside class="col-lg-3">
                     <div class="summary summary-cart">
@@ -166,7 +150,7 @@
                                                 <td>60.00</td>
                                             </tr><!-- End .summary-shipping-row -->
                                             <tr>
-                                                <td>Discount:</td>
+                                                <td>Offer:</td>
                                                 <td><%= discount %></td>
                                             </tr>
                                             <tr class="summary-total">
@@ -280,6 +264,7 @@
             }
         });
     }
+
 </script>
 
 <%- include('../layout/user/footer.ejs') -%>

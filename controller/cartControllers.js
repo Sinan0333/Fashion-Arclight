@@ -16,7 +16,7 @@ const loadCart = async(req,res)=>{
         if(cartData){
 
           for(let i=0;i<cartData.products.length;i++){
-            if( cartData.products[i].productId.offer.discountAmount !=0 && cartData.products[i].productId.offer.is_blocked==false){
+            if( cartData.products[i].productId.offer.discountAmount !=0 && cartData.products[i].productId.offer.is_blocked==false && cartData.products[i].productId.offer.activationDate <= new Date() && cartData.products[i].productId.offer.expiryDate >= new Date){
               let amount = cartData.products[i].productId.offer.discountAmount * cartData.products[i].count
               eachProductDiscount.push(amount)
             }
@@ -24,10 +24,10 @@ const loadCart = async(req,res)=>{
             const discount = eachProductDiscount.reduce((acc,val)=>acc+val,0)
             const total = (subTotal-discount)+cartData.shippingAmount
 
-          res.render('cart',{cart:cartData,subTotal:subTotal,total:total,discount:discount})
+          res.render('cart',{cart:cartData,subTotal:subTotal,total:total,discount:discount,user_id})
 
         }else{
-          res.render('cart',{cart:null})
+          res.render('cart',{cart:null,user_id})
         }
 
     } catch (error) {
@@ -169,6 +169,8 @@ const loadCheckout = async(req,res)=>{
 
     const user_id = req.session.user_id
     const cartData = await Cart.findOne({user:user_id}).populate('products.productId')
+    cartData.couponDiscount!=0 ? await cartData.populate('couponDiscount') : 0
+    const couponDiscount = cartData.couponDiscount !=0 ? cartData.couponDiscount.discountAmount : 0
 
     if(cartData){
       let addressData = await Address.findOne({user:user_id})
@@ -180,19 +182,19 @@ const loadCheckout = async(req,res)=>{
       let eachProductDiscount=[];
   
       for(let i=0;i<cartData.products.length;i++){
-        if( cartData.products[i].productId.offer.discountAmount !=0 && cartData.products[i].productId.offer.is_blocked == false){
+        if( cartData.products[i].productId.offer.discountAmount !=0 && cartData.products[i].productId.offer.is_blocked==false && cartData.products[i].productId.offer.activationDate <= new Date() && cartData.products[i].productId.offer.expiryDate >= new Date){
           let amount = cartData.products[i].productId.offer.discountAmount * cartData.products[i].count
           eachProductDiscount.push(amount)
         }
       }
-        const discount = eachProductDiscount.reduce((acc,val)=>acc+val,0)
-        const total = (subTotal-discount-cartData.couponDiscount)+cartData.shippingAmount
+        const offer = eachProductDiscount.reduce((acc,val)=>acc+val,0)
+        const total = (subTotal-offer-couponDiscount)+cartData.shippingAmount
   
       if(stock.length!=cartData.products.length){
         res.json({stock:false})
       }
   
-      res.render("checkout",{addresses:addressData,cart:cartData,subTotal:subTotal,total:total,discount:discount})
+      res.render("checkout",{addresses:addressData,cart:cartData,subTotal:subTotal,total:total,discount:offer,user_id})
     }else{
       res.redirect('/')
     }

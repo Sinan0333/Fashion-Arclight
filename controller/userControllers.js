@@ -43,7 +43,7 @@ const loadlogin = async (req, res) => {
 //user logout 
 const userLogout = async (req, res) => {
   try {
-    req.session.destroy()
+    req.session.user_id=false
     res.redirect('/login')
   } catch {
     console.log(error.message);
@@ -289,7 +289,6 @@ const loadprofile = async (req, res) => {
     userData.walletHistory.sort((a,b)=>b.date-a.date)
     const addressData = await Address.findOne({user:user_id})
     const OrderData = await Order.find({user:user_id})
-    // const couponData = await Coupon.find({is_blocked:false,usedUsers:{$nin:[user_id]},expiryDate:{$gte:new Date()}})
 
     const couponData = await Coupon.aggregate([
       {
@@ -316,7 +315,7 @@ const loadprofile = async (req, res) => {
       }
     ]);
 
-    res.render("profile",{user:userData,addresses:addressData,orders:OrderData,coupons:couponData});
+    res.render("profile",{user:userData,addresses:addressData,orders:OrderData,coupons:couponData,user_id});
   } catch {
     console.log(error.message);
   }
@@ -329,7 +328,7 @@ const loadEditProfile = async (req, res) => {
     const user_id= req.session.user_id;
     const userData = await User.findById(user_id)
 
-    res.render("editProfile",{user:userData})
+    res.render("editProfile",{user:userData,user_id})
   } catch (error){
     console.log(error.message);
   }
@@ -387,21 +386,11 @@ const editProfile = async (req, res) => {
 };
 
 
-//load Smple
-const sample = async (req, res) => {
-  try {
-    
-    res.render("aboutUs")
-  } catch (error){
-    console.log(error.message);
-  }
-};
-
-
 //load about Us page
 const loadAboutUs = async (req, res) => {
   try {
-    res.render("aboutUs")
+    const user_id = req.session.user_id
+    res.render("aboutUs",{user_id})
   } catch (error){
     console.log(error.message);
   }
@@ -411,7 +400,8 @@ const loadAboutUs = async (req, res) => {
 //load contact Us page
 const loadContactUs = async (req, res) => {
   try {
-    res.render("contactUs")
+    const user_id = req.session.user_id
+    res.render("contactUs",{user_id})
   } catch (error){
     console.log(error.message);
   }
@@ -440,7 +430,6 @@ module.exports = {
   editProfile,
   loadAboutUs,
   loadContactUs,
-  sample,
-
+  
 
 };

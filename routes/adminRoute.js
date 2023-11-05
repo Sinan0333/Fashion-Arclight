@@ -37,6 +37,7 @@ admin_route.get('/logout',adminControllers.adminLogout)
 
 // =========================================< Dashboard  >=================================================
 admin_route.get('/',auth.isLogin,adminControllers.loadDashboard)
+admin_route.get('/search',auth.isLogin,adminControllers.adminSeach)
 
 
 // =========================================< User Management  >=================================================

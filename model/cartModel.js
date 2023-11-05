@@ -28,8 +28,9 @@ const cartSchema = new mongoose.Schema({
     },
   ],
   couponDiscount: {
-    type: Number,
-    default:0,
+    type: String,
+    ref:'Coupon',
+    dafault:0
   },
   shippingMethod: {
     type: String,
