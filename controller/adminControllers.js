@@ -99,6 +99,7 @@ const loadDashboard = async (req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
 
@@ -113,6 +114,7 @@ const loadlogin = async(req,res)=>{
         res.render('login')
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
 
@@ -124,6 +126,7 @@ const adminLogout = async(req,res)=>{
     res.redirect('/admin/login')
   } catch (error) {
       console.log(error.message);
+      res.render('500Error')
   }
 }
 
@@ -159,6 +162,7 @@ const verifyLogin = async (req,res)=>{
   
     } catch (error) {
       console.log(error.message);
+      res.render('500Error')
     }
   }
 
@@ -174,6 +178,7 @@ const loadUserManagement = async(req,res)=>{
       res.render('userManagement',{users:userData})
   } catch (error) {
       console.log(error.message);
+      res.render('500Error')
   }
 }
 
@@ -193,9 +198,8 @@ const blockUser = async(req,res)=>{
     res.json({block:true}) 
 
   } catch (error) {
-
       console.log(error.message);
-
+      res.render('500Error')
   }
 }
 
@@ -240,7 +244,7 @@ const salesReport = async (req, res) => {
     res.render('salesReport', { orders });
   } catch (error) {
     console.log(error.message);
-    res.status(500).send('Internal Server Error');
+    res.render('500Error')
   }
 };
 
@@ -342,7 +346,7 @@ const downloadReport = async (req, res) => {
     }
   } catch (error) {
     console.log(error.message);
-    res.status(500).send('Internal Server Error');
+    res.render('500Error')
   }
 };
 
@@ -405,12 +409,16 @@ const adminSeach = async(req,res)=>{
       })
       res.render('offerManagement',{offers:offerData})
       
+    }else{
+      const productData = await Product.find({
+        name:{ $regex:search, $options:'i'}
+      })
+      res.render('productManagement',{products:productData})
     }
   
   } catch (error) {
-
       console.log(error.message);
-
+      res.render('500Error')
   }
 }
 

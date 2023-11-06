@@ -11,6 +11,7 @@ const loadOfferrManagement = async(req,res)=>{
       
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
 
@@ -23,6 +24,7 @@ const loadAddOffer = async(req,res)=>{
         
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
 
@@ -43,6 +45,7 @@ const addOffer = async (req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
 
@@ -57,6 +60,7 @@ const loadEditOffer = async (req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
 
@@ -80,6 +84,7 @@ const editOffer = async (req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
 
@@ -97,6 +102,7 @@ const blockOffer = async (req,res)=>{
         res.json({block:true})
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
 
@@ -109,6 +115,7 @@ const deleteOffer = async (req,res)=>{
         res.json({delete:true})
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
 

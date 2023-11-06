@@ -32,6 +32,7 @@ const loadCart = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
 
@@ -72,6 +73,7 @@ const addToCart = async(req,res)=>{
          
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
 
@@ -128,6 +130,7 @@ const updateCart = async(req,res)=>{
         
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
 
@@ -159,6 +162,7 @@ const removeProduct = async(req,res)=>{
     }
   } catch (error) {
       console.log(error.message);
+      res.render('500Error')
   }
 }
 
@@ -202,17 +206,22 @@ const loadCheckout = async(req,res)=>{
 
   } catch (error) {
       console.log(error.message);
+      res.render('500Error')
   }
 }
 
 
 //add shipping method
 const addShippingMethod = async (req,res)=>{
-  const method = req.body.method
-  const amount = req.body.amount
-  const cartData = await Cart.findOneAndUpdate({user:req.session.user_id},{$set:{shippingMethod:method,shippingAmount:amount}})
-  res.json({added:true})
-
+  try{
+    const method = req.body.method
+    const amount = req.body.amount
+    const cartData = await Cart.findOneAndUpdate({user:req.session.user_id},{$set:{shippingMethod:method,shippingAmount:amount}})
+    res.json({added:true})
+  }catch(error){
+    console.log(error.message);
+    res.render('500Error')
+  }
 }
 
 

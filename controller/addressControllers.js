@@ -10,6 +10,7 @@ const loadAddAddress = async(req,res)=>{
 
   } catch (error) {
       console.log(error.message);
+      res.render('500Error')
   }
 }
 
@@ -40,12 +41,12 @@ const addAddress = async (req, res) => {
 
           );
 
-        res.redirect('/profile')
+        // res.redirect('/profile')
+        
 
     } catch(error) {
-
       console.log(error.message);
-
+      res.render('500Error')
     }
 };
 
@@ -63,6 +64,7 @@ const loadEditAddress = async(req,res)=>{
 
   } catch (error) {
       console.log(error.message);
+      res.render('500Error')
   }
 }
 
@@ -89,6 +91,7 @@ const editAddress = async(req,res)=>{
 
   } catch (error) {
       console.log(error.message);
+      res.render('500Error')
   }
 }
 
@@ -105,6 +108,7 @@ const deleteAddress = async(req,res)=>{
 
   } catch (error) {
       console.log(error.message);
+      res.render('500Error')
   }
 }
 

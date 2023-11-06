@@ -23,6 +23,7 @@ const addReview = async (req, res) => {
 
     } catch (error){
       console.log(error.message);
+      res.render('500Error')
     }
   };
 
@@ -49,6 +50,7 @@ const addReplay = async (req, res) => {
 
     } catch (error){
       console.log(error.message);
+      res.render('500Error')
     }
 };
 
@@ -81,6 +83,7 @@ const addLike = async (req, res) => {
 
     } catch (error){
       console.log(error.message);
+      res.render('500Error')
     }
 };
 

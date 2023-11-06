@@ -10,6 +10,7 @@ const loadBannerManagement = async (req,res)=>{
         res.render('bannerManagement',{banners:bannerData})
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
 
@@ -22,6 +23,7 @@ const loadAddBanner = async (req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
 
@@ -42,6 +44,7 @@ const addBanner = async (req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
 
@@ -56,6 +59,7 @@ const deleteBanner = async (req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
 
@@ -75,6 +79,7 @@ const blockBanner = async (req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
 
@@ -89,6 +94,7 @@ const loadEditBanner = async (req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
 
@@ -121,6 +127,7 @@ const editBanner = async (req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
 

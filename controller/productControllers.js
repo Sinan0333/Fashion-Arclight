@@ -27,8 +27,9 @@ const loadHome = async (req, res) => {
     const wishData = wishlistData ? wishlistData.products.map((val) => val.productId) : [];
 
     res.render("index",{products:productData,banners:bannerData,categorys:categoryId,wishData,user_id});
-  } catch {
+  } catch(error) {
     console.log(error.message);
+    res.render('500Error')
   }
 };
 
@@ -38,21 +39,24 @@ const loadShop = async(req,res)=>{
   try {
     const user_id = req.session.user_id
     const category = req.query.category 
-    const categoryData = await Category.find()
+    const page = req.query.page ? req.query.page : 1
+    const prevPage = page-1
+    const totalDoc = await Product.countDocuments();
+    const categoryData = await Category.find().sort({name:1})
     const wishlistData = await Wishlist.findOne({user:req.session.user_id})
     const wishData = wishlistData ? wishlistData.products.map((val) => val.productId) : [];
+
     if(category){
-      const productData =await Product.find({category:category})
-      res.render('shop',{products:productData,categorys:categoryData,wishData,user_id})
+      const productData =await Product.find({category:category}).skip(prevPage*4).limit(4)
+      res.render('shop',{products:productData,categorys:categoryData,wishData,user_id,totalDoc,page})
     }else{
-      const productData =await Product.find()
-      res.render('shop',{products:productData,categorys:categoryData,wishData,user_id})
+      const productData =await Product.find().skip(prevPage*4).limit(4)
+      res.render('shop',{products:productData,categorys:categoryData,wishData,user_id,totalDoc,page})
     }
       
   } catch (error) {
-
       console.log(error.message);
-
+      res.render('500Error')
   }
 }
 
@@ -70,8 +74,9 @@ const loadProduct = async (req, res) => {
     const avgRatig =reviews ? reviews.reduce((acc,val)=>acc+val.rating,0)/reviews.length : 0
     const wishProduct = await Wishlist.findOne({user:user_id,'products.productId':product_id})
     res.render("product",{product:productData,relatedProducts:relatedProducts,offerPrice:offerPrice,reviews:reviews,avgRatig:avgRatig,user_id,wishProduct,user:user_id});
-  } catch {
+  } catch(error) {
     console.log(error.message);
+    res.render('500Error')
   }
 };
 
@@ -82,13 +87,16 @@ const productFilter = async (req, res) => {
 
     const user_id = req.session.user_id
     const price = req.query.price
+    const page = req.query.page ? req.query.page : 1
+    const searchQuery =  req.query.search? req.query.search : ""
+    const prevPage = page-1
     const splitPrice =price.split('-')
     const minimum= parseInt(splitPrice[0])
     const maximum = parseInt(splitPrice[1])  
     const sort =parseInt( req.query.sort)
     const category = req.query.category
-    const searchQuery =  req.query.search? req.query.search : ""
     const categoryData = await Category.find()
+    const totalDoc = await Product.countDocuments();
     const wishlistData = await Wishlist.findOne({user:req.session.user_id})
     const wishData = wishlistData ? wishlistData.products.map((val) => val.productId) : [];
     if(category=='all'){
@@ -96,23 +104,24 @@ const productFilter = async (req, res) => {
       const productData = await Product.find({
         name:{ $regex:searchQuery, $options:'i'},
         price: { $gte: minimum, $lte: maximum }
-      }).sort({ price: sort });
+      }).sort({ price: sort }).skip(prevPage*4).limit(4)
 
-      res.render('shop',{products:productData,categorys:categoryData,wishData,user_id})
+      res.render('shop',{products:productData,categorys:categoryData,wishData,user_id,totalDoc,page})
 
     }else{
 
       const productData = await Product.find({
         name:{ $regex:searchQuery, $options:'i'},
         price: { $gte: minimum, $lte: maximum },category:category
-      }).sort({ price: sort });
+      }).sort({ price: sort }).skip(prevPage*4).limit(4)
 
-      res.render('shop',{products:productData,categorys:categoryData,wishData,user_id})
+      res.render('shop',{products:productData,categorys:categoryData,wishData,user_id,totalDoc,page})
     }
 
 
   } catch(error) {
     console.log(error.message);
+    res.render('500Error')
   }
 };
 
@@ -126,6 +135,7 @@ const loadProductManagement = async(req,res)=>{
       res.render('productManagement',{products:productData})
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
 
@@ -140,6 +150,7 @@ const loadAddProduct = async(req,res)=>{
   
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
 
@@ -181,9 +192,8 @@ const addProduct = async(req,res)=>{
     res.redirect('/admin/product')
 
   } catch (error) {
-
       console.log(error.message);
-
+      res.render('500Error')
   }
 }
 
@@ -199,9 +209,8 @@ const loadEditProduct = async(req,res)=>{
       res.render('editProduct',{product:productData,categorys:categoryData,offers:offerData})
   
     } catch (error) {
-  
         console.log(error.message);
-  
+        res.render('500Error')
     }
 }
 
@@ -285,6 +294,7 @@ const editProduct = async (req, res) => {
     res.redirect('/admin/product');
   } catch (error) {
     console.log(error.message);
+    res.render('500Error')
   }
 };
 
@@ -304,9 +314,8 @@ const blockProduct = async(req,res)=>{
       res.redirect('/admin/product')
   
     } catch (error) {
-  
         console.log(error.message);
-  
+        res.render('500Error')
     }
 }
 
@@ -335,9 +344,8 @@ const deleteProduct = async(req,res)=>{
     res.redirect('/admin/product')
 
   } catch (error) {
-
       console.log(error.message);
-
+      res.render('500Error')
   }
 }
 
@@ -357,6 +365,7 @@ module.exports ={
     loadHome,
     loadShop,
     loadProduct,
-    productFilter
+    productFilter,
+
 
 }

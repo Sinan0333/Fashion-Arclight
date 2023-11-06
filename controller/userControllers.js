@@ -23,6 +23,7 @@ const securePassword = async (password) => {
     return passwordHash;
   } catch (error) {
     console.log(error.message);
+    res.render('500Error')
   }
 };
 
@@ -34,8 +35,9 @@ const securePassword = async (password) => {
 const loadlogin = async (req, res) => {
   try {
     res.render("login");
-  } catch {
+  } catch(error) {
     console.log(error.message);
+    res.render('500Error')
   }
 };
 
@@ -45,8 +47,9 @@ const userLogout = async (req, res) => {
   try {
     req.session.user_id=false
     res.redirect('/login')
-  } catch {
+  } catch(error) {
     console.log(error.message);
+    res.render('500Error')
   }
 };
 
@@ -83,6 +86,7 @@ const verifyLogin = async (req,res)=>{
 
   } catch (error) {
     console.log(error.message);
+    res.render('500Error')
   }
 }
 
@@ -98,8 +102,9 @@ const forgotPassword = async (req, res) => {
     }else{
       res.render('getEmail')
     }
-  } catch {
+  } catch(error) {
     console.log(error.message);
+    res.render('500Error')
   }
 };
 
@@ -117,8 +122,9 @@ const getEmail= async (req, res) => {
     res.render(getEmail,{error:'Email not found'})
    }
    
-  } catch {
+  } catch(error) {
     console.log(error.message);
+    res.render('500Error')
   }
 };
 
@@ -138,8 +144,9 @@ const changePassword= async (req, res) => {
     res.redirect("/login")
   }
    
-  } catch {
+  } catch(error) {
     console.log(error.message);
+    res.render('500Error')
   }
 };
 
@@ -150,8 +157,9 @@ const changePassword= async (req, res) => {
 const loadRegister = async (req, res) => {
   try {
     res.render("signUp");
-  } catch {
+  } catch(error) {
     console.log(error.message);
+    res.render('500Error')
   }
 };
 
@@ -186,6 +194,7 @@ const insertUser = async (req, res) => {
     }
   } catch (error) {
     res.send(error.message);
+    res.render('500Error')
   }
 };
 
@@ -227,6 +236,7 @@ const sendVerifyMail = async (username, email, user_id) => {
 
   } catch (error) {
     console.log(error.message);
+    res.render('500Error')
   }
 };
 
@@ -262,6 +272,7 @@ const otpVarification = async (req, res) => {
     
   } catch (error) {
     console.log(error.message);
+    res.render('500Error')
   }
 };
 
@@ -273,6 +284,7 @@ const resendOtp = async (req, res) => {
     res.render("verification");
   } catch(error) {
     console.log(error.message);
+    res.render('500Error')
   }
 };
 
@@ -316,8 +328,9 @@ const loadprofile = async (req, res) => {
     ]);
 
     res.render("profile",{user:userData,addresses:addressData,orders:OrderData,coupons:couponData,user_id});
-  } catch {
+  } catch(error) {
     console.log(error.message);
+    res.render('500Error')
   }
 };
 
@@ -331,6 +344,7 @@ const loadEditProfile = async (req, res) => {
     res.render("editProfile",{user:userData,user_id})
   } catch (error){
     console.log(error.message);
+    res.render('500Error')
   }
 };
 
@@ -382,6 +396,7 @@ const editProfile = async (req, res) => {
 
   } catch (error){
     console.log(error.message);
+    res.render('500Error')
   }
 };
 
@@ -393,6 +408,7 @@ const loadAboutUs = async (req, res) => {
     res.render("aboutUs",{user_id})
   } catch (error){
     console.log(error.message);
+    res.render('500Error')
   }
 };
 
@@ -404,14 +420,9 @@ const loadContactUs = async (req, res) => {
     res.render("contactUs",{user_id})
   } catch (error){
     console.log(error.message);
+    res.render('500Error')
   }
 };
-
-
-
-
-
-
 
 
 module.exports = {
@@ -431,5 +442,4 @@ module.exports = {
   loadAboutUs,
   loadContactUs,
   
-
 };

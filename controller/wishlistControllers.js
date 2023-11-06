@@ -17,6 +17,7 @@ const loadWishlist = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
 
@@ -54,6 +55,7 @@ const addToWishList = async(req,res)=>{
      
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
   
@@ -72,6 +74,7 @@ const removeProduct = async(req,res)=>{
       }n
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
   }
 

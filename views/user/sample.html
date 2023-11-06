@@ -1,20 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagination Design</title>
+    <style>
+        .pagination {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            justify-content: center;
+        }
 
-<div class="row">
-        <div class="col-lg-6">
-            <div class="card card-dashboard">
-                <div class="card-body">
-                    <h3 class="card-title">Address </h3>
-                    <p>Name:sinan<br>
-                    Email: sinan.m.p@gimal,come<br>
-                    Mobile: 7736930520<br>
-                    State: Delivered<br>
-                    City: chundampatta<br>
-                    House Name: Madayiparambilhouse<br>
-                    Pincode: 679337<br>
-                    <a href="/editAddress" >Edit <i class="icon-edit"></i></a>
-                    <a href="/deleteAddress" style="margin-left: 15px;" >Delete <i class="icon-delete"></i></a>
+        .pagination li {
+            margin: 5px;
+            padding: 5px 10px;
+            background-color:#ebeef0 ;
+            color: black;
+            border-radius: 5px;
+            cursor: pointer;
+           
+        }
 
-                </div>
-            </div>
-        </div>
-</div>
+        .pagination li.active {
+            background-color: #e74c3c;
+        }
+
+        .pagination li.prev,
+        .pagination li.next {
+            background-color: #3498db;
+        }
+    </style>
+</head>
+<body>
+    <ul class="pagination">
+        <li class="prev">Prev</li>
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+        <li class="next">Next</li>
+    </ul>
+</body>
+</html>

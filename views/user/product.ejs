@@ -9,9 +9,8 @@
             <br>
             <div class="container d-flex align-items-center">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                    <li class="breadcrumb-item"><a href="#">Products</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Default</li>
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Product</li>
                 </ol>
 
                 <nav class="product-pager ml-auto" aria-label="Product">
@@ -279,12 +278,14 @@
                                         <%= review.comment %>
                                     </p>
                                     <div class="like-button">
+                                        <% if ( user_id) { %>
                                         <button id="pd-like-btn"  onclick="addLike('<%= review._id %>','<%= product._id %>')" >
                                             <i class="far fa-thumbs-up"></i> 
                                         </button>
+                                        <% } %>
                                         <span class="likes-count"><%= review.likes.length %> Likes</span>
                                     </div>
-                                    <% if (review.user._id != user) { %>
+                                    <% if (review.user._id != user && user_id) { %>
                                     <button class="reply-button" onclick="showReplyForm('<%= review._id %>')">Reply</button>
                                     <% } %>
                                     <div id="reply-form-<%= review._id %>" style="display: none;">

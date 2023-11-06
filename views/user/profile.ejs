@@ -12,8 +12,7 @@
         <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
             <div class="container">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                    <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
                     <li class="breadcrumb-item active" aria-current="page">My Account</li>
                 </ol>
             </div><!-- End .container -->
@@ -151,14 +150,14 @@
                                                             House Name: <%= address.houseName %><br>
                                                             Pincode: <%= address.pin %><br>
                                                             <a href="/editAddress?ind=<%= index %>" >Edit <i class="icon-edit"></i></a>
-                                                            <a href="/deleteAddress?_id=<%= address._id %>" style="margin-left: 15px;" >Delete <i class="icon-delete"></i></a>
+                                                            <a href="" style="margin-left: 15px;" >Delete <i class="icon-delete"></i></a>
 
                                                         </div>
                                                     </div>
                                                 </div>
                                             <% }); %>
                                         </div>
-                                        <a class="btn btn-primary" href="/addAddress">Add Address</a>
+                                        <a class="btn btn-primary" href="/addAddress" data-toggle="modal" data-target="#addAddress">Add Address</a>
                                     <% } %>
                                 </div><!-- Show Addresses end -->
 
@@ -216,12 +215,10 @@
                                                         </div>
                                                     </div>
                                                     <% } %>
-                                        
                                         <% }); %>
                                     </div>
                                     <% } %>
                                 </div><!-- .End .tab-pane -->
-
                             </div>
                         </div><!-- End .col-lg-9 -->
                     </div><!-- End .row -->
@@ -232,7 +229,78 @@
 </div><!-- End .page-wrapper -->
 
 
+<!-- Add Address Modal -->
+<div class="modal fade" id="addAddress" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="padding-top: 80px;">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add Address</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" >
+            <div class="tab-pane "  >
+                <form action="/addAddress" id="form" method="post">
+                    <label>Full name *</label>
+                    <input type="text" class="form-control" name="name" id="name" required>
+                    <p style="color: red;" id="nameLengthError"></p>
+                    <div class="row">                                       
+                        <div class="col-sm-6">
+                            <label>Email *</label>
+                            <input type="email" class="form-control" name="email" id="email" required>
+                            <p style="color: red;" id="emailError"></p>
+                        </div><!-- End .col-sm-6 -->
+    
+                        <div class="col-sm-6">
+                            <label>Mobile *</label>
+                            <input type="number" class="form-control" name="mobile" id="mobile" autocomplete="off" required>
+                            <p style="color: red;" id="mobileLngthErrror"></p>
+                        </div><!-- End .col-sm-6 -->
+    
+                        <div class="col-sm-6">
+                            <label>State *</label>
+                            <input type="text" class="form-control" name="state" required>
+                        </div><!-- End .col-sm-6 -->
+    
+                        <div class="col-sm-6">
+                            <label>City *</label>
+                            <input type="text" class="form-control" name="city" required>
+                        </div><!-- End .col-sm-6 -->
+    
+                        <div class="col-sm-6">
+                            <label>Pincode *</label>
+                            <input type="number" class="form-control" name="pincode"  id="pincode" autocomplete="off" required>
+                            <p style="color: red;" id="pincodeLngthErrror"></p>
+                        </div><!-- End .col-sm-6 -->
+                                              
+                        <div class="col-sm-6">
+                            <label>House name *</label>
+                            <input type="text" class="form-control" name="house" required>
+                        </div><!-- End .col-sm-6 -->                                         
+                    </div><!-- End .row -->                                   
+    
+                    <button type="submit" class="btn btn-outline-primary-2">
+                        <span>Add Address</span>
+                        <i class="icon-long-arrow-right"></i>
+                    </button>
+                </form>
+            </div><!-- Add address form end -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
 <script>
+// modal
+    $('#addAddress').on('shown.bs.modal', function () {
+    $('#myInput').trigger('focus')
+    })
+
+
+    // alert box when user logout
     document.addEventListener("DOMContentLoaded", function () {
         const signOutLink = document.getElementById("signOutLink");
         signOutLink.addEventListener("click", function (e) {
@@ -241,6 +309,36 @@
             if (confirmLogout) {
                 window.location.href = signOutLink.getAttribute("href");
             }
+        });
+    });
+
+    //add addres using ajax
+    $(document).ready(function () {
+        $('#form').submit(function (event) {
+            event.preventDefault();
+            var formDataArray = $(this).serializeArray();
+            var formData = $.param(formDataArray)
+            console.log(formData,);
+            $.ajax({
+                type: 'POST',
+                url: '/placeOrder',
+                data: formData,
+                success: function (response) {
+                    if(response.placed==true){
+                        window.location.href = '/orderSuccess'
+                    }else if(response.wallet == false){
+                        swal("Oops, it looks like your wallet balance is too low to place this order !!", "", "error")
+                    }
+                    else{
+                        
+                        razorpayPayment(response.order)
+                    }
+                },
+                error: function (error) {
+    
+                    console.error('Error:', error);
+                }
+            });
         });
     });
 </script>

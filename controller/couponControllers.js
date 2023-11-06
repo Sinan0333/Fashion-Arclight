@@ -12,6 +12,7 @@ const loadCouponManagement = async(req,res)=>{
       
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
 
@@ -24,6 +25,7 @@ const loadAddCoupon= async(req,res)=>{
         
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
 
@@ -51,6 +53,7 @@ const addCoupon = async (req,res)=>{
        
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
 
@@ -65,6 +68,7 @@ const loadEditCoupon = async (req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
 
@@ -96,6 +100,7 @@ const editCoupon = async (req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
 
@@ -113,6 +118,7 @@ const blockCoupon = async (req,res)=>{
         res.json({block:true})
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
 
@@ -125,6 +131,7 @@ const deleteCoupon = async (req,res)=>{
         res.json({delete:true})
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
 
@@ -168,6 +175,7 @@ const checkCoupon = async (req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
 
@@ -183,6 +191,7 @@ const removeCoupon = async (req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
 module.exports ={

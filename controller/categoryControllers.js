@@ -9,6 +9,7 @@ const loadCategoryManagement = async(req,res)=>{
       res.render('categoryManagement',{categorys:categoryData})
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
   
@@ -37,6 +38,7 @@ const addCategory = async(req,res)=>{
   
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
   
@@ -56,9 +58,8 @@ const blockCategory = async(req,res)=>{
       res.redirect('/admin/category')
   
     } catch (error) {
-  
         console.log(error.message);
-  
+        res.render('500Error')
     }
   
 }
@@ -76,9 +77,8 @@ const updateCategory = async(req,res)=>{
       res.redirect('/admin/category')
   
     } catch (error) {
-  
         console.log(error.message);
-  
+        res.render('500Error')
     }
 }
 

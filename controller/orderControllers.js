@@ -123,6 +123,7 @@ const placeOrder = async(req,res)=>{
   
     } catch (error) {
         console.log(error.message);
+        res.render('500Error')
     }
 }
 
@@ -156,9 +157,8 @@ const verifyPayment = async(req,res)=>{
     }
 
   } catch (error) {
-
       console.log(error.message);
-
+      res.render('500Error')
   }
 }
 
@@ -174,9 +174,8 @@ const loadOrderDetails = async(req,res)=>{
     res.render('orderDetails',{order:orderData,user_id})
 
   } catch (error) {
-
       console.log(error.message);
-
+      res.render('500Error')
   }
 }
 
@@ -209,9 +208,8 @@ const cancelOrder = async(req,res)=>{
    
     res.json({cancel:true})  
   } catch (error) {
-
       console.log(error.message);
-
+      res.render('500Error')
   }
 }
 
@@ -226,9 +224,8 @@ const loadInvoice = async(req,res)=>{
     res.render('invoice',{orders:orderData})
 
   } catch (error) {
-
       console.log(error.message);
-
+      res.render('500Error')
   }
 }
 
@@ -240,6 +237,7 @@ const loadOrderSuccess = async(req,res)=>{
     res.render('orderSuccess',{user_id})
   } catch (error) {
       console.log(error.message);
+      res.render('500Error')
   }
 }
 
@@ -256,9 +254,8 @@ const loadOrderManagement = async(req,res)=>{
     res.render('orderManagement',{orders:OrderData})
 
   } catch (error) {
-
       console.log(error.message);
-
+      res.render('500Error')
   }
 }
 
@@ -272,9 +269,8 @@ const loadOrderSummary = async(req,res)=>{
     res.render('orderDetails',{order:OrderData})
 
   } catch (error) {
-
       console.log(error.message);
-
+      res.render('500Error')
   }
 }
 
@@ -312,9 +308,8 @@ const updateOrder = async(req,res)=>{
       res.json({update:true})  
 
   } catch (error) {
-
       console.log(error.message);
-
+      res.render('500Error')
   }
 }
 
@@ -329,9 +324,8 @@ const userOrders= async(req,res)=>{
     res.render('userOrder',{orders:OrderData,user:userData})
 
   } catch (error) {
-
       console.log(error.message);
-
+      res.render('500Error')
   }
 }
 

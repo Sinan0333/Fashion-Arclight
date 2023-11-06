@@ -22,7 +22,7 @@ app.use(noCache())
 app.use('/',userRoute)
 app.use('/admin',adminRoute)
 app.use((req, res) => {
-    res.status(404).render(__dirname+'/views/user/Error.ejs');
+    res.status(404).render(__dirname+'/views/user/404Error.ejs');
   });
 
 
