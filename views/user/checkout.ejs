@@ -16,12 +16,6 @@
 <div class="page-content">
     <div class="checkout">
         <div class="container">
-            <!-- <div class="checkout-discount">
-                <form id="coupon-form">
-                    <input type="text" class="form-control" name="coupon" required id="checkout-discount-input">
-                    <label for="checkout-discount-input" class="text-truncate">Have a coupon? <span>Click here to enter your code</span></label>
-                </form>
-            </div>End .checkout-discount -->
             <div id="reloadArea2">
                 <% if (cart.couponDiscount==0) { %>
                     <div class="flex-w flex-m m-r-20 m-tb-5">
@@ -40,7 +34,7 @@
                 <% } %>
             </div>
 
-            <form  id="myForm">
+            <form  id="form">
                 <div class="row">
                     <div class="col-lg-9">
                     <% if (addresses.address.length >0) { %>
@@ -64,22 +58,24 @@
                                 </div>
                             <% }); %>
                         </div>
-                        <a class="btn btn-primary" href="/addAddress">Add Address</a>
                         <% } else { %>
                             <div class="tab-pane "  >
                                 <h3>Add Address</h1>
                                 <!-- <form action="/addAddress" method="post"> -->
                                     <label>Full name *</label>
-                                    <input type="text" class="form-control" name="name" required>
+                                    <input type="text" class="form-control" name="name" id="name" required>
+                                    <p style="color: red;" id="nameLengthError"></p>
                                     <div class="row">                                       
                                         <div class="col-sm-6">
                                             <label>Email *</label>
-                                            <input type="email" class="form-control" name="email" required>
+                                            <input type="email" class="form-control" name="email" id="email" required>
+                                            <p style="color: red;" id="emailError"></p>
                                         </div><!-- End .col-sm-6 -->
                     
                                         <div class="col-sm-6">
                                             <label>Mobile *</label>
-                                            <input type="number" class="form-control" name="mobile" required autocomplete="off">
+                                            <input type="number" class="form-control" name="mobile" id="mobile" required autocomplete="off">
+                                            <p style="color: red;" id="mobileLngthErrror"></p>
                                         </div><!-- End .col-sm-6 -->
                     
                                         <div class="col-sm-6">
@@ -94,7 +90,8 @@
                     
                                         <div class="col-sm-6">
                                             <label>Pincode *</label>
-                                            <input type="number" class="form-control" name="pincode" required>
+                                            <input type="number" class="form-control" name="pincode" id="pincode" required>
+                                            <p style="color: red;" id="pincodeLngthErrror"></p>
                                         </div><!-- End .col-sm-6 -->
                                                               
                                         <div class="col-sm-6">
@@ -205,20 +202,21 @@
     </div><!-- End .checkout -->
 </div><!-- End .page-content -->
 
+<script src="user/js/modalFormVal.js"></script>
 <script>
 
     $(document).ready(function () {
-        $('#myForm').submit(function (event) {
+        $('#form').submit(function (event) {
             event.preventDefault();
-
             const total = document.getElementById("total1").innerHTML;
             const splitTotal = total.split(' ')
             var formDataArray = $(this).serializeArray();
             formDataArray.push({ name: 'total', value: splitTotal[3] })
             var formData = $.param(formDataArray)
+            const validation = validate()
 
-            console.log(formData,);
-            $.ajax({
+            if(validation){
+                $.ajax({
                 type: 'POST',
                 url: '/placeOrder',
                 data: formData,
@@ -238,6 +236,10 @@
                     console.error('Error:', error);
                 }
             });
+            }else{
+                event.preventDefault()
+            }
+           
         });
     });
 

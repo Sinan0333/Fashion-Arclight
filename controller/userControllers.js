@@ -98,7 +98,7 @@ const forgotPassword = async (req, res) => {
     if(req.session.user_id){
      const userData =await User.findOne({_id:req.session.user_id})
       sendVerifyMail(userData.name,userData.email)
-      res.render('verification')
+      res.render('verification',{email:userData.email})
     }else{
       res.render('getEmail')
     }
@@ -117,7 +117,7 @@ const getEmail= async (req, res) => {
    const userData = await User.findOne({email:email})
    if(userData){
     sendVerifyMail('user',email)
-    res.render('verification')
+    res.render('verification',{email:req.body.email})
    }else{
     res.render(getEmail,{error:'Email not found'})
    }
@@ -281,7 +281,7 @@ const otpVarification = async (req, res) => {
 const resendOtp = async (req, res) => {
   try {
     sendVerifyMail(userData.name,userData.email)
-    res.render("verification");
+    res.render("verification",{email:userData.email});
   } catch(error) {
     console.log(error.message);
     res.render('500Error')
@@ -353,20 +353,23 @@ const loadEditProfile = async (req, res) => {
 const editProfile = async (req, res) => {
   try {
 
+    const user_id = req.session.user_id
     const userData = await User.findById(req.session.user_id)
 // checking user changed theire password
-    if(req.body.currentpswd&&req.body.newpswd){
-
-      const matchPassword = await bcrypt.compare(req.body.currentpswd,userData.password)
-
-      if(matchPassword){
-
-        var sPassword = await securePassword(req.body.newpswd)
-
+    if(req.body.currentpswd||req.body.newpswd){
+      if(req.body.newpswd.length<8){
+        return res.render('editProfile',{error:'',user:userData,user_id})
       }else{
-        res.render('editProfile',{error:'Current password is incorrect.please try again.',user:userData})
+        const matchPassword = await bcrypt.compare(req.body.currentpswd,userData.password)
+
+        if(matchPassword){
+  
+          var sPassword = await securePassword(req.body.newpswd)
+  
+        }else{
+          return res.render('editProfile',{error:'Current password is incorrect.please try again.',user:userData,user_id})
+        }
       }
-      
     }else{
       var sPassword = userData.password
     }

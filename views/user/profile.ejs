@@ -3,12 +3,6 @@
 <div class="page-wrapper">
     <div style="width: 100%; height: 77px; background-color: white;"></div>
     <main class="main">
-        <!-- <section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url('user/images/bg-01.jpg');">
-            <h2 class="ltext-105 cl0 txt-center">
-               My Profile
-            </h2>
-        </section> -->
-
         <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
             <div class="container">
                 <ol class="breadcrumb">
@@ -130,42 +124,51 @@
                                 </div><!-- .End .tab-pane -->
 
                                 <!-- Show Addresses start -->
-                                <div class="tab-pane fade" id="tab-address" role="tabpanel" aria-labelledby="tab-address-link">
-                                    <% if (addresses=== null    ) { %>
-                                        <p>No addresses have been added yet.</p>
-                                        <a class="btn btn-primary" href="/addAddress">Add Address</a>
-                                    <% } else { %>
-                                        <p>The following addresses will be used on the checkout page by default.</p>
-                                        <div class="row">
-                                            <% addresses.address.forEach(function(address, index) { %>
-                                                <div class="col-lg-6">
-                                                    <div class="card card-dashboard">
-                                                        <div class="card-body">
-                                                            <h3 class="card-title">Address <%= index + 1 %></h3>
-                                                            <p>Name: <%= address.fullName %><br>
-                                                            Email: <%= address.email %><br>
-                                                            Mobile: <%= address.mobile %><br>
-                                                            State: <%= address.state %><br>
-                                                            City: <%= address.city %><br>
-                                                            House Name: <%= address.houseName %><br>
-                                                            Pincode: <%= address.pin %><br>
-                                                            <a href="/editAddress?ind=<%= index %>" >Edit <i class="icon-edit"></i></a>
-                                                            <a href="" style="margin-left: 15px;" >Delete <i class="icon-delete"></i></a>
+                                <div  class="tab-pane fade" id="tab-address" role="tabpanel" aria-labelledby="tab-address-link">
+                                    <div id="addrassArea">
+                                        <% if (addresses=== null    ) { %>
+                                            <p>No addresses have been added yet.</p>
+                                            <a class="btn btn-primary" href="/addAddress" data-toggle="modal" data-target="#addAddress">Add Address</a>
+                                        <% } else { %>
+                                            <p>The following addresses will be used on the checkout page by default.</p>
+                                            <div class="row">
+                                                <% addresses.address.forEach(function(address, index) { %>
+                                                    <div class="col-lg-6">
+                                                        <div class="card card-dashboard">
+                                                            <div class="card-body">
+                                                                <h3 class="card-title">Address <%= index + 1 %></h3>
+                                                                <p>Name: <%= address.fullName %><br>
+                                                                Email: <%= address.email %><br>
+                                                                Mobile: <%= address.mobile %><br>
+                                                                State: <%= address.state %><br>
+                                                                City: <%= address.city %><br>
+                                                                House Name: <%= address.houseName %><br>
+                                                                Pincode: <%= address.pin %><br>
+                                                                <a href="/editAddress?ind=<%= index %>" >Edit <i class="icon-edit"></i></a>
+                                                                <button style="margin-left: 15px; cursor: pointer; background: none; border: none;" onclick="deleteAddress('<%= address._id %>')">Delete <i class="icon-delete"></i></button>
 
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            <% }); %>
-                                        </div>
-                                        <a class="btn btn-primary" href="/addAddress" data-toggle="modal" data-target="#addAddress">Add Address</a>
-                                    <% } %>
+                                                <% }); %>
+                                            </div>
+                                            <a class="btn btn-primary" href="/addAddress" data-toggle="modal" data-target="#addAddress">Add Address</a>
+                                        <% } %>
+                                    </div>
                                 </div><!-- Show Addresses end -->
 
                                 <!-- user profiel start -->
                                 <div class="tab-pane fade show active" id="tab-account"  role="tabpanel" aria-labelledby="tab-account-link">
                                 <form action="/editProfile">
-                                    <div class="circle-image">
+                                    <!-- <div class="circle-image">
                                         <img src="images/user/orginal/<%= user.image %>" alt="<%= user.image %>" />
+                                    </div> -->
+                                    <div class="text-center mb-4">
+                                        <div class="custom-file-upload">
+                                            <div class="circular-image-input">
+                                                <img src="images/user/orginal/<%= user.image %>" id="profile-picture" alt="Profile Picture">
+                                            </div>
+                                        </div>
                                     </div>
                                     <br>
                                     <br>
@@ -241,7 +244,7 @@
         </div>
         <div class="modal-body" >
             <div class="tab-pane "  >
-                <form action="/addAddress" id="form" method="post">
+                <form  id="form" onsubmit="return validate();">
                     <label>Full name *</label>
                     <input type="text" class="form-control" name="name" id="name" required>
                     <p style="color: red;" id="nameLengthError"></p>
@@ -289,19 +292,48 @@
         </div>
       </div>
     </div>
-  </div>
+</div>
 
-
-
+<script src="user/js/modalFormVal.js"></script>
 <script>
-// modal
+    // modal
     $('#addAddress').on('shown.bs.modal', function () {
     $('#myInput').trigger('focus')
     })
 
+    //add addres using ajax
+    $(document).ready(function () {
+        $('#form').submit(function (event) {
+            event.preventDefault()
+            var formDataArray = $(this).serializeArray();
+            var formData = $.param(formDataArray)
+            const validation = validate()
 
-    // alert box when user logout
-    document.addEventListener("DOMContentLoaded", function () {
+            if(validation){
+                $.ajax({
+                type: 'POST',
+                url: '/addAddress',
+                data: formData,
+                success: function (response) {
+                    if(response.add==true){
+                        $('#addrassArea').load('/profile #addrassArea'); 
+                        $('#addAddress').modal('hide');
+                    }else{
+                        swal("Oops, there is a problem when adding youre address !!", "", "error")
+                    }
+                },
+                error: function (error) {
+                    console.error('Error:', error);
+                }
+            });
+            }else{
+                event.preventDefault()
+            }   
+        });
+    });
+    
+        // alert box when user logout
+        document.addEventListener("DOMContentLoaded", function () {
         const signOutLink = document.getElementById("signOutLink");
         signOutLink.addEventListener("click", function (e) {
             e.preventDefault(); 
@@ -312,35 +344,25 @@
         });
     });
 
-    //add addres using ajax
-    $(document).ready(function () {
-        $('#form').submit(function (event) {
-            event.preventDefault();
-            var formDataArray = $(this).serializeArray();
-            var formData = $.param(formDataArray)
-            console.log(formData,);
-            $.ajax({
+    //to delete addrs using ajax
+    function deleteAddress(addresId){
+        const data = {_id:addresId}
+        $.ajax({
                 type: 'POST',
-                url: '/placeOrder',
-                data: formData,
+                url: '/deleteAddress',
+                data: data,
                 success: function (response) {
-                    if(response.placed==true){
-                        window.location.href = '/orderSuccess'
-                    }else if(response.wallet == false){
-                        swal("Oops, it looks like your wallet balance is too low to place this order !!", "", "error")
-                    }
-                    else{
-                        
-                        razorpayPayment(response.order)
+                    if(response.add==true){
+                        $('#addrassArea').load('/profile #addrassArea'); 
+                    }else{
+                        swal("Oops, there is a problem when adding youre address !!", "", "error")
                     }
                 },
                 error: function (error) {
-    
                     console.error('Error:', error);
                 }
             });
-        });
-    });
+    }
 </script>
 
 <%- include('../layout/user/footer.ejs') -%>

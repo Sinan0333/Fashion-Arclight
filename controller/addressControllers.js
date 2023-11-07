@@ -18,7 +18,7 @@ const loadAddAddress = async(req,res)=>{
 //Add address
 const addAddress = async (req, res) => {
     try {
-
+console.log(req.body);
         const user_id=req.session.user_id
         const data = {
             fullName:req.body.name,
@@ -41,9 +41,8 @@ const addAddress = async (req, res) => {
 
           );
 
-        // res.redirect('/profile')
+        res.json({add:true})
         
-
     } catch(error) {
       console.log(error.message);
       res.render('500Error')
@@ -60,7 +59,7 @@ const loadEditAddress = async(req,res)=>{
     const userData = await Address.findOne({user:user_id})
     const address = userData.address[ind]
 
-    res.render("editAddress",{edit:address});
+    res.render("editAddress",{edit:address,user_id});
 
   } catch (error) {
       console.log(error.message);
@@ -100,11 +99,11 @@ const editAddress = async(req,res)=>{
 const deleteAddress = async(req,res)=>{
   try {
      const user_id=req.session.user_id
-     const address_id = req.query._id
+     const address_id = req.body._id
 
      await Address.updateOne({user:user_id},{$pull:{address:{_id:address_id}}})
 
-    res.redirect("/profile");
+    res.json({add:true})
 
   } catch (error) {
       console.log(error.message);

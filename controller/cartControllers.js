@@ -54,12 +54,13 @@ const addToCart = async(req,res)=>{
                     productId:product_id,
                     price:productData.price,
                     totalPrice:productData.price,
+  
                 }
                 await Cart.findOneAndUpdate(
     
                     { user: user_id },
                     {
-                      $set: { user: user_id },
+                      $set: { user: user_id ,couponDiscount:0},
                       $push: { products: data }
                     },
                     { upsert: true, new: true }
@@ -173,10 +174,11 @@ const loadCheckout = async(req,res)=>{
 
     const user_id = req.session.user_id
     const cartData = await Cart.findOne({user:user_id}).populate('products.productId')
-    cartData.couponDiscount!=0 ? await cartData.populate('couponDiscount') : 0
-    const couponDiscount = cartData.couponDiscount !=0 ? cartData.couponDiscount.discountAmount : 0
-
+   
     if(cartData){
+      cartData.couponDiscount!=0 ? await cartData.populate('couponDiscount') : 0
+      const couponDiscount = cartData.couponDiscount !=0 ? cartData.couponDiscount.discountAmount : 0
+  
       let addressData = await Address.findOne({user:user_id})
       addressData = addressData == null ? {user:req.session.user_id,_id:1,address:[]} : addressData
      

@@ -57,32 +57,31 @@
             <div class="col-lg-12">
                 <div class="card card-dashboard">
                     <div class="card-body">
-                        <table class="table table-hover">
-                            <tbody>
-                                <% order.products.forEach(function(product,index) { %>
-                                    <tr>
-                                        <td><%= index + 1 %></td>
-                                        <td>
-                                            <img src="/images/product/orginal/<%= product.productId.images.image1 %>" alt="" class="img-thumbnail" style="max-width: 80px;">
-                                        </td>
-                                        <td>
-                                            <a href="/product?_id=<%= product.productId._id %>"><%= product.productId.name %></a>
-                                        </td>                                          
-                                        <td><%= product.productId.category.name %></td>
-                                        <td> $<%= product.price %></td>
-                                        <td ><%= product.count %></td>
-                                        <td> $<%= product.totalPrice %></td>
-                                        <% if (product.status=="returned") { %>
-                                            <td style="color: red;">returned</td>
-                                        <% } %>
-                                    </tr>
-                                <% }); %>
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <tbody>
+                                    <% order.products.forEach(function(product,index) { %>
+                                        <tr>
+                                            <td>
+                                                <img src="/images/product/orginal/<%= product.productId.images.image1 %>" alt="" class="img-thumbnail" style="max-width: 80px;">
+                                            </td>
+                                            <td>
+                                                <a href="/product?_id=<%= product.productId._id %>"><%= product.productId.name %></a>
+                                            </td>                                          
+                                            <td><%= product.productId.category.name %></td>
+                                            <td> ₹<%= product.price %></td>
+                                            <td ><%= product.count %></td>
+                                            <td> ₹<%= product.totalPrice %></td>
+                                        </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div> 
+        </div>
+        
 
         <div id="review-form" style="display: none;">
             <h2 class="review-form-title">Add a Review</h2>

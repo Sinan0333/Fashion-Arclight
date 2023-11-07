@@ -69,7 +69,7 @@ user_route.get('/addAddress',auth.isLogin,addressControllers.loadAddAddress)
 user_route.post('/addAddress',addressControllers.addAddress)
 user_route.get('/editAddress',auth.isLogin,addressControllers.loadEditAddress)
 user_route.post('/editAddress',addressControllers.editAddress)
-user_route.get('/deleteAddress',auth.isLogin,addressControllers.deleteAddress)
+user_route.post('/deleteAddress',addressControllers.deleteAddress)
 
 
 // =========================================< Cart >=================================================

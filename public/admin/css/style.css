@@ -1,13 +1,3 @@
-/* to decrease the size of the image in edit product page */
-/* .img-small {
-    max-width: 150px;
-    max-height: 150px;
-}
- */
-
-
-
-/* add product image preview */
 .image-container {
   display: flex;
   justify-content: space-between;
@@ -73,4 +63,42 @@ img {
 .swal2-popup {
   background-color: #191c24;
   /* Replace with your desired background color */
+}
+
+/* Add this CSS to your stylesheet */
+.popCate {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.popCate-content {
+  background-color: #191c24;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 400px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Add media queries for responsiveness */
+@media (max-width: 768px) {
+  .popCate-content {
+    width: 90%;
+  }
+}
+
+.close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 10px;
+  cursor: pointer;
 }

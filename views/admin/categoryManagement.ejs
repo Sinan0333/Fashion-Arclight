@@ -7,19 +7,19 @@
           <div class="card-body">
             <h4 class="card-title">Category Management</h4>
               <button id="addCategoryBtn" class="btn btn-primary">Add Category</button>
-              <div id="categoryModal" class="modal">
-                <div class="modal-content">
-                  <span class="close">&times;</span>
-                  <h2>Add Category</h2>
-                  <form id="categoryForm" action="/admin/addCategory" method="post">
-                    <label for="categoryName">Category Name:</label>
-                    <input type="text" id="categoryName" name="categoryName" required>
-                    <br><br>
-                      </a> 
-                    <button type="submit" id="saveCategoryBtn" class="btn btn-success">Add</button>
-                  </form>
+              <div id="categoryModal" class="popCate">
+                <div class="popCate-content">
+                    <span class="close">&times;</span>
+                    <h2>Add Category</h2>
+                    <form id="categoryForm" action="/admin/addCategory" method="post">
+                        <label for="categoryName">Category Name:</label>
+                        <input type="text" id="categoryName" name="categoryName" required>
+                        <br><br>
+                        <button type="submit" id="saveCategoryBtn" class="btn btn-success">Add</button>
+                    </form>
                 </div>
-              </div>
+            </div>
+            
               
             <div class="table-responsive">
               <table class="table table-hover">

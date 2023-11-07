@@ -20,7 +20,10 @@
                 <tbody>
                   <% users.forEach(function(user) { %>
                     <tr>
-                      <td><%= user.name %></td> <!-- Replace with actual user properties -->
+                      <td>
+                        <img src="/images/user/orginal/<%= user.image %>" alt="<%= user.name %>" >  
+                            <span class="pl-2"><%= user.name %></span>
+                      </td>
                       <td><%= user.email %></td>
                       <td><%= user.mobile %></td>
                       <td>
