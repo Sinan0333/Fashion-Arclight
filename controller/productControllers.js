@@ -19,6 +19,7 @@ const loadHome = async (req, res) => {
       path: 'category',
       match: { is_blocked: false } 
     })
+
     const user_id = req.session.user_id
     const bannerData =await Banner.find({is_blocked:false})
     const categoryData = await Category.find().sort({name:1})
@@ -27,6 +28,7 @@ const loadHome = async (req, res) => {
     const wishData = wishlistData ? wishlistData.products.map((val) => val.productId) : [];
 
     res.render("index",{products:productData,banners:bannerData,categorys:categoryId,wishData,user_id});
+
   } catch(error) {
     console.log(error.message);
     res.render('500Error')
@@ -37,6 +39,7 @@ const loadHome = async (req, res) => {
 //to load shop page
 const loadShop = async(req,res)=>{
   try {
+
     const user_id = req.session.user_id
     const category = req.query.category 
     const page = req.query.page ? req.query.page : 1
@@ -64,16 +67,18 @@ const loadShop = async(req,res)=>{
 //load product page
 const loadProduct = async (req, res) => {
   try {
+
     const product_id=req.query._id
     const user_id =req.session.user_id
     const productData = await Product.findOne({_id:product_id}).populate('category').populate('offer')
-    const offerPrice = productData.price-productData.offer.discountAmount 
+    const offerPrice = productData.offer ? productData.price-productData.offer.discountAmount : productData.price-0
     const relatedProducts =await Product.find({category:productData.category._id})
     const reviewData = await Review.findOne({productId:product_id}).populate('review.user').populate('review.replay.user')
     const reviews =reviewData ? reviewData.review:[]
     const avgRatig =reviews ? reviews.reduce((acc,val)=>acc+val.rating,0)/reviews.length : 0
     const wishProduct = await Wishlist.findOne({user:user_id,'products.productId':product_id})
     res.render("product",{product:productData,relatedProducts:relatedProducts,offerPrice:offerPrice,reviews:reviews,avgRatig:avgRatig,user_id,wishProduct,user:user_id});
+
   } catch(error) {
     console.log(error.message);
     res.render('500Error')
@@ -99,6 +104,7 @@ const productFilter = async (req, res) => {
     const totalDoc = await Product.countDocuments();
     const wishlistData = await Wishlist.findOne({user:req.session.user_id})
     const wishData = wishlistData ? wishlistData.products.map((val) => val.productId) : [];
+
     if(category=='all'){
 
       const productData = await Product.find({
@@ -131,8 +137,10 @@ const productFilter = async (req, res) => {
 // load productManagement page dynamically
 const loadProductManagement = async(req,res)=>{
     try {
+
       const productData = await Product.find().populate("category").populate("offer")
       res.render('productManagement',{products:productData})
+
     } catch (error) {
         console.log(error.message);
         res.render('500Error')
@@ -158,8 +166,9 @@ const loadAddProduct = async(req,res)=>{
 // to add product 
 const addProduct = async(req,res)=>{
   try {
+
       const offer = req.body.offer
-      const offerData = await Offer.findOne({name:offer})
+      const offerData =offer !=0 ? await Offer.findOne({name:offer}) : 0
       const category  = await Category.findOne({name:req.body.category})
       const files = await req.files;
 
@@ -183,12 +192,14 @@ const addProduct = async(req,res)=>{
       "images.image2": files.image2[0].filename,
       "images.image3": files.image3[0].filename,
       "images.image4": files.image4[0].filename,
-      offer:offerData._id,
       description:req.body.description,
       is_blocked:false
     })
 
-    await data.save()
+    const result = await data.save()
+    if(offer!=0){
+      await Product.findOneAndUpdate({_id:result._id},{$set:{offer:offerData._id}})
+    }
     res.redirect('/admin/product')
 
   } catch (error) {
@@ -218,12 +229,13 @@ const loadEditProduct = async(req,res)=>{
 // to edit product
 const editProduct = async (req, res) => {
   try {
+
     const product_id = req.query._id;
     let imagesFiles = await req.files;
     const productData = await Product.findOne({ _id: product_id });
     const category  = await Category.findOne({name:req.body.category})
     const offer = req.body.offer
-    const offerData = await Offer.findOne({name:offer}) 
+    const offerData =offer !=0 ? await Offer.findOne({name:offer}) : 0 
 
     const img = [
       imagesFiles.image1 ? imagesFiles.image1[0].filename : productData.images.image1,
@@ -245,34 +257,6 @@ const editProduct = async (req, res) => {
       img3 = imagesFiles.image3 ? imagesFiles.image3[0].filename : productData.images.image3;
       img4 = imagesFiles.image4 ? imagesFiles.image4[0].filename : productData.images.image4;
 
-    // const deleteImagePromises = imagefileName.map((image) => {
-    //   const imagePathOrginal = `public/images/product/orginal/${image}`;
-    //   const imagePathSharped = `public/images/product/sharped/${image}`;
-
-    //   return new Promise((resolve, reject) => {
-    //     try {
-    //       fs.unlinkSync(imagePathOrginal);
-    //       fs.unlinkSync(imagePathSharped);
-    //       resolve();
-    //     } catch (error) {
-    //       reject(error);
-    //     }
-    //   });
-    // });
-
-
-    // await Promise.all(deleteImagePromises);
-
-    // const img = [];
-    // for (let i = 0; i < req.files.length; i++) { 
-    //   img.push(req.files[i].filename);
-    //   await Sharp("public/images/product/orginal/" + req.files[i].filename)
-    //     .resize(500, 500)
-    //     .toFile("public/images/product/sharped/" + req.files[i].filename);
-    // }
-    
-  
-
     await Product.findByIdAndUpdate(
       { _id: product_id },
       {
@@ -281,7 +265,6 @@ const editProduct = async (req, res) => {
           category: category._id,
           quantity: req.body.quantity,
           price: req.body.price,
-          offer: offerData._id,
           "images.image1": img1,
           "images.image2": img2,
           "images.image3": img3,
@@ -290,6 +273,10 @@ const editProduct = async (req, res) => {
         },
       }
     );
+
+    if(offer!=0){
+      await Product.findOneAndUpdate({_id:product_id},{$set:{offer:offerData._id}})
+    }
 
     res.redirect('/admin/product');
   } catch (error) {
@@ -305,6 +292,7 @@ const blockProduct = async(req,res)=>{
   
       const  product_id =  req.query._id
       const productData = await Product.findOne({_id:product_id})
+      
       if(productData.is_blocked){
        await Product.findByIdAndUpdate({_id:product_id},{$set:{is_blocked:false}}) 
       }else{  

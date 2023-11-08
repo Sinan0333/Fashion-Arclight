@@ -22,6 +22,7 @@ const productSchema=mongoose.Schema({
     offer:{
         type:String,
         ref: "Offer",
+        required:false
     },
     images: {
       image1:{

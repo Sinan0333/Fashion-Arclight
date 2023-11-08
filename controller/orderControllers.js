@@ -207,6 +207,7 @@ const cancelOrder = async(req,res)=>{
     }
    
     res.json({cancel:true})  
+    
   } catch (error) {
       console.log(error.message);
       res.render('500Error')
@@ -233,8 +234,10 @@ const loadInvoice = async(req,res)=>{
 // Load order succes page
 const loadOrderSuccess = async(req,res)=>{
   try {
+
     const user_id = req.session.user_id
     res.render('orderSuccess',{user_id})
+
   } catch (error) {
       console.log(error.message);
       res.render('500Error')
@@ -282,6 +285,7 @@ const updateOrder = async(req,res)=>{
     const order_id = req.body.orderId
     const orderStatus = req.body.status
     const user_id = req.session.user_id
+
     if(orderStatus == 'cancel'){
       const orderData = await Order.findOneAndUpdate({_id:order_id},{$set:{status:orderStatus,cancelReason:'There was a problem in youre order'}})
 
@@ -290,6 +294,7 @@ const updateOrder = async(req,res)=>{
         let count = orderData.products[i].count
         await Product.updateOne({_id:product},{$inc:{quantity:count}})
       }
+      
    if(orderData.paymentMethod != 'COD'&& orderData.status != 'pending'){
 
     const data = {

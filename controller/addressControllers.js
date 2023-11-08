@@ -18,7 +18,7 @@ const loadAddAddress = async(req,res)=>{
 //Add address
 const addAddress = async (req, res) => {
     try {
-console.log(req.body);
+
         const user_id=req.session.user_id
         const data = {
             fullName:req.body.name,
@@ -71,6 +71,7 @@ const loadEditAddress = async(req,res)=>{
 //  to update address
 const editAddress = async(req,res)=>{
   try {
+
      const user_id=req.session.user_id
 
     await Address.updateOne({user:user_id,'address._id':req.body._id},
@@ -98,6 +99,7 @@ const editAddress = async(req,res)=>{
 //  to delete address
 const deleteAddress = async(req,res)=>{
   try {
+    
      const user_id=req.session.user_id
      const address_id = req.body._id
 

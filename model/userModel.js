@@ -30,6 +30,11 @@ const userSchema=mongoose.Schema({
         type:Boolean,
         required:true
     },
+    is_verified:{
+        type:Boolean,
+        default:false,
+        required:true
+    },
     wallet:{
         type:Number,
         default:0

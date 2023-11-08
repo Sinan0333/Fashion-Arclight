@@ -36,7 +36,11 @@
                       <td><%= product.category.name %></td>
                       <td><%= product.quantity %></td>
                       <td><i class="fa-solid fa-indian-rupee-sign"></i><%= product.price %></td>
-                      <td><%= product.offer.name %></td>
+                      <% if (product.offer) { %>
+                        <td><%= product.offer.name %></td>
+                      <% } else { %>
+                        <td>0</td>
+                      <% } %>
                       <td>
                         <a href="/admin/editProduct?_id=<%= product._id %>" data-category-id="<%= product._id %>" class="btn btn-warning edit-button">
                             Edit

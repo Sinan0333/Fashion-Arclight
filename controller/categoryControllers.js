@@ -5,8 +5,10 @@ const Category = require('../model/categoryModel')
 // load categoryManagement page dynamically
 const loadCategoryManagement = async(req,res)=>{
     try {
+
       const categoryData = await Category.find()
       res.render('categoryManagement',{categorys:categoryData})
+
     } catch (error) {
         console.log(error.message);
         res.render('500Error')
@@ -17,6 +19,7 @@ const loadCategoryManagement = async(req,res)=>{
 // to add category 
 const addCategory = async(req,res)=>{
     try {
+
       const categoryName=req.body.categoryName
       const categoryData= await Category.find({name:categoryName})
 
@@ -49,6 +52,7 @@ const blockCategory = async(req,res)=>{
   
       const  category_id =  req.query._id
       const categoryData = await Category.findOne({_id:category_id})
+      
       if(categoryData.is_blocked){
        await Category.findByIdAndUpdate({_id:category_id},{$set:{is_blocked:false}}) 
       }else{  

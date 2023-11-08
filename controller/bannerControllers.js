@@ -5,9 +5,10 @@ const fs = require("fs")
 //load Banner Mangement
 const loadBannerManagement = async (req,res)=>{
     try {
+
         const bannerData = await Banner.find()
-        
         res.render('bannerManagement',{banners:bannerData})
+        
     } catch (error) {
         console.log(error.message);
         res.render('500Error')

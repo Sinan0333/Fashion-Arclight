@@ -35,6 +35,7 @@ const addCoupon = async (req,res)=>{
     try {
 
         const couponData = await Coupon.findOne({couponCode:req.body.code})
+
         if(couponData){
             res.render("addCoupon",{error:'coupon code already exist'})
         }else{
@@ -47,6 +48,7 @@ const addCoupon = async (req,res)=>{
                 criteriaAmount:req.body.criteriAamount,
                 usersLimit:req.body.userLimit,
             })
+
             await data.save()
             res.redirect('/admin/coupon')
         }
@@ -108,14 +110,17 @@ const editCoupon = async (req,res)=>{
 // Block Coupon 
 const blockCoupon = async (req,res)=>{
     try {
+
         const couponId = req.body._id
         const couponData = await Coupon .findById(couponId)
+
         if(couponData.is_blocked===true){
             await Coupon.findOneAndUpdate({_id:couponId},{$set:{is_blocked:false}})
         }else{
             await Coupon.findOneAndUpdate({_id:couponId},{$set:{is_blocked:true}})
         }
         res.json({block:true})
+        
     } catch (error) {
         console.log(error.message);
         res.render('500Error')

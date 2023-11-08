@@ -12,15 +12,15 @@ require("dotenv").config()
 
 
 let OTP;
-const userData ={};
-let email;
 
 
 //bcrypt password
 const securePassword = async (password) => {
   try {
+
     const passwordHash = await bcrypt.hash(password, 10);
     return passwordHash;
+
   } catch (error) {
     console.log(error.message);
     res.render('500Error')
@@ -45,8 +45,10 @@ const loadlogin = async (req, res) => {
 //user logout 
 const userLogout = async (req, res) => {
   try {
+
     req.session.user_id=false
     res.redirect('/login')
+
   } catch(error) {
     console.log(error.message);
     res.render('500Error')
@@ -60,21 +62,29 @@ const verifyLogin = async (req,res)=>{
 
     const email = req.body.email
     const password = req.body.password
-    const userData = await User.findOne({email:email})
+    const userData = await User.findOne({email:email}) 
 
     if (userData) {
        
       const matchPassword = await bcrypt.compare(password,userData.password)
 
       if (matchPassword) {
+
         if(userData.is_blocked===false){
 
-          req.session.user_id = userData._id
-          res.redirect('/')
+          if(userData.is_verified==true){
+
+            req.session.user_id = userData._id
+            res.redirect('/')
+          }else{
+
+            sendVerifyMail(userData.name,userData.email)
+            res.render('verification',{email:userData.email})
+
+          }
         }else{
           res.render('login',{error:'Admin blocked you'})
         }
-       
         
       } else {
         res.render('login',{error:'incorrect password'})
@@ -96,9 +106,11 @@ const forgotPassword = async (req, res) => {
   try {
    
     if(req.session.user_id){
-     const userData =await User.findOne({_id:req.session.user_id})
+
+      const userData =await User.findOne({_id:req.session.user_id})
       sendVerifyMail(userData.name,userData.email)
       res.render('verification',{email:userData.email})
+
     }else{
       res.render('getEmail')
     }
@@ -113,11 +125,14 @@ const forgotPassword = async (req, res) => {
 const getEmail= async (req, res) => {
   try {
    
-   email = req.body.email
-   const userData = await User.findOne({email:email})
+   req.session.user_chPass = req.body.email
+   const userData = await User.findOne({email:req.body.email})
+
    if(userData){
-    sendVerifyMail('user',email)
+
+    sendVerifyMail('user',req.body.email)
     res.render('verification',{email:req.body.email})
+
    }else{
     res.render(getEmail,{error:'Email not found'})
    }
@@ -134,14 +149,18 @@ const changePassword= async (req, res) => {
   try {
    
   if (req.session.user_id) {
+
     const user_id = req.session.user_id
     const sPassword = await securePassword(req.body.newpswd)
     await User.findOneAndUpdate({_id:user_id},{$set:{password:sPassword}})
     res.redirect("/profile")
+
   }else{
+
     const sPassword = await securePassword(req.body.newpswd)
-    await User.findOneAndUpdate({email:email},{$set:{password:sPassword}})
+    await User.findOneAndUpdate({email:req.session.user_chPass},{$set:{password:sPassword}})
     res.redirect("/login")
+
   }
    
   } catch(error) {
@@ -167,30 +186,38 @@ const loadRegister = async (req, res) => {
 //inserting user data when sign up
 const insertUser = async (req, res) => {
   try {
+
     const check = await User.findOne({ email: req.body.email });
+    let img
+
     if (check) {
       res.render("signUp", { error: "Email already exist" });
     } else {
       const sPassword = await securePassword(req.body.password)
  
-      if(req.file){
-        var img = req.file.originalname
+      if(req.file && req.file.originalname){
+        img = req.file.originalname
       }else{
-        var img = 'default.avif'
+        img = 'default.avif'
       }
       
-      userData.name=req.body.username
-      userData.email=req.body.email
-      userData.mobile=req.body.mobile
-      userData.password=sPassword
-      userData.image=img
-      userData.is_admin=0
-      userData.is_blocked=false
+      const data = new User({
+        name: req.body.username,
+        email: req.body.email,
+        mobile: req.body.mobile,
+        password: sPassword,
+        image:img,
+        is_admin:0,
+        is_blocked:false,
+        is_verified:false
+      });
 
-      // const result = await data.save();
+
+      const result = await data.save();
       sendVerifyMail(req.body.username,req.body.email)
-      // req.session.user_id = result._id
+      req.session.user_email = req.body.email
       res.render("verification",{email:req.body.email});
+
     }
   } catch (error) {
     res.send(error.message);
@@ -244,6 +271,7 @@ const sendVerifyMail = async (username, email, user_id) => {
 //otp verification and render home page
 const otpVarification = async (req, res) => {
   try {
+
     const first = req.body.first;
     const second = req.body.second;
     const third = req.body.third;
@@ -252,20 +280,26 @@ const otpVarification = async (req, res) => {
 
   if(otp!==OTP){
     res.render('verification',{error:'Otp verification failed',email:'**********'})
-  }
-  else{
+  }else{
 
     if(req.session.user_id){
+
       res.render('changePassword')
+
     }else{
-      const Data = await User.findOne({email:email})
-      if(Data){
+
+      const Data = await User.findOne({email:req.session.user_chPass})
+
+      if( Data){
+
         res.render('changePassword')
+
       }else{
-        const data =new User(userData)
-        const result = await data.save()
-        req.session.user_id=result._id
+
+        const userData = await User.findOneAndUpdate({email:req.session.user_email},{$set:{is_verified:true}})
+        req.session.user_id=userData._id
         res.redirect("/"); 
+
       }
     }
   }
@@ -280,8 +314,11 @@ const otpVarification = async (req, res) => {
 // to resend otp
 const resendOtp = async (req, res) => {
   try {
+
+    const userData = await User.findOne({email:req.session.user_email})
     sendVerifyMail(userData.name,userData.email)
     res.render("verification",{email:userData.email});
+    
   } catch(error) {
     console.log(error.message);
     res.render('500Error')
@@ -328,6 +365,7 @@ const loadprofile = async (req, res) => {
     ]);
 
     res.render("profile",{user:userData,addresses:addressData,orders:OrderData,coupons:couponData,user_id});
+
   } catch(error) {
     console.log(error.message);
     res.render('500Error')
@@ -338,10 +376,12 @@ const loadprofile = async (req, res) => {
 //load Editprofile Form
 const loadEditProfile = async (req, res) => {
   try {
+
     const user_id= req.session.user_id;
     const userData = await User.findById(user_id)
 
     res.render("editProfile",{user:userData,user_id})
+    
   } catch (error){
     console.log(error.message);
     res.render('500Error')
@@ -355,7 +395,9 @@ const editProfile = async (req, res) => {
 
     const user_id = req.session.user_id
     const userData = await User.findById(req.session.user_id)
-// checking user changed theire password
+    let img;
+    let sPassword
+
     if(req.body.currentpswd||req.body.newpswd){
       if(req.body.newpswd.length<8){
         return res.render('editProfile',{error:'',user:userData,user_id})
@@ -364,18 +406,17 @@ const editProfile = async (req, res) => {
 
         if(matchPassword){
   
-          var sPassword = await securePassword(req.body.newpswd)
+           sPassword = await securePassword(req.body.newpswd)
   
         }else{
           return res.render('editProfile',{error:'Current password is incorrect.please try again.',user:userData,user_id})
         }
       }
     }else{
-      var sPassword = userData.password
+      sPassword = userData.password
     }
 
-    //checking the user changed therir profile photo or not
-    let img;
+
    if(req.file && req.file.originalname){
       img=req.file.originalname
       const imagePathOrginal = `public/images/product/orginal/${userData.image}`
@@ -407,8 +448,10 @@ const editProfile = async (req, res) => {
 //load about Us page
 const loadAboutUs = async (req, res) => {
   try {
+
     const user_id = req.session.user_id
     res.render("aboutUs",{user_id})
+
   } catch (error){
     console.log(error.message);
     res.render('500Error')
@@ -419,8 +462,10 @@ const loadAboutUs = async (req, res) => {
 //load contact Us page
 const loadContactUs = async (req, res) => {
   try {
+
     const user_id = req.session.user_id
     res.render("contactUs",{user_id})
+
   } catch (error){
     console.log(error.message);
     res.render('500Error')

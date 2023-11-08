@@ -67,11 +67,13 @@ const removeProduct = async(req,res)=>{
       const product_id = req.body.productId
       const user_id = req.session.user_id
       const wishlistData =  await Wishlist.findOneAndUpdate({user:user_id},{$pull:{products:{productId:product_id}}})
+
       if(wishlistData){
         res.json({remove:true})
       }else{
         res.json({remove:false})
-      }n
+      }
+      
     } catch (error) {
         console.log(error.message);
         res.render('500Error')

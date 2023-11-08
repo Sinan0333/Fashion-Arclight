@@ -16,10 +16,12 @@ const loadCart = async(req,res)=>{
         if(cartData){
 
           for(let i=0;i<cartData.products.length;i++){
-            if( cartData.products[i].productId.offer.discountAmount !=0 && cartData.products[i].productId.offer.is_blocked==false && cartData.products[i].productId.offer.activationDate <= new Date() && cartData.products[i].productId.offer.expiryDate >= new Date){
-              let amount = cartData.products[i].productId.offer.discountAmount * cartData.products[i].count
-              eachProductDiscount.push(amount)
-            }
+            if(cartData.products[i].productId.offer){
+                if( cartData.products[i].productId.offer.discountAmount !=0 && cartData.products[i].productId.offer.is_blocked==false && cartData.products[i].productId.offer.activationDate <= new Date() && cartData.products[i].productId.offer.expiryDate >= new Date){
+                  let amount = cartData.products[i].productId.offer.discountAmount * cartData.products[i].count
+                  eachProductDiscount.push(amount)
+                }
+            } 
           }
             const discount = eachProductDiscount.reduce((acc,val)=>acc+val,0)
             const total = (subTotal-discount)+cartData.shippingAmount
@@ -156,8 +158,10 @@ const removeProduct = async(req,res)=>{
 
 
     if(productData){
+
       await Cart.findOneAndUpdate({user:user_id},{$pull:{products:{productId:product_id}}})
       res.json({remove:true})
+
     }else{
       res.json({remove:false})
     }
@@ -176,6 +180,7 @@ const loadCheckout = async(req,res)=>{
     const cartData = await Cart.findOne({user:user_id}).populate('products.productId')
    
     if(cartData){
+
       cartData.couponDiscount!=0 ? await cartData.populate('couponDiscount') : 0
       const couponDiscount = cartData.couponDiscount !=0 ? cartData.couponDiscount.discountAmount : 0
   
@@ -188,9 +193,11 @@ const loadCheckout = async(req,res)=>{
       let eachProductDiscount=[];
   
       for(let i=0;i<cartData.products.length;i++){
-        if( cartData.products[i].productId.offer.discountAmount !=0 && cartData.products[i].productId.offer.is_blocked==false && cartData.products[i].productId.offer.activationDate <= new Date() && cartData.products[i].productId.offer.expiryDate >= new Date){
-          let amount = cartData.products[i].productId.offer.discountAmount * cartData.products[i].count
-          eachProductDiscount.push(amount)
+        if(cartData.products[i].productId.offer){
+          if( cartData.products[i].productId.offer.discountAmount !=0 && cartData.products[i].productId.offer.is_blocked==false && cartData.products[i].productId.offer.activationDate <= new Date() && cartData.products[i].productId.offer.expiryDate >= new Date){
+            let amount = cartData.products[i].productId.offer.discountAmount * cartData.products[i].count
+            eachProductDiscount.push(amount)
+          }
         }
       }
         const offer = eachProductDiscount.reduce((acc,val)=>acc+val,0)
@@ -216,10 +223,12 @@ const loadCheckout = async(req,res)=>{
 //add shipping method
 const addShippingMethod = async (req,res)=>{
   try{
+
     const method = req.body.method
     const amount = req.body.amount
     const cartData = await Cart.findOneAndUpdate({user:req.session.user_id},{$set:{shippingMethod:method,shippingAmount:amount}})
     res.json({added:true})
+    
   }catch(error){
     console.log(error.message);
     res.render('500Error')

@@ -92,14 +92,17 @@ const editOffer = async (req,res)=>{
 // Block Offer 
 const blockOffer = async (req,res)=>{
     try {
+
         const offerId = req.body._id
         const offerData = await Offer .findById(offerId)
+
         if(offerData.is_blocked===true){
             await Offer.findOneAndUpdate({_id:offerId},{$set:{is_blocked:false}})
         }else{
             await Offer.findOneAndUpdate({_id:offerId},{$set:{is_blocked:true}})
         }
         res.json({block:true})
+
     } catch (error) {
         console.log(error.message);
         res.render('500Error')
@@ -110,9 +113,11 @@ const blockOffer = async (req,res)=>{
 // Delete Offer
 const deleteOffer = async (req,res)=>{
     try {
+
         const offerId = req.body._id
         await Offer.findOneAndDelete({_id:offerId})
         res.json({delete:true})
+        
     } catch (error) {
         console.log(error.message);
         res.render('500Error')

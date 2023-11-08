@@ -78,12 +78,16 @@
                                 </div><!-- End .rating-container -->
 
                                 <div class="product-price">
+                                    <% if (!product.offer) { %>
+                                        <i class="fa-solid fa-indian-rupee-sign"></i><%= product.price %>
+                                    <% } else { %>
                                     <% if (product.offer.discountAmount == 0 || product.offer.is_blocked == true || product.offer.activationDate >= new Date() || product.offer.expiryDate <= new Date()) { %>
                                         <i class="fa-solid fa-indian-rupee-sign"></i><%= product.price %>
                                     <% } else { %>
                                         <span style="color: limegreen; margin-right: 20px;"><i class="fa-solid fa-indian-rupee-sign"></i><%= product.offer.discountAmount %> off</span>
                                         <span style="color: grey; text-decoration: line-through; margin-right: 20px;"><i class="fa-solid fa-indian-rupee-sign"></i><%= product.price %></span>
                                         <span style="margin-right: 20px;"><i class="fa-solid fa-indian-rupee-sign"></i><%= offerPrice %></span>
+                                    <% } %>
                                     <% } %>
                                 </div><!-- End .product-price -->
                                 

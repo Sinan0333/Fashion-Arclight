@@ -20,6 +20,7 @@ const ejs = require('ejs');
 //load admin Dashboard
 const loadDashboard = async (req,res)=>{
     try {
+
       let data=[];
       let ind=0
       const currentDate = new Date();
@@ -176,6 +177,7 @@ const loadUserManagement = async(req,res)=>{
 
       const userData = await User.find({is_admin:0})
       res.render('userManagement',{users:userData})
+      
   } catch (error) {
       console.log(error.message);
       res.render('500Error')
