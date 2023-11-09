@@ -44,12 +44,12 @@
                         </span>
                       </td> 
                       <td>
-                        <a href="/admin/blockCategory?_id=<%= category._id %>" class="btn btn-danger block-button" data-initial-status="<%= category.is_blocked %>">
+                        <a href="/admin/blockCategory?_id=<%= category._id %>" class="btn btn-outline-danger block-button" data-initial-status="<%= category.is_blocked %>">
                           <%= category.is_blocked ? "Unblock" : "Block" %>
                         </a>                        
                       </td>
                       <td>
-                        <a href="#" data-category-id="<%= category._id %>" class="btn btn-warning edit-button">
+                        <a href="#" data-category-id="<%= category._id %>" class="btn btn-outline-warning edit-button">
                             Edit
                           </a>                    
                       </td>

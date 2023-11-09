@@ -34,7 +34,6 @@ const addCategory = async(req,res)=>{
     
         })
         const result = await data.save();
-        console.log("after saving");
         res.redirect('/admin/category')
   
       } 

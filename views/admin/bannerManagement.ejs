@@ -40,16 +40,16 @@
                         </span>
                       </td> 
                       <td>
-                        <a href="/admin/editBanner?_id=<%= banner._id %>" data-category-id="<%= banner._id %>" class="btn btn-warning edit-button">
+                        <a href="/admin/editBanner?_id=<%= banner._id %>" data-category-id="<%= banner._id %>" class="btn btn-outline-warning edit-button">
                             Edit
                           </a>                    
                       </td>
                       <td>
-                        <a  class="btn btn-danger block-button" data-initial-status="<%= banner.is_blocked %>" onclick="blockBanner('<%= banner._id %>')">
+                        <a  class="btn btn-outline-danger block-button" data-initial-status="<%= banner.is_blocked %>" onclick="blockBanner('<%= banner._id %>')">
                           <%= banner.is_blocked ? "Unblock" : "Block" %>
                         </a>                        
                         <td>
-                          <a data-category-id="<%= banner._id %>" class="btn btn-primary delete-button" onclick="deleteBanner('<%= banner._id %>')">
+                          <a data-category-id="<%= banner._id %>" class="btn btn-outline-primary delete-button" onclick="deleteBanner('<%= banner._id %>')">
                             Delete
                           </a>                          
                       </td>                      

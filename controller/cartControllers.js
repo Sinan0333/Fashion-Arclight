@@ -9,24 +9,12 @@ const loadCart = async(req,res)=>{
         
         const user_id = req.session.user_id
         const cartData =  await Cart.findOne({user:user_id}).populate('products.productId')
-        const offerData = cartData ? await cartData.populate('products.productId.offer'):0
         const subTotal = cartData ? cartData.products.reduce((acc,val)=>acc+val.totalPrice,0) : 0
-        let eachProductDiscount=[];
 
         if(cartData){
 
-          for(let i=0;i<cartData.products.length;i++){
-            if(cartData.products[i].productId.offer){
-                if( cartData.products[i].productId.offer.discountAmount !=0 && cartData.products[i].productId.offer.is_blocked==false && cartData.products[i].productId.offer.activationDate <= new Date() && cartData.products[i].productId.offer.expiryDate >= new Date){
-                  let amount = cartData.products[i].productId.offer.discountAmount * cartData.products[i].count
-                  eachProductDiscount.push(amount)
-                }
-            } 
-          }
-            const discount = eachProductDiscount.reduce((acc,val)=>acc+val,0)
-            const total = (subTotal-discount)+cartData.shippingAmount
-
-          res.render('cart',{cart:cartData,subTotal:subTotal,total:total,discount:discount,user_id})
+          const total = subTotal+cartData.shippingAmount
+          res.render('cart',{cart:cartData,subTotal:subTotal,total:total,user_id})
 
         }else{
           res.render('cart',{cart:null,user_id})
@@ -47,6 +35,18 @@ const addToCart = async(req,res)=>{
         const product_id = req.body.productId
         const productData = await Product.findById(product_id)
         const cartProduct = await Cart.findOne({ user: user_id ,'products.productId':product_id})
+        let productPrice=productData.price
+
+        if(productData.offer){
+      
+          const productOffer = await productData.populate('offer')
+          if( productOffer.offer.discountAmount !=0 && productOffer.offer.is_blocked==false && productOffer.offer.activationDate <= new Date() && productOffer.offer.expiryDate >= new Date){
+            const discount =  productData.price*productData.offer.discountAmount/100
+            productPrice = productData.price - discount
+           
+          }
+
+        }
 
         if(productData.quantity>0){
             if(cartProduct){
@@ -54,8 +54,8 @@ const addToCart = async(req,res)=>{
             }else{
                 const data={
                     productId:product_id,
-                    price:productData.price,
-                    totalPrice:productData.price,
+                    price:productPrice,
+                    totalPrice:productPrice,
   
                 }
                 await Cart.findOneAndUpdate(
@@ -187,27 +187,15 @@ const loadCheckout = async(req,res)=>{
       let addressData = await Address.findOne({user:user_id})
       addressData = addressData == null ? {user:req.session.user_id,_id:1,address:[]} : addressData
      
-      const offerData = await cartData.populate('products.productId.offer')
       const subTotal = cartData.products.reduce((acc,val)=>acc+val.totalPrice,0)
       const stock = cartData.products.filter((val,ind)=>val.productId.quantity>0)
-      let eachProductDiscount=[];
-  
-      for(let i=0;i<cartData.products.length;i++){
-        if(cartData.products[i].productId.offer){
-          if( cartData.products[i].productId.offer.discountAmount !=0 && cartData.products[i].productId.offer.is_blocked==false && cartData.products[i].productId.offer.activationDate <= new Date() && cartData.products[i].productId.offer.expiryDate >= new Date){
-            let amount = cartData.products[i].productId.offer.discountAmount * cartData.products[i].count
-            eachProductDiscount.push(amount)
-          }
-        }
-      }
-        const offer = eachProductDiscount.reduce((acc,val)=>acc+val,0)
-        const total = (subTotal-offer-couponDiscount)+cartData.shippingAmount
+      const total = (subTotal-couponDiscount)+cartData.shippingAmount
   
       if(stock.length!=cartData.products.length){
         res.json({stock:false})
       }
   
-      res.render("checkout",{addresses:addressData,cart:cartData,subTotal:subTotal,total:total,discount:offer,user_id})
+      res.render("checkout",{addresses:addressData,cart:cartData,subTotal:subTotal,total:total,user_id})
     }else{
       res.redirect('/')
     }

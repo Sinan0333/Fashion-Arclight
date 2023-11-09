@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const quantityErr = document.getElementById('quantityErr')
     const coupon = document.getElementById('coupon')
     const couponErr = document.getElementById('couponLengthError')
+    const compareErr = document.getElementById('compareErr')
 
     document.getElementById("form").addEventListener("submit", function (event) {
         if(nameInput){
@@ -70,6 +71,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 event.preventDefault()
             } else {
                 couponErr.textContent = ""
+            }
+        }
+        if(criteriaAmount&&discount){
+            if (criteriaAmount.value < discount.value) {
+                compareErr.textContent = "Discount amount must be greater than Criteria amount"
+                event.preventDefault()
+            } else {
+                compareErr.textContent = ""
             }
         }
        

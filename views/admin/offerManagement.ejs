@@ -36,16 +36,16 @@
                       <td><%= offer.activationDate.toLocaleDateString('en-US', { year:'numeric', month: 'short', day: '2-digit'}).replace(/\//g, '-') %></td> 
                       <td><%= offer.expiryDate.toLocaleDateString('en-US', { year:'numeric', month: 'short', day: '2-digit'}).replace(/\//g, '-') %></td> 
                       <td>
-                        <a href="/admin/editOffer?_id=<%= offer._id %>" data-category-id="<%= offer._id %>" class="btn btn-warning edit-button">
+                        <a href="/admin/editOffer?_id=<%= offer._id %>" data-category-id="<%= offer._id %>" class="btn btn-outline-warning edit-button">
                             Edit
                           </a>                    
                       </td>
                       <td>
-                        <a  class="btn btn-danger block-button" data-initial-status="<%= offer.is_blocked %>" onclick="blockOffer('<%= offer._id %>')">
+                        <a  class="btn btn-outline-danger block-button" data-initial-status="<%= offer.is_blocked %>" onclick="blockOffer('<%= offer._id %>')">
                           <%= offer.is_blocked ? "Unblock" : "Block" %>
                         </a>                         
                         <td>
-                          <a data-category-id="<%= offer._id %>" class="btn btn-primary delete-button" onclick="deleteOffer('<%= offer._id %>')">
+                          <a data-category-id="<%= offer._id %>" class="btn btn-outline-primary delete-button" onclick="deleteOffer('<%= offer._id %>')">
                             Delete
                           </a> 
                       </td>                      

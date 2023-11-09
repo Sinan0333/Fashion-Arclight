@@ -42,16 +42,16 @@
                         <td>0</td>
                       <% } %>
                       <td>
-                        <a href="/admin/editProduct?_id=<%= product._id %>" data-category-id="<%= product._id %>" class="btn btn-warning edit-button">
+                        <a href="/admin/editProduct?_id=<%= product._id %>" data-category-id="<%= product._id %>" class="btn btn-outline-warning edit-button">
                             Edit
                           </a>                    
                       </td>
                       <td>
-                        <a href="/admin/blockProduct?_id=<%= product._id %>" class="btn btn-danger block-button" data-initial-status="<%= product.is_blocked %>">
+                        <a href="/admin/blockProduct?_id=<%= product._id %>" class="btn btn-outline-danger block-button" data-initial-status="<%= product.is_blocked %>">
                           <%= product.is_blocked ? "Unblock" : "Block" %>
                         </a>                        
                         <td>
-                          <a href="/admin/deleteProduct?_id=<%= product._id %>" data-category-id="<%= product._id %>" class="btn btn-primary delete-button">
+                          <a href="/admin/deleteProduct?_id=<%= product._id %>" data-category-id="<%= product._id %>" class="btn btn-outline-primary delete-button">
                               Delete
                           </a>
                       </td>                      

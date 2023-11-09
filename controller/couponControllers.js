@@ -80,25 +80,20 @@ const editCoupon = async (req,res)=>{
     try {
 
         const couponId = req.query._id
-        const couponData = await Coupon.findOne({couponCode:req.body.code})
-
-        if(couponData){
-            res.render("editCoupon",{error:'coupon code already exist'})
-        }else{
-            await Coupon.findOneAndUpdate({_id:couponId},
-                {
-                    name:req.body.name,
-                    couponCode:req.body.code,
-                    discountAmount:req.body.discount,
-                    activationDate:req.body.activationDate,
-                    expiryDate:req.body.expiryDate,
-                    criteriaAmount:req.body.criteriAamount,
-                    usersLimit:req.body.userLimit,
     
-                })
+        const couponData = await Coupon.findOneAndUpdate({_id:couponId},
+            {
+                name:req.body.name,
+                couponCode:req.body.code,
+                discountAmount:req.body.discount,
+                activationDate:req.body.activationDate,
+                expiryDate:req.body.expiryDate,
+                criteriaAmount:req.body.criteriAamount,
+                usersLimit:req.body.userLimit,
+
+            })
     
             res.redirect("/admin/coupon")
-        }
 
     } catch (error) {
         console.log(error.message);

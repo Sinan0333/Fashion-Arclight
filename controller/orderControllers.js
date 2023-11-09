@@ -52,8 +52,12 @@ const placeOrder = async(req,res)=>{
         const address = addressData.address[addressIndex]
         const cartData = await Cart.findOne({user:user_id})
         const productData = cartData.products
-        // const total = productData.reduce((acc,val)=> acc+val.totalPrice,0)
+        let couponDiscount =0
         
+        if(cartData.couponDiscount !=0){
+          await cartData.populate('couponDiscount')
+          couponDiscount=cartData.couponDiscount.discountAmount
+        }
         const data = new Order({
         user:user_id,
         deliveryDetails:address,
@@ -64,7 +68,7 @@ const placeOrder = async(req,res)=>{
         paymentMethod:paymentMethod,
         shippingMethod:cartData.shippingMethod,
         shippingAmount:cartData.shippingAmount,
-        couponDiscount:cartData.couponDiscount,
+        couponDiscount:couponDiscount,
        })
 
        const orderData = await data.save()

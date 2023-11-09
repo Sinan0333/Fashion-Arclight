@@ -32,13 +32,13 @@
                         <!-- <a href="/admin/blockUser?_id=<%= user._id %>" class="btn btn-danger block-button" data-initial-status="<%= user.is_blocked %>">
                           <%= user.is_blocked ? "Unblock" : "Block" %>
                         </a> -->
-                        <button class="btn btn-danger block-button" data-user-id="<%= user._id %>" data-initial-status="<%= user.is_blocked %>" onclick="block('<%= user._id %>')">
+                        <button class="btn btn-outline-danger block-button" data-user-id="<%= user._id %>" data-initial-status="<%= user.is_blocked %>" onclick="block('<%= user._id %>')">
                           <%= user.is_blocked ? "Unblock" : "Block" %>
                         </button>
                         
                       </td>
                       <td>
-                        <a href="/admin/userOrders?userId=<%= user._id %>" class="btn btn-primary delete-button" >
+                        <a href="/admin/userOrders?userId=<%= user._id %>" class="btn btn-outline-primary delete-button" >
                             Show
                         </a>
                     </td>  

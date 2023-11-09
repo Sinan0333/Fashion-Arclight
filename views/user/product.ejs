@@ -152,7 +152,7 @@
                                         <span class="social-label">Share:</span>
                                         <a href="#" class="social-icon" title="Facebook" target="_blank"><i class="icon-facebook-f"></i></a>
                                         <a href="#" class="social-icon" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>
-                                        <a href="#" class="social-icon" title="Instagram" target="_blank"><i class="icon-instagram"></i></a>
+                                        <a href="https://www.instagram.com/_atsinan_/" class="social-icon" title="Instagram" target="_blank"><i class="icon-instagram"></i></a>
                                         <a href="#" class="social-icon" title="Pinterest" target="_blank"><i class="icon-pinterest"></i></a>
                                     </div>
                                 </div><!-- End .product-details-footer -->
@@ -177,10 +177,6 @@
             </li>
 
             <li class="nav-item p-b-10">
-                <a class="nav-link" data-toggle="tab" href="#information" role="tab">Additional information</a>
-            </li>
-
-            <li class="nav-item p-b-10">
                 <a class="nav-link" data-toggle="tab" href="#reviews" role="tab">Reviews (<%= reviews.length %>)</a>
             </li>
         </ul>
@@ -196,64 +192,6 @@
                 </div>
             </div>
 
-            <!-- - -->
-            <div class="tab-pane fade" id="information" role="tabpanel">
-                <div class="row">
-                    <div class="col-sm-10 col-md-8 col-lg-6 m-lr-auto">
-                        <ul class="p-lr-28 p-lr-15-sm">
-                            <li class="flex-w flex-t p-b-7">
-                                <span class="stext-102 cl3 size-205">
-                                    Weight
-                                </span>
-
-                                <span class="stext-102 cl6 size-206">
-                                    0.79 kg
-                                </span>
-                            </li>
-
-                            <li class="flex-w flex-t p-b-7">
-                                <span class="stext-102 cl3 size-205">
-                                    Dimensions
-                                </span>
-
-                                <span class="stext-102 cl6 size-206">
-                                    110 x 33 x 100 cm
-                                </span>
-                            </li>
-
-                            <li class="flex-w flex-t p-b-7">
-                                <span class="stext-102 cl3 size-205">
-                                    Materials
-                                </span>
-
-                                <span class="stext-102 cl6 size-206">
-                                    60% cotton
-                                </span>
-                            </li>
-
-                            <li class="flex-w flex-t p-b-7">
-                                <span class="stext-102 cl3 size-205">
-                                    Color
-                                </span>
-
-                                <span class="stext-102 cl6 size-206">
-                                    Black, Blue, Grey, Green, Red, White
-                                </span>
-                            </li>
-
-                            <li class="flex-w flex-t p-b-7">
-                                <span class="stext-102 cl3 size-205">
-                                    Size
-                                </span>
-
-                                <span class="stext-102 cl6 size-206">
-                                    XL, L, M, S
-                                </span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
 
             <!-- - -->
             <div class="tab-pane fade" id="reviews" role="tabpanel">
@@ -263,12 +201,13 @@
                             <!-- Review -->
                             <% reviews.forEach(function(review) { %>
                             <div class="flex-w flex-t p-b-68">
-                                <div class="wrap-pic-s size-109 bor0 of-hidden m-r-18 m-t-6">
-                                    <img src="images/user/orginal/<%= review.user.image %>" alt="AVATAR">
-                                </div>
+                                
 
                                 <div class="size-207">
                                     <div class="flex-w flex-sb-m p-b-17">
+                                        <div class="circular-image-input" style="width: 60px;height: 60px;">
+                                            <img src="images/user/orginal/<%= review.user.image %>" alt="AVATAR">
+                                        </div>
                                             <h5><%= review.user.name %></h5>
 
                                         <span class="fs-18 cl11">
@@ -305,7 +244,7 @@
                                     <div class="replies">
                                         <% review.replay.forEach(function(reply) { %>
                                         <div class="reply flex-w flex-t p-b-68">
-                                            <div class="wrap-pic-s size-109 bor0 of-hidden m-r-18 m-t-6">
+                                            <div  class="circular-image-input" style="width: 60px;height: 60px;">
                                                 <img src="images/user/orginal/<%= reply.user.image %>" alt="AVATAR">
                                             </div>
                                             <p class="stext-102 cl6"><strong><%= reply.user.name %>:</strong> <%= reply.comment %></p>
