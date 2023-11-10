@@ -19,7 +19,7 @@
                     <th>Expiry Date</th>
                     <th>Update</th>
                     <th>Action</th>
-                    <th>Delete</th>
+                    <!-- <th>Delete</th> -->
 
                   </tr>
                 </thead>
@@ -44,11 +44,11 @@
                         <a  class="btn btn-outline-danger block-button" data-initial-status="<%= offer.is_blocked %>" onclick="blockOffer('<%= offer._id %>')">
                           <%= offer.is_blocked ? "Unblock" : "Block" %>
                         </a>                         
-                        <td>
+                        <!-- <td>
                           <a data-category-id="<%= offer._id %>" class="btn btn-outline-primary delete-button" onclick="deleteOffer('<%= offer._id %>')">
                             Delete
                           </a> 
-                      </td>                      
+                      </td>                       -->
                     </tr>
                       <% counter++; %>
                   <% }); %>

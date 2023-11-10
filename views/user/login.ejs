@@ -9,7 +9,23 @@
   <body>
     <div class="bg-img">
       <div class="content">
-        <header>Login </header>
+        <div class="animation-container">
+          <span class="letter">W</span>
+          <span class="letter">e</span>
+          <span class="letter">l</span>
+          <span class="letter">c</span>
+          <span class="letter">o</span>
+          <span class="letter">m</span>
+          <span class="letter">e</span>
+        </div>
+        <div class="animation-login">
+          <span class="letter2">l</span>
+          <span class="letter2">o</span>
+          <span class="letter2">g</span>
+          <span class="letter2">i</span>
+          <span class="letter2">n</span>
+        </div>
+        <header id="hdLogin" style="display: none;">Login </header>
         <form action="login" method="post" id="form">
 
           <div class="field space">
@@ -66,6 +82,33 @@
          showBtn.style.color = "#222";
        }
       });
+    </script>
+    <script>
+     document.addEventListener('DOMContentLoaded', function() {
+    const animationContainer = document.querySelector('.animation-container');
+    const animationLogin = document.querySelector('.animation-login');
+    const loginLetter = document.querySelectorAll('.letter2');
+    const letters = document.querySelectorAll('.letter');
+    
+    letters.forEach((letter, index) => {
+      setTimeout(() => {
+        letter.style.animationDelay = `${index * 0.1}s`;
+      }, 0);
+    });
+
+    setTimeout(() => {
+      animationContainer.style.display = 'none';
+
+      loginLetter.forEach((letter, index) => {
+        setTimeout(() => {
+          letter.style.display = 'inline-block';
+          letter.style.animationDelay = `${index * 0.1}s`;
+        }, 0);
+      });
+    }, 3000);
+
+  });
+
     </script>
     <script src="user/js/login.js"></script>
 

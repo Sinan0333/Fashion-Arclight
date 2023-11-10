@@ -35,15 +35,14 @@ const addToCart = async(req,res)=>{
         const product_id = req.body.productId
         const productData = await Product.findById(product_id)
         const cartProduct = await Cart.findOne({ user: user_id ,'products.productId':product_id})
-        let productPrice=productData.price
+        let productPrice= productData.price
 
         if(productData.offer){
       
           const productOffer = await productData.populate('offer')
           if( productOffer.offer.discountAmount !=0 && productOffer.offer.is_blocked==false && productOffer.offer.activationDate <= new Date() && productOffer.offer.expiryDate >= new Date){
             const discount =  productData.price*productData.offer.discountAmount/100
-            productPrice = productData.price - discount
-           
+            productPrice = Math.floor(productData.price - discount)
           }
 
         }

@@ -6,7 +6,6 @@
         <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
             <br>
             <br>
-            <br>
             <div class="container d-flex align-items-center">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="/">Home</a></li>
@@ -317,6 +316,8 @@
     </div> 
 </section>              
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
 <script>
     function addToCart(productId) {
         const data = {productId:productId}
@@ -331,7 +332,21 @@
                 if(response.stock===true){
                     swal("Success", "Item added to cart!", "success")
                 }else{
-                    swal("Sorry", "No stock!", "error");
+                    
+                    Swal.fire({
+                  icon: "warning",
+                  title: "Please Login",
+                  confirmButtonColor: "#3085d6",
+                  confirmButtonText: "Login",
+                  showCancelButton: true,
+                  cancelButtonColor: "#d33",
+          
+                })
+                .then((result) => {
+                  if (result.isConfirmed) {
+                    window.location.href = "/login";
+                  }
+                });
                 }
 
             },
@@ -403,7 +418,20 @@ function addToWish(productId) {
                     swal("Success", "Item removed from the wishlist!", "success")  
                 }
                 else{
-                    // swal("Sorry", "No stock!", "error");
+                    Swal.fire({
+                  icon: "warning",
+                  title: "Please Login",
+                  confirmButtonColor: "#3085d6",
+                  confirmButtonText: "Login",
+                  showCancelButton: true,
+                  cancelButtonColor: "#d33",
+          
+                })
+                .then((result) => {
+                  if (result.isConfirmed) {
+                    window.location.href = "/login";
+                  }
+                });
                 }
 
             },

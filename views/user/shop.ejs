@@ -18,10 +18,6 @@
                 <a href="/shop?category=<%= categorys[1]._Id %>" class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" >Shirts</a>
             
                 <a href="/shop?category=<%= categorys[2]._id %>" class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" >T shirts</a>
-            
-                <a href="#" class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" >Shoes</a>
-            
-                <a href="#" class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5"  >Watches</a>
             </div>
 
             <div class="flex-w flex-c-m m-tb-10">
@@ -302,6 +298,7 @@
 <% } %>
 </section>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script>
     function search(){
         const searchInput = document.getElementById('search-input');
@@ -345,7 +342,20 @@
                     swal("Success", "Item removed from the wishlist!", "success")  
                 }
                 else{
-                    // swal("Sorry", "No stock!", "error");
+                    Swal.fire({
+                  icon: "warning",
+                  title: "Please Login",
+                  confirmButtonColor: "#3085d6",
+                  confirmButtonText: "Login",
+                  showCancelButton: true,
+                  cancelButtonColor: "#d33",
+          
+                })
+                .then((result) => {
+                  if (result.isConfirmed) {
+                    window.location.href = "/login";
+                  }
+                });
                 }
 
             },

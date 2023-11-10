@@ -73,7 +73,7 @@ user_route.post('/deleteAddress',addressControllers.deleteAddress)
 
 
 // =========================================< Cart >=================================================
-user_route.post('/addToCart',cartControllers.addToCart)
+user_route.post('/addToCart',auth.isLogin,cartControllers.addToCart)
 user_route.get('/cart',auth.isLogin,cartControllers.loadCart)
 user_route.post('/updateCart',cartControllers.updateCart)
 user_route.post('/removeProduct',cartControllers.removeProduct)
@@ -91,7 +91,7 @@ user_route.post('/invoice',orderControllers.loadInvoice)
 
 
 // =========================================< Wishlist >=================================================
-user_route.post('/addToWishList',wishlistControllers.addToWishList)
+user_route.post('/addToWishList',auth.isLogin,wishlistControllers.addToWishList)
 user_route.get('/wishlist',auth.isLogin,wishlistControllers.loadWishlist)
 user_route.post('/removeWish',wishlistControllers.removeProduct)
 

@@ -25,8 +25,8 @@ function validate(){
         }
     }
     if(mobile){
-        if (mobile.value.length < 10) {
-            mobileLngthErrror.textContent = "Mobile number must be at least 10 digits"
+        if (mobile.value.length != 10) {
+            mobileLngthErrror.textContent = "Type a  10 digit mobiel number"
             event.preventDefault()
             success =false
         } else {
@@ -34,7 +34,7 @@ function validate(){
         }
    }
    if(nameInput){
-        if (nameInput.value.length < 4) {
+        if (nameInput.value.length < 4 || nameInput.value.trim() === "") {
             nameLengthError.textContent = "User name  must be at least 4 characters"
             event.preventDefault()
             success =false

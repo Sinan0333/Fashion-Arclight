@@ -3,65 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Success</title>
+    <title>Document</title>
+
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
 
-        .container {
-            width: 40%;
-            padding: 20px;
-            background-color: #ffffff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
+.order-success {
+    text-align: center;
+}
 
-        .success-icon {
-            font-size: 48px;
-            color: #28a745; /* Green color for success */
-        }
+.order-success-content {
+    background-color: #fefefe;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
 
-        h1 {
-            font-size: 24px;
-            margin-top: 20px;
-        }
+h1 {
+    font-size: 36px;
+    color:limegreen;
+}
 
-        p {
-            font-size: 16px;
-            margin: 20px 0;
-        }
+p {
+    font-size: 20px;
+    color: #000000;
+}
 
-        .button-container {
-            margin-top: 20px;
-        }
+.shop-more-button {
+    background-color: #000;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
 
-        .back-button {
-            background-color: #007bff; /* Blue color for the button */
-            color: #fff;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 4px;
-            font-weight: bold;
-        }
+.shop-more-button:hover {
+    background-color: #222;
+}
+
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-confetti@2.12.0/tsparticles.confetti.bundle.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <div class="success-icon">&#10004;</div>
-        <h1>Your Order Was Successful!</h1>
-        <p>Thank you for your purchase.</p>
-        <p>Your order will be shipped soon.</p>
-        <div class="button-container">
-            <a href="/" class="back-button">Back to Home</a>
+    <div class="order-success">
+        <div class="order-success-content">
+            <h1>Order Successfully Placed</h1>
+            <p>Thank you for your purchase! Your order is on its way.</p>
+            <a href="/"><button class="shop-more-button"  >Shop More</button></a>
         </div>
     </div>
+<script>
+    const duration = 15 * 1000,
+  animationEnd = Date.now() + duration,
+  defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+function randomInRange(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+const interval = setInterval(function() {
+  const timeLeft = animationEnd - Date.now();
+
+  if (timeLeft <= 0) {
+    return clearInterval(interval);
+  }
+
+  const particleCount = 50 * (timeLeft / duration);
+
+  // since particles fall down, start a bit higher than random
+  confetti(
+    Object.assign({}, defaults, {
+      particleCount,
+      origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+    })
+  );
+  confetti(
+    Object.assign({}, defaults, {
+      particleCount,
+      origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+    })
+  );
+}, 250);
+</script>
 </body>
 </html>

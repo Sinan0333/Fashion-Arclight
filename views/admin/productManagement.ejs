@@ -20,7 +20,7 @@
                     <th>Offer</th>
                     <th>Update</th>
                     <th>Action</th>
-                    <th>Delete</th>
+                    <!-- <th>Delete</th> -->
 
                   </tr>
                 </thead>
@@ -50,11 +50,11 @@
                         <a href="/admin/blockProduct?_id=<%= product._id %>" class="btn btn-outline-danger block-button" data-initial-status="<%= product.is_blocked %>">
                           <%= product.is_blocked ? "Unblock" : "Block" %>
                         </a>                        
-                        <td>
+                        <!-- <td>
                           <a href="/admin/deleteProduct?_id=<%= product._id %>" data-category-id="<%= product._id %>" class="btn btn-outline-primary delete-button">
                               Delete
                           </a>
-                      </td>                      
+                      </td>                       -->
                     </tr>
                       <% counter++; %>
                   <% }); %>

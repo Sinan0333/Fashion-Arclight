@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById("form").addEventListener("submit", function (event) {
         if(nameInput){
-            if (nameInput.value.length < 4) {
+            if (nameInput.value.length < 4 || nameInput.value.trim() === "") {
                 nameLengthError.textContent = " name  must be at least 4 characters"
                 event.preventDefault()
             } else {

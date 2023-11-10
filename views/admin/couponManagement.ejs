@@ -22,7 +22,7 @@
                     <th>Used</th>
                     <th>Update</th>
                     <th>Action</th>
-                    <th>Delete</th>
+                    <!-- <th>Delete</th> -->
 
                   </tr>
                 </thead>
@@ -50,11 +50,11 @@
                         <a  class="btn btn-outline-danger block-button" data-initial-status="<%= coupon.is_blocked %>" onclick="blockCoupon('<%= coupon._id %>')">
                           <%= coupon.is_blocked ? "Unblock" : "Block" %>
                         </a>                         
-                        <td>
+                        <!-- <td>
                           <a data-category-id="<%= coupon._id %>" class="btn btn-outline-primary delete-button" onclick="deleteCoupon('<%= coupon._id %>')">
                             Delete
                           </a> 
-                      </td>                      
+                      </td>                       -->
                     </tr>
                       <% counter++; %>
                   <% }); %>

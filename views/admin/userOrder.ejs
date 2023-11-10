@@ -38,11 +38,11 @@
                             <%= order.status %>
                           </button>
                           <div class="dropdown-menu">
-                            <button class="dropdown-item" type="button" onclick="updateOrder('<%= order._id %>','Placed')">Placed</button>
-                            <button class="dropdown-item" type="button" onclick="updateOrder('<%= order._id %>','Shipped')">Shipped</button>
-                            <button class="dropdown-item" type="button" onclick="updateOrder('<%= order._id %>','Out for Delivery')">Out for Delivery</button>
-                            <button class="dropdown-item" type="button" onclick="updateOrder('<%= order._id %>','delivered')">delivered</button>
-                            <button class="dropdown-item" type="button" onclick="updateOrder('<%= order._id %>','cancel')">Cancel</button>
+                            <button class="dropdown-item" type="button" onclick="updateOrder('<%= order._id %>','Placed','<%= user._id %>')">Placed</button>
+                            <button class="dropdown-item" type="button" onclick="updateOrder('<%= order._id %>','Shipped','<%= user._id %>')">Shipped</button>
+                            <button class="dropdown-item" type="button" onclick="updateOrder('<%= order._id %>','Out for Delivery','<%= user._id %>')">Out for Delivery</button>
+                            <button class="dropdown-item" type="button" onclick="updateOrder('<%= order._id %>','delivered','<%= user._id %>')">delivered</button>
+                            <button class="dropdown-item" type="button" onclick="updateOrder('<%= order._id %>','cancel','<%= user._id %>')">Cancel</button>
                           </div>
                         </div>
                       </td>
@@ -64,7 +64,8 @@
     <!-- partial:../../partials/_footer.html -->
 
     <script>
-         function updateOrder(orderId,status) {
+         function updateOrder(orderId,status,user_id) {
+          console.log(user_id);
         const data = {orderId:orderId,status:status}
         console.log(data);
         $.ajax({
@@ -74,10 +75,10 @@
             contentType: 'application/json',
             success: function (response) {
                 if(response.update===true){
-                    $('#reloadArea').load('/admin/order #reloadArea'); 
+                    $('#reloadArea').load(`/admin/userOrders?userId=${user_id}  #reloadArea`); 
                 }else{
                     swal("Somthing error", "", "error")
-                    $('#reloadArea').load('/cart #reloadArea'); 
+                    $('#reloadArea').load(`/userOrders?_id=${user_id}  #reloadArea`); 
                 }
 
             },

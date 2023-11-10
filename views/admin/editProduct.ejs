@@ -36,11 +36,14 @@
             <div class="form-group">
               <label for="exampleSelectGender">Offers</label>
               <select class="form-control" id="exampleSelectGender" name="offer" style="color: white;">
-                <option><%= product.offer.name %></option>
+                <% if (product.offer) { %>
+                  <option><%= product.offer.name %></option>
+                  <% } %>
+                  <option value="0">0</option>
                 <% offers.forEach(function(offer) { %>
               <option><%= offer.name %></option>
               <% }); %>
-              <option value="0">0</option>
+             
             </select>
           </div>
             <div class="row d-flex justify-content-center ">

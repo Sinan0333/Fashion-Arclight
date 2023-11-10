@@ -7,6 +7,11 @@
   user-select: none;
 }
 
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+}
+
 .bg-img {
   background: url('/user/images/pexels-pixabay-325876.jpg');
   height: 100vh;
@@ -30,8 +35,9 @@
   left: 50%;
   z-index: 999;
   text-align: center;
-  padding: 60px 32px;
-  width: 450px;
+  padding: 5% 3%;
+  width: 90%;
+  max-width: 450px;
   transform: translate(-50%, -50%);
   background: rgba(255, 255, 255, 0.04);
   box-shadow: -1px 4px 28px 0px rgba(0, 0, 0, 0.75);
@@ -39,10 +45,9 @@
 
 .content header {
   color: white;
-  font-size: 33px;
+  font-size: 2rem;
   font-weight: 600;
-  margin: 0 0 35px 0;
-  font-family: 'Montserrat', sans-serif;
+  margin: 0 0 20px 0;
 }
 
 .field {
@@ -51,6 +56,7 @@
   width: 100%;
   display: flex;
   background: rgba(255, 255, 255, 0.94);
+  margin-bottom: 15px;
 }
 
 .field span {
@@ -67,7 +73,6 @@
   outline: none;
   color: #222;
   font-size: 16px;
-  font-family: 'Poppins', sans-serif;
 }
 
 .space {
@@ -82,7 +87,6 @@
   color: #222;
   display: none;
   cursor: pointer;
-  font-family: 'Montserrat', sans-serif;
 }
 
 .pass-key:valid~.show {
@@ -97,7 +101,6 @@
 .pass a {
   color: white;
   text-decoration: none;
-  font-family: 'Poppins', sans-serif;
 }
 
 .pass:hover a {
@@ -112,7 +115,6 @@
   letter-spacing: 1px;
   font-weight: 600;
   cursor: pointer;
-  font-family: 'Montserrat', sans-serif;
 }
 
 .field input[type="submit"]:hover {
@@ -122,7 +124,6 @@
 .login {
   color: white;
   margin: 20px 0;
-  font-family: 'Poppins', sans-serif;
 }
 
 .links {
@@ -168,13 +169,11 @@ i span {
   font-weight: 500;
   letter-spacing: 1px;
   font-size: 16px;
-  font-family: 'Poppins', sans-serif;
 }
 
 .signup {
   font-size: 15px;
   color: white;
-  font-family: 'Poppins', sans-serif;
 }
 
 .signup a {
@@ -193,9 +192,8 @@ i span {
 }
 
 .field-container {
-  width: 385px;
+  width: 100%;
   display: inline-block;
-  vertical-align: middle;
 }
 
 .custom-file-upload {
@@ -213,7 +211,6 @@ i span {
   border-radius: 50%;
   overflow: hidden;
   cursor: pointer;
-
 }
 
 .circular-image-input img {
@@ -236,4 +233,50 @@ i span {
   display: flex;
   align-items: center;
   justify-content: flex-start;
+}
+
+.animation-container {
+  font-size: 2em;
+  font-weight: bold;
+  overflow: hidden;
+}
+
+.animation-login {
+  font-size: 2em;
+  font-weight: bold;
+  overflow: hidden;
+}
+
+.letter {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(1em);
+  animation: appear 0.5s forwards;
+  color: #fff;
+}
+
+.letter2 {
+  display: none;
+  opacity: 0;
+  transform: translateY(1em);
+  animation: appear 0.5s forwards;
+  color: #fff;
+}
+
+/* Media Query for smaller screens */
+@media only screen and (max-width: 768px) {
+  .content {
+    padding: 10% 5%;
+  }
+
+  .content header {
+    font-size: 2rem;
+  }
+}
+
+@keyframes appear {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

@@ -276,6 +276,8 @@ const editProduct = async (req, res) => {
 
     if(offer!=0){
       await Product.findOneAndUpdate({_id:product_id},{$set:{offer:offerData._id}})
+    }else{
+      await Product.findOneAndUpdate({_id:product_id},{$unset:{offer:1}})
     }
 
     res.redirect('/admin/product');
