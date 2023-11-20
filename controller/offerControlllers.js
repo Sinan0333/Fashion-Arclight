@@ -16,6 +16,7 @@ const loadOfferrManagement = async(req,res)=>{
 }
 
 
+
 // load Add Offer 
 const loadAddOffer = async(req,res)=>{
     try {
