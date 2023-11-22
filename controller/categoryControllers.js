@@ -85,7 +85,6 @@ const updateCategory = async(req,res)=>{
     }
 }
 
-
 module.exports ={
     loadCategoryManagement,
     addCategory,
