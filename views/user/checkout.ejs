@@ -183,7 +183,7 @@
                                     value="wallet"
                                     />
                                 </div>
-                            <a href="" class="d-block text-dark" for="pay3">Wallet</a>
+                                <a href="" class="d-block text-dark" for="pay3">Wallet</a>
                             </div>
                             <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
                                 <span class="btn-text">Place Order</span>
@@ -267,8 +267,6 @@
     var rzp1 = new Razorpay(options);
     rzp1.open();
     }
-
-
     function verifyPayment(payment, order) {
         const amount2 = document.getElementById("total1").innerHTML;
         console.log(amount2);
