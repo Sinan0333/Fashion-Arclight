@@ -14,7 +14,6 @@ const loadAddAddress = async(req,res)=>{
   }
 }
 
-
 //Add address
 const addAddress = async (req, res) => {
     try {
