@@ -7,7 +7,6 @@ const app = express()
 const noCache = require('nocache')
 
 
-
 const userRoute= require('./routes/userRoute')
 const adminRoute= require('./routes/adminRoute')
 
