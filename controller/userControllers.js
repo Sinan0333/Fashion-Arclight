@@ -5,7 +5,7 @@ const Order = require("../model/orderModel")
 const Coupon = require("../model/CouponModel")
 
 
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 const fs = require("fs")
 require("dotenv").config()
